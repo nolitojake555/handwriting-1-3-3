@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Handwriting Studio V7.8 · Y14.5M tracing references · 1–3–3 lettering</title>
+<style>
+:root{--bg:#f4f6fb;--panel:#fff;--line:#e1e6ed;--ink:#172332;--muted:#637386;--blue:#365fda;--soft:#e8efff;--green:#178160;--radius:16px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:14px}
+header{background:#17273c;color:#fff;padding:19px clamp(18px,4vw,44px);display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+header h1{margin:0;font-size:21px;letter-spacing:-.025em}header p{color:#b5c6db;margin:5px 0 0;font-size:12px}.badge{display:inline-block;border:1px solid #617892;border-radius:20px;padding:5px 10px;color:#cfdef5;font-size:11px}
+main{padding:24px;max-width:1600px;margin:auto;display:grid;grid-template-columns:minmax(350px,490px) minmax(410px,1fr);gap:22px;align-items:start}
+.controls{display:flex;flex-direction:column;gap:16px;min-width:0}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:21px;box-shadow:0 2px 9px #21334d08}
+.card h2{font-size:16px;margin:0 0 6px;letter-spacing:-.015em}.card .sub{color:var(--muted);font-size:12px;line-height:1.5;margin:0 0 18px}
+.step{display:inline-flex;align-items:center;justify-content:center;background:var(--soft);color:#2849a2;width:26px;height:26px;border-radius:9px;margin-right:8px;font-weight:700;font-size:12px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.btn{appearance:none;border:1px solid #d3dce9;background:white;border-radius:9px;padding:9px 12px;font-weight:650;font-size:12px;cursor:pointer;color:#29394e;min-height:36px}.btn:hover{background:#edf2fc}.btn:focus-visible,.glyph:focus-visible{outline:3px solid #9bb6ff;outline-offset:2px}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.btn.primary:hover{background:#2a50be}.btn.danger{color:#bc3b40}.btn.green{background:#e7f7ef;color:#08744f;border-color:#b9e6ce}
+.char-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px;margin:10px 0 13px}.glyph{min-width:0;height:34px;background:#f9fbff;border:1px solid #dce3ed;border-radius:7px;color:#374455;font-size:14px;cursor:pointer;position:relative}.glyph.active{outline:2px solid #365fda;border-color:#365fda;background:#eaf0ff}.glyph.saved:after{content:'';height:5px;width:5px;border-radius:50%;background:#21a876;position:absolute;right:3px;top:3px}.glyph:hover{background:#eaf0ff}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.muted{color:var(--muted)}.small{font-size:12px}.selected{font-size:13px;font-weight:700}.sample-box{border:1px solid #dae2ed;background:#fff;border-radius:12px;padding:5px;touch-action:none;margin:10px 0}.sample-box canvas{width:100%;height:152px;display:block;cursor:crosshair;touch-action:none}
+textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px;padding:12px;resize:vertical;line-height:1.55;color:#26374a;font:13px/1.6 ui-sans-serif,system-ui,Arial}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-weight:600;font-size:12px;color:#405168}.field input:not([type=checkbox]),.field select{border:1px solid #d6deea;border-radius:8px;background:#fff;padding:9px 8px;min-width:0;width:100%;font:13px ui-sans-serif,system-ui,Arial;color:#29394b}.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.checkline{display:flex;gap:9px;align-items:center;font-size:12px;color:#344356;line-height:1.4}.checkline input{accent-color:var(--blue)}
+.infobar{margin-top:10px;padding:10px 12px;border:1px solid #e1e8f1;border-radius:9px;background:#f8faff;font-size:12px;line-height:1.55;color:#4d6175}.status{color:#0d7c50;font-weight:650}.warning{color:#9a590b}.hint{color:#607287;line-height:1.6;font-size:12px}
+.preview-pane{position:sticky;top:17px;min-width:0}.preview-top{background:white;border:1px solid var(--line);border-radius:14px 14px 0 0;padding:15px 18px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.preview-top h2{font-size:16px;margin:0 0 3px}.preview-top p{margin:0;font-size:12px;color:var(--muted)}
+.page-list{background:#e8ecf3;border-radius:0 0 14px 14px;border:1px solid var(--line);border-top:0;max-height:calc(100vh - 135px);overflow:auto;padding:25px;display:block;scrollbar-gutter:stable}.sheet{background:#fff;box-shadow:0 8px 28px #23314824;border-radius:2px;width:min(calc(100% * var(--preview-zoom,1)),calc(680px * var(--page-width-scale,1) * var(--preview-zoom,1)));aspect-ratio:var(--paper-ratio,210 / 297);overflow:hidden;margin:0 auto 22px}.sheet:last-child{margin-bottom:0}.sheet svg{display:block;width:100%;height:100%}
+.note{font-size:11px;color:#6d7e92;margin:12px 0 0;line-height:1.45}hr{border:0;border-top:1px solid #e5eaf2;margin:16px 0}.stack{display:flex;flex-direction:column;gap:10px}.file-input{display:none}
+.realism-box{margin-top:12px;padding:12px 13px;border:1px solid #dae2f1;border-radius:11px;background:#f8faff}
+.realism-box label{font-weight:650;font-size:12px;color:#34445e}
+.realism-box strong{font-size:12px;color:#365fda}
+.realism-box input[type=range]{display:block;width:100%;margin:15px 0 9px;accent-color:#365fda;cursor:pointer}
+.realism-box .hint{margin:0 0 10px}
+.realism-box.is-off{opacity:.62}
+.thickness-panel{padding:12px 13px;margin:13px 0 0;border:1px solid #dce5f0;border-radius:11px;background:#f7faff}
+.thickness-panel input[type=range]{display:block;width:100%;margin:11px 0 8px;accent-color:#365fda;cursor:pointer}
+.thickness-panel strong{font-size:13px;color:#365fda}
+.thickness-swatch{display:block;width:100%;height:26px;border-radius:6px;background:white;border:1px solid #e4eaf2}
+.gallery-header{margin:17px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.gallery-header h3{font-size:14px;margin:0}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.version-card{border:1px solid #dce5f0;border-radius:10px;background:#fff;padding:9px;min-width:0}
+.version-card.is-viewing{border-color:#365fda;box-shadow:0 0 0 1px #365fda}
+.version-card svg{width:100%;height:77px;background:#fafcff;border-radius:6px;display:block;margin:3px 0 9px}
+.version-card .toolbar{gap:5px}.version-card .btn{padding:5px 8px;font-size:11px;min-height:30px}
+.version-card .muted{font-size:11px}
+.version-card .row{margin-bottom:4px}
+.version-viewer{padding:10px;border:1px solid #dbe5f1;border-radius:11px;background:#f8faff}
+.version-viewer svg{width:100%;height:155px;display:block;background:#fff;border-radius:8px}
+.version-viewer p{margin:8px 0 0}
+.accent-help{padding:12px;margin:12px 0 5px;background:#f4f7ff;border:1px solid #dbe5fb;border-radius:10px}.accent-help strong{color:#34445e;font-size:12px}.accent-help .btn{padding:6px 9px;min-height:30px}
+.empty-gallery{color:var(--muted);font-size:12px;border:1px dashed #c7d4e6;border-radius:10px;padding:15px;line-height:1.6}
+/* Ink options and page zoom stay separate from saved handwriting geometry. */
+.ink-panel{padding:13px;margin-top:14px;background:#f8faff;border:1px solid #dbe5f1;border-radius:11px}
+.ink-panel>label{font-size:12px;font-weight:700;color:#34445e;display:block;margin-bottom:9px}
+.ink-picker{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.ink-picker input[type=color]{width:53px;height:39px;padding:3px;border:1px solid #cdd8e7;border-radius:8px;background:#fff;cursor:pointer}
+.ink-picker strong{color:#41536a;font-size:12px;letter-spacing:.04em}
+.ink-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.ink-preset{width:27px;height:27px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px #b9c8dc;cursor:pointer}
+.ink-preset[aria-pressed=true]{box-shadow:0 0 0 2px #365fda;outline:2px solid white;outline-offset:-3px}
+.ink-preset:focus-visible{outline:3px solid #9bb6ff;outline-offset:3px}
+.ink-panel .hint{margin:8px 0 0}
+.preview-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.zoom-controls{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;background:#f6f8fc;border:1px solid #dce5f0;border-radius:9px;padding:5px}
+.zoom-controls .btn{padding:5px 9px;min-height:29px;font-size:13px}
+.zoom-controls input[type=range]{width:90px;accent-color:#365fda;cursor:pointer}
+.zoom-controls output{min-width:44px;text-align:center;font-weight:700;font-size:12px;font-variant-numeric:tabular-nums;color:#34445e}
+@media(max-width:560px){.preview-actions{width:100%;justify-content:space-between}.zoom-controls input[type=range]{width:67px}}
+
+/* V5: word/phrase sampling and naturally varying pen marks */
+.pill-new{font-size:10px;color:#13644b;background:#e0f5ea;border-radius:6px;padding:3px 6px;vertical-align:middle;margin-left:3px}
+.phrase-pad{margin-top:13px}.phrase-pad canvas{height:127px}.phrase-gallery{display:grid;gap:10px;margin:10px 0}
+.phrase-item{border:1px solid #dce5f0;border-radius:11px;background:#fbfcff;padding:12px;min-width:0}
+.phrase-item .sample-text{font-size:12px;font-weight:750;overflow-wrap:anywhere;color:#2d496b}
+.phrase-item .ink-thumbnail{height:88px;border:1px solid #ecf0f6;border-radius:7px;background:white;margin:8px 0;overflow:hidden}
+.phrase-item svg{width:100%;height:100%;display:block}
+.phrase-item .toolbar{margin-top:6px}.phrase-item .btn{min-height:30px;padding:5px 8px}
+.phrase-item .sample-meta{font-size:11px;color:#637386}
+.phrase-item.is-editing{border-color:#365fda;box-shadow:0 0 0 1px #365fda}
+@media(max-width:560px){.phrase-pad canvas{height:108px}}
+
+/* V6 ink / paper controls */
+.ink-effects{border:1px solid #dbe5f1;background:#f8faff;border-radius:11px;padding:14px;margin-top:12px}
+.ink-effects h3{font-size:13px;margin:0 0 7px;color:#2e4059}
+.ink-effects .hint{margin:7px 0 0}.ink-effects input[type=range]{width:100%;accent-color:#365fda;margin:12px 0 4px}
+.effect-switches{display:grid;gap:8px;margin-top:13px}.effect-row{display:flex;align-items:center;gap:10px;background:white;padding:10px;border:1px solid #e3eaf3;border-radius:9px;cursor:pointer}
+.effect-row>input{accent-color:#365fda;width:17px;height:17px;flex-shrink:0}.effect-row span{display:flex;flex-direction:column;gap:3px}.effect-row strong{font-size:12px;color:#34465f}.effect-row small{font-size:11px;color:#748297}
+.paper-panel{border:1px solid #dbe5f1;background:#f8faff;border-radius:11px;padding:13px;margin:12px 0 14px}.paper-panel .fields{grid-template-columns:repeat(2,minmax(0,1fr))}.paper-panel .hint{margin:5px 0 0}
+.equation-panel{background:#f8faff;border:1px solid #dbe5f1;border-radius:11px;padding:14px;margin-top:16px}.equation-panel h3{margin:0;font-size:14px;color:#263956}.equation-panel .hint{margin:9px 0}.equation-panel code{background:#edf1f8;border-radius:4px;padding:2px 4px;font-size:11px}.equation-template-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0}.equation-template-toolbar .btn{min-width:35px;padding:7px 9px}.equation-panel textarea{min-height:77px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.equation-live{min-height:80px;background:#fff;border:1px solid #e1e7f1;border-radius:8px;padding:8px;overflow-x:auto;display:flex;align-items:center}.equation-live svg{width:100%;min-width:260px;height:78px;display:block}
+/* Controls for subtle irregularities in constructed equation lines */
+.math-roughness{margin:12px 0 10px;border:1px solid #dbe4f1;background:#fff;border-radius:9px;padding:12px}
+.math-roughness .row{margin:11px 0 0}
+.math-roughness label{font-size:12px;color:#405168;font-weight:650}
+.math-roughness input[type=range]{width:100%;accent-color:#365fda;margin:9px 0 0}
+.math-roughness .hint{margin:5px 0 0}
+.math-roughness.is-off .roughness-slider{opacity:.5}
+[hidden]{display:none!important}
+
+@media(max-width:1050px){main{grid-template-columns:1fr;max-width:800px}.preview-pane{position:static}.page-list{max-height:none;padding:16px}.sheet{width:calc(100% * var(--preview-zoom,1))}}
+@media(max-width:560px){main{padding:12px;gap:12px}.card{padding:15px}.fields{grid-template-columns:repeat(2,minmax(0,1fr))}.char-grid{grid-template-columns:repeat(8,minmax(0,1fr))}header{padding:15px}.page-list{padding:9px}}
+@page{size:210mm 297mm;margin:0}
+@media print{html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}header,.controls,.preview-top,.note{display:none!important}main{padding:0;margin:0;display:block;max-width:none}.preview-pane{position:static}.page-list{display:block;padding:0;margin:0;border:0;background:white;overflow:visible;max-height:none}.sheet{width:var(--print-width,210mm)!important;height:var(--print-height,297mm)!important;aspect-ratio:auto;page-break-after:always;break-after:page;box-shadow:none;border:0;border-radius:0;margin:0!important}.sheet:last-child{page-break-after:auto;break-after:auto}.sheet svg{width:100%!important;height:100%!important}}
+
+/* V7.8 tracing guide: system-installed fonts are used if available. No fonts bundled. */
+@font-face{font-family:"TraceY14Local";src:local("Y14.5M-2009"),local("Y145M-2009");font-weight:normal;font-style:normal}
+.tracing-panel{margin:11px 0 10px;border:1px solid #cbdaf0;border-radius:12px;background:#f3f7fe;padding:12px;display:grid;gap:9px}
+.tracing-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.tracing-heading strong{font-size:13px;color:#254063}
+.tracing-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tracing-row label{display:inline-flex;gap:7px;align-items:center;font-weight:600;font-size:12px;color:#334963}
+.tracing-row input[type=range]{width:min(170px,40vw);accent-color:#365fda}
+.tracing-panel output{font-weight:750;font-variant-numeric:tabular-nums;color:#3554a0}
+.tracing-panel p{margin:0;color:#5d6f86;font-size:11px;line-height:1.55}
+.tracing-panel .btn{min-height:30px;padding:6px 10px}
+.tracing-panel input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.tracing-panel .trace-file-label{display:inline-flex;cursor:pointer;align-items:center;border:1px solid #cbd7e9;border-radius:8px;padding:6px 9px;background:#fff;color:#2d4567;font-size:11px;font-weight:700}
+.tracing-panel .trace-file-label:focus-within{outline:2px solid #365fda}
+.tracing-panel .trace-status{font-size:11px;color:#4b6381}
+/* V7.6: precision handwriting capture workspace */
+#sampleViewport{overflow:auto;max-width:100%;border:2px solid #a5b9d9;border-radius:12px;background:#fff;touch-action:pan-x pan-y;box-shadow:inset 0 0 0 1px #fff}
+#sampleViewport .sample-box{width:max-content;max-width:none;margin:0;padding:0;border:0;border-radius:0}
+#drawCanvas{display:block!important;max-width:none!important;height:auto!important;touch-action:none}
+.sample-controls{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:10px 0}
+.sample-controls label{font-size:12px;font-weight:650;display:flex;align-items:center;gap:5px}
+.sample-controls input[type=range]{width:130px}
+.sample-controls select{max-width:140px}
+.sample-guide-legend{display:flex;gap:8px 15px;align-items:center;flex-wrap:wrap;background:#f4f8ff;border:1px solid #d3e1f5;border-radius:9px;padding:10px 12px;margin:8px 0;font-size:11px;color:#2b4668;font-weight:650}
+.sample-guide-legend[hidden]{display:none}
+.sample-guide-legend span{display:inline-flex;align-items:center;gap:6px}
+.guide-chip{display:inline-block;width:18px;border-top:3px solid #3572ca;border-radius:2px}
+.guide-chip.xheight{border-color:#1e8c75;border-top-style:dashed}
+.guide-chip.baseline{border-color:#be4f42}
+.guide-chip.desc{border-color:#8861b8;border-top-style:dotted}
+</style>
+</head>
+<body>
+<header><div><h1>Handwriting Studio <span style="color:#91b2ff">/ 1–3–3</span></h1><p>Capture your own lettering, then write and print pages with it. Everything runs locally in your browser.</p></div><span class="badge">V7.8 · TRACING REFERENCES • OFFLINE</span></header>
+<main>
+ <section class="controls">
+  <div class="card">
+   <h2><span class="step">1</span>Sample your handwriting</h2>
+   <p class="sub">Select a character, write it in the box using your mouse, stylus or finger, then save it. Repeat for the characters you need. You can save more than one version of a letter. The realism settings below create subtle new shapes even if you only sample each letter once. You can also sample complete words or phrases in the next panel.</p>
+   <div class="row"><span class="selected" id="selectedChar">Selected: A</span><span class="muted small" id="count">Sample characters and math symbols</span></div>
+   <div class="char-grid" id="charGrid" aria-label="Characters to sample"></div>
+   <div class="row"><div class="stack"><label class="checkline"><input type="checkbox" id="lowercaseGrid"> Include lowercase letters</label><label class="checkline"><input type="checkbox" id="mathSymbolsGrid" checked> Include mathematical symbols (sample them using your own handwriting)</label><label class="checkline"><input type="checkbox" id="accentGrid" checked> Include accent marks for composite letters</label></div><span class="small muted" id="variantCount"></span></div>
+   <div class="accent-help" id="accentHelp">
+    <div class="row"><strong>Build accented letters from saved parts</strong><span class="pill-new">V7.5</span></div>
+    <p class="hint" style="margin:7px 0">Sample each letter and its separate accent mark once. Accents overlay the letter without moving it off its guide. For example, <strong>Ñ = N + ~</strong> and <strong>ñ = n + ~</strong>. The same mark can be reused on different letters.</p>
+    <label class="checkline"><input type="checkbox" id="composeAccents" checked> Compose accents automatically (use individual saved letters + marks)</label>
+    <div class="toolbar" style="margin-top:9px"><button class="btn" type="button" data-accent-pick="N">Sample N</button><button class="btn" type="button" data-accent-pick="n">Sample n</button><button class="btn" type="button" data-accent-pick="~">Sample ~</button><button class="btn" type="button" data-accent-pick="´">Sample ´</button><button class="btn" type="button" data-accent-pick="`">Sample `</button></div>
+    <div id="accentStatus" class="hint" role="status" style="margin-top:8px">Ñ and ñ are built from your samples automatically.</div>
+   </div>
+   <div class="sample-controls" aria-label="Drawing workspace controls">
+     <label for="sampleZoom">Drawing zoom <output id="sampleZoomLabel">100%</output></label>
+     <input type="range" id="sampleZoom" min="75" max="300" value="100" step="25" aria-label="Drawing area zoom">
+     <button type="button" class="btn" id="sampleZoomReset">Reset zoom</button>
+     <label><input type="checkbox" id="sampleGuideToggle" checked> Show letter guides</label>
+     <label><input type="checkbox" id="sampleGridToggle"> Fine grid</label>
+   </div>
+   <div id="sampleGuideLegend" class="sample-guide-legend" aria-label="Letter guide line meanings">
+     <span><i class="guide-chip cap"></i>Cap height</span>
+     <span><i class="guide-chip xheight"></i>Lowercase x-height</span>
+     <span><i class="guide-chip baseline"></i>Baseline</span>
+     <span><i class="guide-chip desc"></i>Descenders</span>
+   </div>
+   <div class="tracing-panel" aria-label="Letter tracing template">
+    <div class="tracing-heading"><strong>Tracing template · Y14.5M-2009</strong><span class="pill-new">NEW</span></div>
+    <div class="tracing-row"><label><input type="checkbox" id="sampleTraceToggle" checked> Show faint letter / symbol</label><label for="sampleTraceOpacity">Opacity <output id="sampleTraceOpacityLabel">20%</output></label><input id="sampleTraceOpacity" type="range" min="5" max="55" step="5" value="20" aria-label="Tracing template opacity"></div>
+    <div class="tracing-row"><label class="trace-file-label" for="sampleTraceFontFile">Load exact Y14.5M-2009 font<input id="sampleTraceFontFile" type="file" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" /></label><span id="sampleTraceFontStatus" class="trace-status" role="status">Uses the installed font when available; otherwise a clean fallback.</span></div>
+    <p>The reference changes automatically when you select A, a, ~, +, √, or another symbol. It stays behind your pen strokes, lines up with the guides, and is never saved or printed. If the exact font is not installed, load your own <strong>Y14.5M-2009.ttf</strong> file above. <a href="https://www.fontspace.com/y145m-2009-font-f9006" target="_blank" rel="noopener noreferrer">Font information and source</a>.</p>
+   </div>
+   <p class="hint">The colored guides and faint reference appear only while sampling, never on the printed page. At 100% the whole drawing area fits this panel.</p>
+   <div id="sampleViewport"><div class="sample-box"><canvas id="drawCanvas" width="640" height="224" aria-label="Draw handwriting character here"></canvas></div></div>
+   <p class="hint" id="letterGuideHelp">Uppercase: write from the top guide to the baseline. For lowercase, turn on “Include lowercase letters.”</p>
+   <div class="toolbar"><button class="btn" id="undoBtn">Undo stroke</button><button class="btn" id="redoBtn">Redo stroke</button><button class="btn" id="clearBtn">Clear drawing</button><button class="btn primary" id="saveBtn">Save character</button><button class="btn" id="cancelEditBtn" hidden>Cancel edit</button><button class="btn" id="nextBtn">Next missing</button></div>
+   <div class="infobar" id="sampleStatus">Write the selected letter between the horizontal guides. Click “Save character.”</div>
+   <div class="thickness-panel">
+    <div class="row"><label for="thicknessSlider"><strong>Stroke thickness</strong> (printed lettering)</label><strong id="thicknessValue">0.20 mm</strong></div>
+    <input type="range" id="thicknessSlider" min="0.05" max="1.5" step="0.05" value="0.2" aria-label="Handwriting stroke thickness in millimeters" />
+    <svg class="thickness-swatch" id="thicknessSwatch" viewBox="0 0 250 26" aria-label="Stroke thickness example"><path id="thicknessLine" d="M18 13 Q70 8 120 13 T232 13" stroke="#1c2a43" stroke-linecap="round" fill="none" stroke-width="3"/></svg>
+    <p class="hint" style="margin:7px 0 0">Changes the drawing preview and every handwritten letter on the A4 page. Does not overwrite the shape of your saved samples.</p>
+   </div>
+   <div class="gallery-header"><h3>Saved letter versions</h3><span class="muted small" id="galleryCount">No versions</span></div>
+   <p class="hint" style="margin:0 0 10px">View all samples for the selected character. Select <strong>View</strong> to enlarge, <strong>Edit</strong> to modify an existing version, or <strong>Delete</strong> to remove only that version. Multiple versions are rotated naturally in the page.</p>
+   <div class="version-viewer" id="versionViewer" hidden><div class="row"><strong id="viewingLabel" class="small">Viewing sample</strong><span class="small muted">Exact saved strokes</span></div><div id="viewingArtwork"></div></div>
+   <div class="gallery" id="versionGallery" aria-live="polite"></div>
+   <hr />
+   <div class="toolbar"><button class="btn" id="exportBtn">Export handwriting profile</button><button class="btn" id="importBtn">Import profile</button><button class="btn danger" id="resetBtn">Erase all samples</button></div>
+   <input type="file" id="importFile" class="file-input" accept=".json,application/json" />
+   <div class="note">Your letters and natural word/phrase samples stay in this browser. Export a profile (.json) to back them up or move to another computer.</div>
+  </div>
+  <div class="card" id="phraseCard">
+   <h2><span class="step">2</span>Sample a natural word or phrase <span class="pill-new">NEW</span></h2>
+   <p class="sub">Write a word or short sentence in one natural motion. When the <strong>same text</strong> appears in your notes, the program uses your real connected strokes instead of assembling individual letters. For new text it uses your letter samples. This runs offline; it does not train an AI model.</p>
+   <div class="field"><label for="phraseText">Text you will handwrite (up to 60 characters)</label><input id="phraseText" type="text" maxlength="60" placeholder="Example: SOIL MECHANICS" autocomplete="off" value="SOIL MECHANICS"></div>
+   <div class="sample-box phrase-pad"><canvas id="phraseCanvas" width="960" height="194" aria-label="Draw the complete word or phrase here"></canvas></div>
+   <div class="toolbar"><button class="btn" id="phraseUndo" type="button">Undo stroke</button><button class="btn" id="phraseClear" type="button">Clear</button><button class="btn primary" id="phraseSave" type="button">Save phrase</button><button class="btn" id="phraseCancelEdit" type="button" hidden>Cancel edit</button></div>
+   <div class="infobar" id="phraseStatus">Write the phrase as you normally would, left to right, between the guide lines. Avoid squeezing long sentences into the box; shorter samples work best.</div>
+   <div class="gallery-header"><h3>Saved word / phrase samples</h3><span id="phraseCount" class="muted small">0 phrases</span></div>
+   <div id="phraseGallery" class="phrase-gallery" aria-live="polite"></div>
+  </div>
+  <div class="card">
+   <h2><span class="step">3</span>Write your content</h2>
+   <p class="sub">Type or paste your notes. The program builds lines and automatically adds more pages when needed, using the selected paper size.</p>
+   <textarea id="content" spellcheck="false" placeholder="Type the text you want written using your handwriting…">CIVIL ENGINEERING
+
+SOIL MECHANICS
+
+THE STRENGTH OF SOIL DEPENDS ON ITS PROPERTIES AND THE LOADS APPLIED TO IT.
+
+1. UNIT WEIGHT
+2. WATER CONTENT
+3. COMPACTION
+
+STRESS: $\sigma = \frac{P}{A}$
+
+$$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{aligned}$$</textarea>
+   <div class="stack" style="margin-top:12px"><label class="checkline"><input type="checkbox" id="uppercase" checked> Convert text to uppercase (traditional engineering lettering)</label>
+   <div class="infobar" id="caseStatus" role="status">Uppercase conversion is enabled. Switch it off to use lowercase samples in your notes.</div>
+   <p class="hint">Accented letters work directly in notes and equations. Try <strong>NIÑO, niño, mañana, lápiz, café, naïve</strong>. Each accent uses your saved base letter and accent-mark sample, with no separate Ñ or ñ sample needed.</p>
+   <div class="field"><label for="phraseMode">Handwriting composition</label><select id="phraseMode"><option value="hybrid">Hybrid: real phrase samples + individual letters (recommended)</option><option value="letters">Individual letters only</option></select></div></div>
+   <div class="infobar" id="matchStats">Saved phrase matches will appear here after you start sampling.</div>
+   <div class="equation-panel" id="equationPanel">
+    <div class="row"><h3>Equation editor <span class="pill-new">NEW</span></h3><span class="small muted">Math notation + your handwriting</span></div>
+    <p class="hint">Build a formula below, then insert it at the cursor in your notes. Use <code>$...$</code> for an inline equation or <code>$$...$$</code> for a centered equation on its own line. You can also type LaTeX directly in your notes.</p>
+    <div class="equation-template-toolbar" id="equationTemplates">
+      <button class="btn" type="button" data-math-template="\frac{a}{b}" title="Fraction">a/b</button>
+      <button class="btn" type="button" data-math-template="\sqrt{x}" title="Square root">√</button>
+      <button class="btn" type="button" data-math-template="x^{2}" title="Exponent">x²</button>
+      <button class="btn" type="button" data-math-template="M_{u}" title="Subscript">Mᵤ</button>
+      <button class="btn" type="button" data-math-template="\sigma" title="Greek sigma">σ</button>
+      <button class="btn" type="button" data-math-template="\Delta" title="Delta">Δ</button>
+      <button class="btn" type="button" data-math-template="\sum_{i=1}^{n}" title="Summation">∑</button>
+      <button class="btn" type="button" data-math-template="\int_{0}^{L}" title="Integral">∫</button>
+      <button class="btn" type="button" data-math-template="\boxed{x}" title="Boxed answer">□</button>
+    </div>
+    <div class="field"><label for="equationDraft">Equation input (LaTeX-style)</label><textarea id="equationDraft" rows="2" spellcheck="false" placeholder="\sigma = \frac{P}{A}">\sigma = \frac{P}{A}</textarea></div>
+    <div class="equation-live" id="equationLive" aria-label="Equation preview"></div>
+    <div class="toolbar" style="margin-top:10px"><button type="button" class="btn primary" id="insertInlineMath">Insert inline</button><button type="button" class="btn primary" id="insertDisplayMath">Insert centered equation</button><button type="button" class="btn" id="insertAlignMath">Insert aligned solution</button></div>
+    <div class="fields" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:0">
+     <div class="field"><label for="equationSize">Equation size</label><select id="equationSize"><option value="80">Small (80%)</option><option value="100" selected>Normal (100%)</option><option value="120">Large (120%)</option><option value="150">Extra large (150%)</option></select></div>
+     <div class="field"><label for="equationAlign">Standalone alignment</label><select id="equationAlign"><option value="center">Center</option><option value="left">Left</option></select></div>
+    </div>
+    <div class="math-roughness" id="mathRoughnessBox">
+     <label class="checkline"><input type="checkbox" id="mathHandDrawn" checked> Hand-drawn fraction bars, radicals, and answer boxes</label>
+     <div class="roughness-slider">
+      <div class="row"><label for="mathRoughness">Line irregularity</label><strong id="mathRoughnessValue" class="small">45% · natural</strong></div>
+      <input type="range" id="mathRoughness" min="0" max="100" step="1" value="45" aria-describedby="mathRoughnessHint">
+      <p class="hint" id="mathRoughnessHint">Adds tiny, smooth pen wobbles and imperfect corners to equation lines. 0% gives straight ruler lines. The same pattern is used in PDF output.</p>
+     </div>
+    </div>
+    <p class="hint">Supported: fractions, stacked solutions, superscripts, subscripts, roots, Greek letters, summations, integrals, and boxed answers. Special symbols use your saved stroke samples where available. Square-root signs now stretch over the full expression inside their braces. For example, use <code>\sqrt{x+\int_0^L f(t)dt}</code> to place the integral under the root.</p>
+    <p class="small warning" id="equationWarnings" role="status" aria-live="polite"></p>
+   </div>
+   <div class="ink-panel">
+    <label for="inkColor">Handwriting ink color</label>
+    <div class="ink-picker"><input type="color" id="inkColor" value="#1c2a43" aria-label="Choose handwritten text color"><strong id="inkHex">#1C2A43</strong><span class="small muted">Pick any color</span></div>
+    <div class="ink-presets" aria-label="Ink color presets">
+     <button type="button" class="ink-preset" data-ink="#1c2a43" style="background:#1c2a43" aria-label="Dark ink" title="Dark ink"></button>
+     <button type="button" class="ink-preset" data-ink="#111111" style="background:#111111" aria-label="Black ink" title="Black ink"></button>
+     <button type="button" class="ink-preset" data-ink="#1449ad" style="background:#1449ad" aria-label="Blue ink" title="Blue ink"></button>
+     <button type="button" class="ink-preset" data-ink="#147273" style="background:#147273" aria-label="Teal ink" title="Teal ink"></button>
+     <button type="button" class="ink-preset" data-ink="#ad2525" style="background:#ad2525" aria-label="Red ink" title="Red ink"></button>
+    </div>
+    <p class="hint">Applies to the writing, saved-letter previews and printed/PDF pages. Your saved letter shapes stay unchanged.</p>
+   </div>
+   <div class="ink-effects" id="inkEffectsPanel">
+    <h3>Realistic ink effects <span class="pill-new">NEW</span></h3>
+    <p class="hint">Toggle effects separately to imitate ink soaking into paper, tiny excess-ink spots, or an accidental drag. Only the generated writing is affected, not the original saved samples.</p>
+    <div class="effect-switches">
+     <label class="effect-row"><input type="checkbox" id="inkBlot"><span><strong>Ink blots</strong><small>Occasional extra-dark dots around a stroke</small></span></label>
+     <label class="effect-row"><input type="checkbox" id="inkBleed"><span><strong>Ink bleed</strong><small>Soft, slightly feathered stroke edges</small></span></label>
+     <label class="effect-row"><input type="checkbox" id="inkSmudge"><span><strong>Ink smudges</strong><small>Faint, sideways dragged ink marks</small></span></label>
+    </div>
+    <div class="row" style="margin-top:13px"><label for="effectStrength" class="small"><strong>Effects strength</strong></label><strong id="effectStrengthValue" class="small">50%</strong></div>
+    <input type="range" id="effectStrength" min="0" max="100" step="5" value="50" aria-label="Ink effects strength">
+    <p class="hint">At 0%, effects are invisible. At high strength they become more noticeable. Effects are reproducible in the preview and PDF.</p>
+   </div>
+  </div>
+  <div class="card">
+   <h2><span class="step">4</span>Set paper & lettering layout</h2>
+   <p class="sub">Choose paper dimensions and orientation. The 1–3–3 lettering guide uses 1 mm upper offset, 3 mm writing height, and 3 mm gap by default.</p>
+   <div class="paper-panel">
+    <div class="fields" style="margin-top:0">
+     <div class="field"><label for="paperSize">Paper size</label><select id="paperSize"><option value="A4">A4 (210 × 297 mm)</option><option value="A3">A3 (297 × 420 mm)</option><option value="A5">A5 (148 × 210 mm)</option><option value="Letter">US Letter (8.5 × 11 in)</option><option value="Legal">US Legal (8.5 × 14 in)</option><option value="B5">ISO B5 (176 × 250 mm)</option><option value="Custom">Custom dimensions</option></select></div>
+     <div class="field"><label for="paperOrientation">Orientation</label><select id="paperOrientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+    </div>
+    <div class="fields custom-paper" id="customPaperFields" hidden>
+     <div class="field"><label for="customPaperWidth">Width (mm)</label><input id="customPaperWidth" type="number" min="100" max="600" step="0.1" value="210"></div>
+     <div class="field"><label for="customPaperHeight">Height (mm)</label><input id="customPaperHeight" type="number" min="100" max="600" step="0.1" value="297"></div>
+    </div>
+    <p class="hint" id="paperDescription">A4 portrait · 210 × 297 mm. Printed page and guide lines will fit this size.</p>
+   </div>
+   <div class="fields">
+    <div class="field"><label for="u1">First band (mm)</label><input type="number" min="0" max="8" step="0.25" id="u1" value="1"></div>
+    <div class="field"><label for="u2">Letter height (mm)</label><input type="number" min="1.5" max="12" step="0.25" id="u2" value="3"></div>
+    <div class="field"><label for="u3">Line gap (mm)</label><input type="number" min="0.5" max="15" step="0.25" id="u3" value="3"></div>
+    <div class="field"><label for="marginTop">Top margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginTop" value="17"></div>
+    <div class="field"><label for="marginLeft">Left margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginLeft" value="16"></div>
+    <div class="field"><label for="marginRight">Right margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginRight" value="14"></div>
+    <div class="field"><label for="marginBottom">Bottom margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginBottom" value="15"></div>
+    <div class="field"><label for="letterSpace">Letter spacing (mm)</label><input type="number" min="0" max="5" step="0.1" id="letterSpace" value="0.5"></div>
+    <div class="field"><label for="penWidth">Stroke width (mm) · precise</label><input type="number" min="0.05" max="1.5" step="0.05" id="penWidth" value="0.2"></div>
+   </div>
+   <div class="stack"><label class="checkline"><input type="checkbox" id="guides" checked> Show faint 1–3–3 guide lines in the PDF</label><label class="checkline"><input type="checkbox" id="marginGuides"> Show left/right margin marks</label><label class="checkline"><input type="checkbox" id="variation" checked> Make each repeated letter slightly different</label><label class="checkline"><input type="checkbox" id="naturalPressure" checked> Subtle pen-pressure changes along the strokes</label></div>
+   <div class="realism-box" id="realismBox">
+    <div class="row"><label for="variationLevel">Handwriting variation strength</label><strong id="variationText">35% · subtle</strong></div>
+    <input type="range" id="variationLevel" min="0" max="100" step="1" value="35" aria-describedby="variationHelp" />
+    <p class="hint" id="variationHelp">Changes letter shape, size, tilt, baseline, and spacing. Nearby letters share a small baseline drift for more natural words. If enabled, pen pressure is varied along each stroke. Preview and print use the same seeded pattern.</p>
+    <div class="toolbar"><button class="btn" id="shuffleBtn" type="button">Try another variation pattern</button><span class="small muted" id="variationPattern">Pattern 1</span></div>
+   </div>
+   <div class="infobar"><strong id="paperInfo">A4 portrait: 210 × 297 mm.</strong> <span id="lineInfo">7 mm per writing row</span>. Unrecorded characters use a basic fallback font.</div>
+   <hr />
+   <div class="toolbar"><button class="btn primary" id="printBtn">Print / Save PDF</button><button class="btn" id="refreshBtn">Refresh preview</button><button class="btn" id="restoreBtn">Default layout</button></div>
+   <div class="note">For printing, use <strong>scale 100%</strong>, <strong>zero extra margins</strong>, and <strong>Background graphics</strong> for the full ink effects. The program requests your selected paper size; confirm the print dialog matches it. Choose “Save as PDF” for a file.</div>
+  </div>
+ </section>
+ <section class="preview-pane">
+  <div class="preview-top"><div><h2>Live paper preview</h2><p id="previewStats">Preparing pages…</p></div>
+   <div class="preview-actions"><div class="zoom-controls" role="group" aria-label="Paper preview zoom">
+    <button type="button" class="btn" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
+    <input type="range" id="zoomSlider" min="50" max="250" step="10" value="100" aria-label="Preview zoom percentage">
+    <button type="button" class="btn" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
+    <output id="zoomValue" for="zoomSlider">100%</output>
+    <button type="button" class="btn" id="zoomReset" title="Return to normal size">Fit</button>
+   </div><button class="btn primary" id="printTop">Print / Save PDF</button></div>
+  </div>
+  <div class="page-list" id="pageList"></div>
+  <p class="note">Use the + / − buttons or slider to zoom in and out. At larger zoom levels, scroll sideways to inspect the page. Zoom affects the screen preview only; the PDF keeps your selected paper dimensions.</p>
+ </section>
+</main>
+<script>
+'use strict';
+(function(){
+ const ABC='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!:-/()';
+ const MATH_SYMBOLS='+−×÷=<>≤≥≠±√∑∫∏σπτγΔθμλφρΩαβεκηνω·∞°%[]{}|\\';
+ const EXTRA='abcdefghijklmnopqrstuvwxyz';
+ const ACCENT_MARKS='~´`^¨˚¸¯ˇ˘';
+ const MARK_BY_COMBINING={'\u0303':'~','\u0301':'´','\u0300':'`','\u0302':'^','\u0308':'¨','\u030a':'˚','\u0327':'¸','\u0304':'¯','\u030c':'ˇ','\u0306':'˘'};
+ const BELOW_MARKS=new Set(['¸']);
+ const KEY='handwriting_studio_133_v1';
+ const SETTINGS='handwriting_studio_133_settings_v1';
+ const PHRASES='handwriting_studio_133_phrases_v5';
+ const PAPER_PRESETS={A4:[210,297],A3:[297,420],A5:[148,210],Letter:[215.9,279.4],Legal:[215.9,355.6],B5:[176,250]};
+ const svgNS='http://www.w3.org/2000/svg';
+ let phrases={};let phraseStrokes=[];let phraseCurrentStroke=null;let phraseDrawing=false;let editingPhrase=null;let editingPhraseIndex=null;let samples={};let chosen='A';let strokes=[];let activeStroke=null;let drawing=false;let redoStrokes=[];let variationSeed=10091;let variationPattern=1;let viewVersion=0;let editVersion=null;let previewZoom=100;
+ const $=id=>document.getElementById(id);
+ const isColor=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
+ const clampZoom=z=>Math.max(50,Math.min(250,Math.round(Number(z)/10)*10));
+ const ctx=$('drawCanvas').getContext('2d');
+ // Font selection stays local to the browser; no font bytes are shipped with this app.
+ let tracingFontFamily='"TraceY14Local", "Y14.5M-2009", Arial, sans-serif';
+ let loadedTraceFont=null;
+ function traceTextMetrics(char){
+   const lower=/^[a-z]$/.test(char), small='aceimnorsuvwxz'.includes(char), descent='gjpqy'.includes(char);
+   if('~´`^¨˚¸¯ˇ˘'.includes(char))return {minY:char==='¸'?181:14,maxY:char==='¸'?211:43,maxW:100};
+   if(lower){if(descent)return {minY:86,maxY:210,maxW:145};return {minY:small?86:48,maxY:175,maxW:145}}
+   if(char==='.'||char===',')return {minY:155,maxY:char===','?198:176,maxW:90};
+   if(char===':'||char===';')return {minY:109,maxY:189,maxW:85};
+   if(/[+=<>×÷−±≤≥]/.test(char))return {minY:91,maxY:160,maxW:180};
+   return {minY:48,maxY:175,maxW:185};
+ }
+ function drawTracingReference(){
+   if(!$('sampleTraceToggle').checked)return;
+   const alpha=Math.max(.05,Math.min(.55,Number($('sampleTraceOpacity').value)/100||.2));
+   const char=chosen;
+   const box=traceTextMetrics(char);
+   const maxH=box.maxY-box.minY;
+   const visibleChar=char==='´'?'´':char;
+   ctx.save();
+   // Use a neutral tint so the user's pen strokes always remain visually distinct.
+   ctx.fillStyle='#536a8b';ctx.globalAlpha=alpha;ctx.textAlign='left';ctx.textBaseline='alphabetic';
+   ctx.font='190px '+tracingFontFamily;
+   let m=ctx.measureText(visibleChar);
+   let bounds={left:Math.max(0,m.actualBoundingBoxLeft||0),right:Math.max(0,m.actualBoundingBoxRight||0),top:Math.max(1,m.actualBoundingBoxAscent||0),bottom:Math.max(0,m.actualBoundingBoxDescent||0)};
+   let width=bounds.left+bounds.right;
+   let height=bounds.top+bounds.bottom;
+   // Unusual GD&T symbols (such as ~) can be font control glyphs. The fallback keeps tracing usable.
+   if(width<2||height<2){ctx.font='190px Arial, sans-serif';m=ctx.measureText(visibleChar);bounds={left:Math.max(0,m.actualBoundingBoxLeft||0),right:Math.max(0,m.actualBoundingBoxRight||0),top:Math.max(1,m.actualBoundingBoxAscent||0),bottom:Math.max(0,m.actualBoundingBoxDescent||0)};width=bounds.left+bounds.right;height=bounds.top+bounds.bottom;}
+   const scale=Math.min(maxH/Math.max(height,1),box.maxW/Math.max(width,1));
+   const drawWidth=width*scale;
+   // Center the visible ink, not the nominal font advance. This remains stable across fonts.
+   const originX=320-drawWidth/2+bounds.left*scale;
+   const originY=box.minY+bounds.top*scale;
+   ctx.translate(originX,originY);ctx.scale(scale,scale);
+   ctx.fillText(visibleChar,0,0);
+   ctx.restore();
+ }
+ function updateTracingUI(){
+   const enabled=$('sampleTraceToggle').checked;
+   $('sampleTraceOpacity').disabled=!enabled;
+   $('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';
+   redrawCanvas();storeSettings();
+ }
+ for(const id of ['sampleTraceToggle','sampleTraceOpacity'])$(id).addEventListener('input',updateTracingUI);
+ $('sampleTraceFontFile').addEventListener('change',async e=>{
+   const file=e.target.files?.[0];if(!file)return;
+   const status=$('sampleTraceFontStatus');
+   try{
+     if(file.size>10_000_000)throw Error('Font file exceeds 10 MB');
+     if(!/\.(ttf|otf|woff2?)$/i.test(file.name))throw Error('Choose a TTF, OTF, WOFF or WOFF2 font');
+     const bytes=await file.arrayBuffer();
+     const font=new FontFace('UserY14Tracing',bytes,{style:'normal',weight:'normal'});
+     await font.load();document.fonts.add(font);
+     if(loadedTraceFont){try{document.fonts.delete(loadedTraceFont)}catch(_){}}
+     loadedTraceFont=font;tracingFontFamily='"UserY14Tracing", Arial, sans-serif';
+     status.textContent='Loaded '+file.name+' locally. The reference now uses this font.';
+     redrawCanvas();
+   }catch(err){status.textContent='Could not load font: '+err.message}
+   e.target.value='';
+ });
+
+ const optionIds=['u1','u2','u3','marginTop','marginLeft','marginRight','marginBottom','letterSpace','penWidth','variationLevel','effectStrength','mathRoughness','customPaperWidth','customPaperHeight','sampleTraceOpacity'];
+ const checkIds=['mathSymbolsGrid','uppercase','guides','marginGuides','variation','lowercaseGrid','accentGrid','composeAccents','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle'];
+ const defaults={u1:1,u2:3,u3:3,marginTop:17,marginLeft:16,marginRight:14,marginBottom:15,letterSpace:0.5,penWidth:0.2,variationLevel:35,mathSymbolsGrid:true,accentGrid:true,composeAccents:true,uppercase:true,guides:true,marginGuides:false,variation:true,lowercaseGrid:false,naturalPressure:true,inkBlot:false,inkBleed:false,inkSmudge:false,mathHandDrawn:true,mathRoughness:45,effectStrength:50,customPaperWidth:210,customPaperHeight:297,sampleTraceOpacity:20,sampleTraceToggle:true,paperSize:'A4',paperOrientation:'portrait',inkColor:'#1c2a43'};
+ function load(){try{const obj=JSON.parse(localStorage.getItem(KEY)||'{}');if(obj&&typeof obj==='object')samples=obj}catch(e){samples={}}
+ try{const obj=JSON.parse(localStorage.getItem(PHRASES)||'{}');if(obj&&typeof obj==='object')phrases=obj}catch(e){phrases={}}
+ try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
+ }
+ function store(){try{localStorage.setItem(KEY,JSON.stringify(samples));localStorage.setItem(PHRASES,JSON.stringify(phrases))}catch(e){$('sampleStatus').textContent='Browser storage full: please export your handwriting profile.'}}
+ function storeSettings(){const o={};for(const id of optionIds)o[id]=$(id).value;for(const id of checkIds)o[id]=$(id).checked;o.content=$('content').value;o.equationDraft=$('equationDraft').value;o.equationSize=$('equationSize').value;o.equationAlign=$('equationAlign').value;o.phraseMode=$('phraseMode').value;o.paperSize=$('paperSize').value;o.paperOrientation=$('paperOrientation').value;o.inkColor=$('inkColor').value;o.previewZoom=previewZoom;o.variationSeed=variationSeed;o.variationPattern=variationPattern;try{localStorage.setItem(SETTINGS,JSON.stringify(o))}catch(e){}}
+ function alphabet(){return [...new Set([...ABC,...($('lowercaseGrid').checked?EXTRA:''),...($('mathSymbolsGrid').checked?MATH_SYMBOLS:''),...($('accentGrid').checked?ACCENT_MARKS:'')])].join('')}
+ function glyphList(){const root=$('charGrid');root.replaceChildren();for(const char of alphabet()){const b=document.createElement('button');b.className='glyph'+(chosen===char?' active':'')+((samples[char]||[]).length?' saved':'');b.title='Sample '+char;b.textContent=char;b.type='button';b.addEventListener('click',()=>select(char));root.appendChild(b)}
+ const count=[...alphabet()].filter(c=>(samples[c]||[]).length>0).length;$('count').textContent=`${count} of ${[...alphabet()].length} sampled`;}
+ function cancelEdit(){redoStrokes=[];editVersion=null;$('saveBtn').textContent='Save character';$('cancelEditBtn').hidden=true;strokes=[];activeStroke=null;redrawCanvas()}
+ function select(c){chosen=c;cancelEdit();viewVersion=0;
+  const switchedCase=isLowercase(c)&&$('uppercase').checked;if(switchedCase)$('uppercase').checked=false;
+  $('selectedChar').textContent='Selected: '+(c===' '?'SPACE':c);
+  $('variantCount').textContent=(samples[c]||[]).length+' saved version(s)';glyphList();renderGallery();
+  $('letterGuideHelp').textContent=ACCENT_MARKS.includes(c)?'Draw only the accent mark (not the letter). Its sample is fitted automatically above or below your letter, so you can draw it anywhere inside the box.':isLowercase(c)?'Lowercase guides: top = capital height, middle = x-height, lower dashed line = baseline, bottom = descenders. For a,c,e,m,n,o,r,s,u,v,w,x,z use middle to baseline; b,d,f,h,k,l,t can reach the top; g,j,p,q,y extend below baseline.':'Draw the selected symbol inside the guides. The lower dashed guide is the baseline.';
+  $('sampleStatus').textContent='Draw '+c+' using the guides, then save it. You can save multiple versions.';redrawCanvas();updateCaseStatus();updateAccentStatus();if(switchedCase)refresh();}
+ function isLowercase(ch){return ch.length===1&&ch>='a'&&ch<='z'}
+ const LOWER_SHORT='aceimnorsuvwxz';
+ const LOWER_DESC='gjpqy';
+ function defaultPlacement(ch){
+  if(isLowercase(ch))return LOWER_DESC.includes(ch)?{topEm:.73,bottomEm:-.28}:(LOWER_SHORT.includes(ch)?{topEm:.73,bottomEm:0}:{topEm:1,bottomEm:0});
+  if(ch==='.'||ch===',')return {topEm:.30,bottomEm:0};
+  if(ch===':'||ch===';')return {topEm:.62,bottomEm:0};
+  return {topEm:1,bottomEm:0};
+ }
+ // Unicode canonically decomposed characters (Ñ, ñ, á, É, ü, ç, etc.)
+ // reuse the already sampled base letter and separate mark. No fake letter glyphs
+ // are stored or generated, and imports from older versions still work.
+ function accentParts(ch,c){
+  if(!c.composeAccents||!ch||ch.length!==1||(samples[ch]||[]).length)return null;
+  const bits=ch.normalize('NFD');if(bits.length<2)return null;
+  const base=bits[0],marks=[...bits.slice(1)].map(x=>MARK_BY_COMBINING[x]);
+  if(!/^[A-Za-z]$/.test(base)||!marks.length||marks.some(m=>!m))return null;
+  return {base,marks};
+ }
+ function updateAccentStatus(){
+  const sample=x=>(samples[x]||[]).length>0;
+  const status=$('accentStatus');if(!status)return;
+  status.textContent='Ñ = '+(sample('N')?'✓ N sampled':'N not sampled')+' + '+(sample('~')?'✓ ~ sampled':'~ not sampled')+'  •  ñ = '+(sample('n')?'✓ n sampled':'n not sampled')+' + '+(sample('~')?'✓ ~ sampled':'~ not sampled')+'. Missing parts use the fallback font until sampled.';
+ }
+ function placementFor(ch,g){const d=defaultPlacement(ch);
+  if(!g||!Number.isFinite(g.topEm)||!Number.isFinite(g.bottomEm)||g.topEm<=g.bottomEm)return d;
+  return {topEm:Math.max(-.42,Math.min(1.42,g.topEm)),bottomEm:Math.max(-.48,Math.min(1.35,g.bottomEm))};
+ }
+ function updateCaseStatus(){
+  const on=$('uppercase').checked;
+  $('caseStatus').textContent=on?'Uppercase conversion is ON: lowercase letters in your typed notes will become capitals. Uncheck this option to keep lowercase handwriting.':'Lowercase is preserved: your typed a–z characters use lowercase samples (or the fallback font if not sampled).';
+  $('caseStatus').style.borderColor=on?'#eccf89':'#a7d6bc';
+ }
+ function redrawCanvas(){
+  const c=$('drawCanvas'),w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+  $('sampleGuideLegend').hidden=!$('sampleGuideToggle').checked;
+  ctx.save();
+  if($('sampleGridToggle').checked){
+   ctx.strokeStyle='#e2eaf5';ctx.lineWidth=.9;
+   for(let x=16;x<w;x+=16){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+   for(let y=0;y<h;y+=16){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+  }
+  drawTracingReference();
+  if($('sampleGuideToggle').checked){
+   // All four guides are always visible: characters stay aligned when switching case.
+   const guides=[
+    {y:48,label:'CAP HEIGHT',color:'#3572ca',dash:[],width:2.5},
+    {y:86,label:'X-HEIGHT',color:'#1e8c75',dash:[8,5],width:2},
+    {y:175,label:'BASELINE',color:'#be4f42',dash:[],width:2.8},
+    {y:211,label:'DESCENDERS',color:'#8861b8',dash:[3,5],width:2}
+   ];
+   for(const g of guides){
+    ctx.beginPath();ctx.strokeStyle=g.color;ctx.lineWidth=g.width;ctx.setLineDash(g.dash);
+    ctx.moveTo(14,g.y);ctx.lineTo(w-14,g.y);ctx.stroke();ctx.setLineDash([]);
+    // Labels live at the LEFT, not the cropped right edge of a zoomed canvas.
+    ctx.font='bold 15px system-ui, sans-serif';const labelWidth=ctx.measureText(g.label).width;
+    ctx.fillStyle='rgba(255,255,255,.94)';ctx.fillRect(18,g.y-22,labelWidth+14,19);
+    ctx.fillStyle=g.color;ctx.fillText(g.label,25,g.y-7);
+   }
+  }
+  ctx.restore();
+  ctx.lineWidth=Math.max(1.1,Math.min(20,getCfg().penWidth/Math.max(1.5,getCfg().u2)*127));
+  ctx.strokeStyle=getCfg().inkColor;ctx.lineJoin='round';ctx.lineCap='round';
+  for(const st of strokes){if(!st.length)continue;ctx.beginPath();ctx.moveTo(st[0][0],st[0][1]);
+   if(st.length===1){ctx.lineTo(st[0][0]+.01,st[0][1]+.01)}else{for(let i=1;i<st.length;i++)ctx.lineTo(st[i][0],st[i][1])}ctx.stroke()}
+ }
+ function cursor(e){const rect=$('drawCanvas').getBoundingClientRect();return [(e.clientX-rect.left)*$('drawCanvas').width/rect.width,(e.clientY-rect.top)*$('drawCanvas').height/rect.height,Math.max(.08,Math.min(1,e.pressure||.5))]}
+ $('drawCanvas').addEventListener('pointerdown',e=>{e.preventDefault();$('drawCanvas').setPointerCapture(e.pointerId);drawing=true;activeStroke=[cursor(e)];strokes.push(activeStroke);redoStrokes=[];redrawCanvas()});
+ $('drawCanvas').addEventListener('pointermove',e=>{if(!drawing||!activeStroke)return;e.preventDefault();const p=cursor(e),l=activeStroke[activeStroke.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])>=1.3){activeStroke.push(p);redrawCanvas()}});
+ function endStroke(){drawing=false;activeStroke=null}for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('drawCanvas').addEventListener(ev,endStroke);
+ $('undoBtn').onclick=()=>{const last=strokes.pop();if(last)redoStrokes.push(last);redrawCanvas()};
+ $('redoBtn').onclick=()=>{const last=redoStrokes.pop();if(last)strokes.push(last);redrawCanvas()};
+ $('clearBtn').onclick=()=>{strokes=[];redoStrokes=[];redrawCanvas()};
+ function updateSampleZoom(){const z=Number($('sampleZoom').value);const fitWidth=Math.min(640,Math.max(220,$('sampleViewport').clientWidth-4));$('drawCanvas').style.width=(fitWidth*z/100)+'px';$('sampleZoomLabel').textContent=z+'%';}
+ $('sampleZoom').addEventListener('input',updateSampleZoom);
+ $('sampleZoomReset').onclick=()=>{$('sampleZoom').value=100;updateSampleZoom()};
+ for(const id of ['sampleGridToggle','sampleGuideToggle'])$(id).addEventListener('change',redrawCanvas);
+ updateSampleZoom();window.addEventListener('resize',updateSampleZoom);
+ function normalize(st,preserveAll=false){let pts=st.flat();if(!pts.length)return null;let minX=Math.min(...pts.map(p=>p[0])),maxX=Math.max(...pts.map(p=>p[0])),minY=Math.min(...pts.map(p=>p[1])),maxY=Math.max(...pts.map(p=>p[1]));let w=Math.max(maxX-minX,3),h=Math.max(maxY-minY,3);const data=st.map(s=>s.filter((_,i)=>preserveAll||i===0||i===s.length-1||i%2===0).map(p=>[(p[0]-minX)/w,(p[1]-minY)/h,...(p.length>2?[Math.max(.08,Math.min(1,p[2]))]:[])]));
+  // Preserve drawing placement on the cap-height / baseline / descender guides.
+  // Older profiles without these optional metrics still work using letter-shape defaults.
+  return {aspect:Number((w/h).toFixed(4)),strokes:data,topEm:Number(Math.max(-.42,Math.min(1.42,(175-minY)/127)).toFixed(4)),bottomEm:Number(Math.max(-.48,Math.min(1.35,(175-maxY)/127)).toFixed(4))};}
+ function showVersion(index){const versions=samples[chosen]||[];if(index<0||index>=versions.length)return;viewVersion=index;renderGallery()}
+ function versionSvg(g,large=false){const svg=el('svg',{viewBox:'0 0 240 110',role:'img','aria-label':'Handwritten sample strokes'});
+  const maxWidth=large?212:208,maxHeight=large?86:82;
+  const height=Math.min(maxHeight,maxWidth/g.aspect),width=height*g.aspect,x=(240-width)/2,y=(110-height)/2;
+  el('line',{x1:12,y1:99,x2:228,y2:99,stroke:'#e5ebf5','stroke-width':.8,'stroke-dasharray':'3 3'},svg);
+  const weight=Math.max(.65,Math.min(12,height*getCfg().penWidth/getCfg().u2));
+  for(const stroke of g.strokes){if(stroke.length)el('path',{d:pathFromStroke(stroke,x,y,width,height,(a,b)=>[a,b]),fill:'none',stroke:getCfg().inkColor,'stroke-width':weight,'stroke-linecap':'round','stroke-linejoin':'round'},svg)}return svg;
+ }
+ function renderGallery(){const versions=samples[chosen]||[],grid=$('versionGallery');grid.replaceChildren();$('galleryCount').textContent=versions.length+' saved / 12 max';$('variantCount').textContent=versions.length+' saved version(s)';
+  if(viewVersion>=versions.length)viewVersion=Math.max(0,versions.length-1);
+  const viewer=$('versionViewer');viewer.hidden=!versions.length;
+  if(!versions.length){const empty=document.createElement('div');empty.className='empty-gallery';empty.textContent='No saved versions for '+chosen+' yet. Draw the letter above and click Save character.';grid.appendChild(empty);$('viewingArtwork').replaceChildren();return}
+  $('viewingLabel').textContent=chosen+' · Version '+(viewVersion+1)+' of '+versions.length;
+  $('viewingArtwork').replaceChildren(versionSvg(versions[viewVersion],true));
+  versions.forEach((g,i)=>{const card=document.createElement('div');card.className='version-card'+(i===viewVersion?' is-viewing':'');
+   const header=document.createElement('div');header.className='row';const label=document.createElement('strong');label.className='small';label.textContent='Version '+(i+1);const hint=document.createElement('span');hint.className='muted';hint.textContent=i===editVersion?'Editing':'Saved';header.append(label,hint);card.append(header,versionSvg(g));
+   const actions=document.createElement('div');actions.className='toolbar';
+   const view=document.createElement('button');view.className='btn';view.textContent='View';view.type='button';view.setAttribute('aria-label','View '+chosen+' version '+(i+1));view.onclick=()=>showVersion(i);
+   const edit=document.createElement('button');edit.className='btn';edit.textContent='Edit';edit.type='button';edit.setAttribute('aria-label','Edit '+chosen+' version '+(i+1));edit.onclick=()=>loadVersion(i);
+   const del=document.createElement('button');del.className='btn danger';del.textContent='Delete';del.type='button';del.setAttribute('aria-label','Delete '+chosen+' version '+(i+1));del.onclick=()=>{if(del.dataset.confirm==='1'){deleteVersion(i);return}
+    del.dataset.confirm='1';del.textContent='Confirm delete';del.setAttribute('aria-label','Confirm delete '+chosen+' version '+(i+1));
+    const cancel=document.createElement('button');cancel.className='btn';cancel.type='button';cancel.textContent='Cancel';cancel.onclick=()=>{del.dataset.confirm='';del.textContent='Delete';del.setAttribute('aria-label','Delete '+chosen+' version '+(i+1));cancel.remove()};actions.appendChild(cancel)};
+   actions.append(view,edit,del);card.appendChild(actions);grid.appendChild(card)});
+ }
+ function loadVersion(i){const g=(samples[chosen]||[])[i];if(!g)return;
+  const pos=placementFor(chosen,g),originalH=127*(pos.topEm-pos.bottomEm);
+  const scale=Math.min(1,540/(Math.max(1,originalH)*g.aspect));
+  const height=originalH*scale,width=height*g.aspect,x=(640-width)/2,y=175-127*pos.topEm*scale;
+  redoStrokes=[];strokes=g.strokes.map(stroke=>stroke.map(p=>[x+p[0]*width,y+p[1]*height,...(p.length>2?[p[2]]:[])]));editVersion=i;viewVersion=i;
+  $('saveBtn').textContent='Save changes';$('cancelEditBtn').hidden=false;redrawCanvas();renderGallery();
+  $('sampleStatus').innerHTML='<span class="status">Editing '+chosen+' version '+(i+1)+'. Click Save changes to replace this version, or Cancel edit.</span>';
+  $('drawCanvas').scrollIntoView({block:'nearest',behavior:'smooth'});
+ }
+ function deleteVersion(i){const variants=samples[chosen]||[];if(!variants[i])return;
+  variants.splice(i,1);if(!variants.length)delete samples[chosen];cancelEdit();viewVersion=Math.min(i,(samples[chosen]||[]).length-1);store();glyphList();renderGallery();render();updateAccentStatus();
+  $('sampleStatus').innerHTML='<span class="status">Deleted version '+(i+1)+' of '+chosen+'.</span>';
+ }
+ $('cancelEditBtn').onclick=()=>{cancelEdit();renderGallery();$('sampleStatus').textContent='Editing cancelled. Saved samples have not changed.'};
+ $('saveBtn').onclick=()=>{const g=normalize(strokes,editVersion!==null);if(!g){$('sampleStatus').innerHTML='<span class="warning">Draw the character before saving.</span>';return;}
+  if(!samples[chosen])samples[chosen]=[];
+  if(editVersion===null&&samples[chosen].length>=12){$('sampleStatus').innerHTML='<span class="warning">You already have 12 versions. Delete an old version or edit one to continue.</span>';return}
+  if(editVersion!==null){samples[chosen][editVersion]=g;viewVersion=editVersion}else{samples[chosen].push(g);viewVersion=samples[chosen].length-1}
+  const edited=editVersion!==null;store();cancelEdit();glyphList();renderGallery();render();
+  updateAccentStatus();$('sampleStatus').innerHTML='<span class="status">'+(edited?'Updated':'Saved')+' '+chosen+' version '+(viewVersion+1)+'. Your page preview now uses your saved samples.</span>';
+ };
+ for(const b of document.querySelectorAll('[data-accent-pick]'))b.addEventListener('click',()=>{const ch=b.dataset.accentPick;if(isLowercase(ch)&&!$('lowercaseGrid').checked){$('lowercaseGrid').checked=true;$('uppercase').checked=false}if(ACCENT_MARKS.includes(ch))$('accentGrid').checked=true;select(ch);});
+ $('nextBtn').onclick=()=>{let arr=[...alphabet()],i=arr.indexOf(chosen);for(let k=1;k<=arr.length;k++){let c=arr[(i+k)%arr.length];if(!(samples[c]||[]).length){select(c);return}}select(arr[(i+1)%arr.length])};
+ $('exportBtn').onclick=()=>{const obj={format:'HandwritingStudio133',version:'7.8',samples,phrases};downloadBlob(new Blob([JSON.stringify(obj)],{type:'application/json'}),'my-handwriting-v7-8-133.json')};
+ function downloadBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+ $('importBtn').onclick=()=>$('importFile').click();
+ $('importFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const obj=JSON.parse(await file.text());const data=obj.samples||obj;if(!data||typeof data!=='object')throw Error('Not a handwriting profile');const clean={};for(const [k,v] of Object.entries(data)){if(k.length===1&&Array.isArray(v)){const valid=v.filter(g=>Number.isFinite(g.aspect)&&g.aspect>0&&g.aspect<40&&Array.isArray(g.strokes)&&g.strokes.every(s=>Array.isArray(s)&&s.every(p=>Array.isArray(p)&&(p.length===2||p.length===3)&&p.every(n=>Number.isFinite(n)&&n>=-.05&&n<=1.05))));if(valid.length)clean[k]=valid.slice(0,12)}}samples=clean;phrases=validatePhraseProfiles(obj.phrases||{});store();glyphList();select(chosen);renderPhraseGallery();render();updateAccentStatus();$('sampleStatus').innerHTML='<span class="status">Handwriting profile imported.</span>'}catch(err){alert('Cannot import this profile: '+err.message)}e.target.value=''};
+ $('resetBtn').onclick=()=>{if(confirm('Delete all saved letters AND phrases in this browser? Export a backup first if needed.')){samples={};phrases={};store();select(chosen);renderPhraseGallery();render();updateAccentStatus()}};
+ function cfgNum(id,fallback){const v=Number($(id).value);return Number.isFinite(v)?v:fallback}
+ function getCfg(){const c={};for(const id of optionIds)c[id]=cfgNum(id,defaults[id]);for(const id of checkIds)c[id]=$(id).checked;c.u1=Math.max(0,Math.min(8,c.u1));c.u2=Math.max(1.5,Math.min(12,c.u2));c.u3=Math.max(.5,Math.min(15,c.u3));c.marginTop=Math.max(0,Math.min(60,c.marginTop));c.marginBottom=Math.max(0,Math.min(60,c.marginBottom));c.marginLeft=Math.max(0,Math.min(60,c.marginLeft));c.marginRight=Math.max(0,Math.min(60,c.marginRight));c.letterSpace=Math.max(0,Math.min(5,c.letterSpace));c.penWidth=Math.max(.05,Math.min(1.5,c.penWidth));c.variationLevel=Math.max(0,Math.min(100,c.variationLevel));c.mathRoughness=Math.max(0,Math.min(100,c.mathRoughness));c.inkColor=isColor($('inkColor').value)?$('inkColor').value:defaults.inkColor;
+ c.inkBlot=!!c.inkBlot;c.inkBleed=!!c.inkBleed;c.inkSmudge=!!c.inkSmudge;
+ c.effectStrength=Math.max(0,Math.min(100,c.effectStrength))/100;
+ c.paperSize=$('paperSize').value;c.paperOrientation=$('paperOrientation').value;
+ let dims=c.paperSize==='Custom'?[c.customPaperWidth,c.customPaperHeight]:(PAPER_PRESETS[c.paperSize]||PAPER_PRESETS.A4);
+ const rawW=Math.max(100,Math.min(600,Number(dims[0])||210)),rawH=Math.max(100,Math.min(600,Number(dims[1])||297));
+ c.paperW=c.paperOrientation==='landscape'?Math.max(rawW,rawH):Math.min(rawW,rawH);
+ c.paperH=c.paperOrientation==='landscape'?Math.min(rawW,rawH):Math.max(rawW,rawH);
+ c.marginLeft=Math.min(c.marginLeft,Math.max(0,(c.paperW-10)/2));c.marginRight=Math.min(c.marginRight,Math.max(0,c.paperW-c.marginLeft-10));
+ return c}
+ function el(tag,attrs={},parent){const e=document.createElementNS(svgNS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(parent)parent.appendChild(e);return e}
+ // All variation is seeded by glyph occurrence, making preview, refresh and PDF identical.
+ const hash=(n)=>{let x=(n*1664525+1013904223)>>>0;x^=x>>>16;x=Math.imul(x,2246822519);x^=x>>>13;return (x>>>0)/4294967296;};
+ function rand(ch,idx,channel){return hash((variationSeed + Math.imul(idx+1,747796405) + Math.imul(ch.charCodeAt(0)+1,2891336453) + Math.imul(channel+1,277803737))>>>0)}
+ function shapeFor(char,i){const variants=samples[char];if(!variants||!variants.length)return null;return variants[(Math.floor(rand(char,0,99)*variants.length)+i)%variants.length]}
+ function variationFor(ch,idx,c){const s=c.variation?c.variationLevel/100:0;
+  return {strength:s,width:1+(rand(ch,idx,1)-.5)*.18*s,height:1+(rand(ch,idx,2)-.5)*.15*s,
+   x:(rand(ch,idx,3)-.5)*.22*s,y:(rand(ch,idx,4)-.5)*.30*s,
+   tilt:(rand(ch,idx,5)-.5)*8*s,pen:1+(rand(ch,idx,6)-.5)*.22*s,
+   opacity:1-(rand(ch,idx,7)*.10*s),spacing:(rand(ch,idx,8)-.5)*.28*s};
+ }
+ function sharedDrift(idx,c){if(!c.variation)return 0;const amount=(c.variationLevel/100)*.12;return amount*(Math.sin((idx+variationSeed%31)/3.8)+.55*Math.sin((idx+variationSeed%17)/7.2));}
+ function charHeightFactor(ch){const p=defaultPlacement(ch);return p.topEm-p.bottomEm;}
+ function baseGlyphWidth(ch,g,c){const p=placementFor(ch,g);return Math.max(.4,Math.min(c.u2*1.9,c.u2*g.aspect*(p.topEm-p.bottomEm)))}
+ function dimOf(ch,idx,c){if(ch===' ')return 2.15*c.u2/3;if(ch==='\t')return 8.6*c.u2/3;
+  const composition=accentParts(ch,c);if(composition)return dimOf(composition.base,idx,c);
+  const g=shapeFor(ch,idx),v=variationFor(ch,idx,c),factor=charHeightFactor(ch);
+  if(!g){const isThin='ilI1.,:;!|'.includes(ch);return (isThin?c.u2*.43:c.u2*.72)*factor+c.letterSpace}
+  return Math.max(.15,baseGlyphWidth(ch,g,c)*v.width+c.letterSpace+v.spacing);
+ }
+ // Smooth spatial noise gives connected strokes the SAME deformation, so crossings
+ // and junctions still meet. An individual pen stroke is then resampled, so even
+ // straight two-point strokes can acquire a tiny natural bend.
+ function makeWarp(ch,idx,strength){if(strength<=0)return (x,y)=>[x,y];
+  const dx=[],dy=[];for(let r=0;r<3;r++){dx[r]=[];dy[r]=[];for(let col=0;col<3;col++){
+   const slot=r*3+col;dx[r][col]=rand(ch,idx,20+slot)*2-1;dy[r][col]=rand(ch,idx,40+slot)*2-1;
+  }}
+  function noise(grid,x,y){const xx=Math.max(0,Math.min(1,x))*2,yy=Math.max(0,Math.min(1,y))*2;
+   const i=Math.min(1,Math.floor(xx)),j=Math.min(1,Math.floor(yy));let u=xx-i,v=yy-j;
+   u=u*u*(3-2*u);v=v*v*(3-2*v);
+   return (grid[j][i]*(1-u)+grid[j][i+1]*u)*(1-v)+(grid[j+1][i]*(1-u)+grid[j+1][i+1]*u)*v;
+  }
+  const amplitude=.07*strength;
+  return (x,y)=>[x+amplitude*noise(dx,x,y),y+amplitude*noise(dy,x,y)];
+ }
+ function pathFromStroke(stroke,x,top,w,h,warp){if(!stroke.length)return '';
+  const points=[];for(let i=0;i<stroke.length;i++){
+   if(i>0){const a=stroke[i-1],b=stroke[i];const distance=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    const n=Math.min(24,Math.max(1,Math.ceil(distance/.085)));
+    for(let k=1;k<n;k++){const t=k/n;points.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]);}
+   }
+   points.push(stroke[i]);
+  }
+  let d='';for(let k=0;k<points.length;k++){
+   const [px,py]=warp(points[k][0],points[k][1]);
+   const X=(x+px*w).toFixed(3),Y=(top+py*h).toFixed(3);
+   d+=(k===0?'M':' L')+X+' '+Y;
+  }
+  return points.length===1?d+' l0.001 0.001':d;
+ }
+
+ // Blot / bleed / smudge rely on the same deterministic per-letter seed as handwriting variation.
+ // Effects are vector overlays. The ink and paper outlines remain unaffected by preview zoom.
+ function inkArtifacts(parent,stroke,d,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity){
+  const strength=c.effectStrength;if(strength<=0)return;
+  if(c.inkBleed){
+   el('path',{d,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*(1.28+strength*.65)).toFixed(4),
+    'stroke-opacity':(.10+strength*.16).toFixed(3),filter:'url(#ink-bleed)',
+    'stroke-linecap':'round','stroke-linejoin':'round','data-effect':'bleed'},parent);
+  }
+  if(c.inkSmudge&&rand(ch,idx,152+si)<(.30+.42*strength)){
+   const offX=(.14+.48*strength)*(.6+rand(ch,idx,154+si)*.8);
+   const offY=(.06+.22*strength)*(rand(ch,idx,155+si)>.25?1:-1);
+   el('path',{d,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*(1.45+strength*.9)).toFixed(4),
+     'stroke-opacity':(.06+.17*strength).toFixed(3),filter:'url(#ink-smudge)',
+     transform:`translate(${offX.toFixed(3)} ${offY.toFixed(3)})`,'stroke-linecap':'round','stroke-linejoin':'round','data-effect':'smudge'},parent);
+  }
+  if(c.inkBlot&&rand(ch,idx,163+si)<(.14+.55*strength)){
+   const pi=Math.min(stroke.length-1,Math.floor(rand(ch,idx,164+si)*stroke.length));
+   const anchor=stroke[pi];if(!anchor)return;
+   const [px,py]=warp(anchor[0],anchor[1]);const cx=locX+px*w,cy=top+py*h;
+   const br=baseWidth*(.58+strength*1.15)*(.8+rand(ch,idx,165+si)*.5);
+   el('ellipse',{cx:cx.toFixed(3),cy:cy.toFixed(3),rx:br.toFixed(4),ry:(br*(.72+rand(ch,idx,167+si)*.5)).toFixed(4),
+     fill:c.inkColor,'fill-opacity':(.48+strength*.4).toFixed(3),'data-effect':'blot'},parent);
+   const small=br*(.27+rand(ch,idx,168+si)*.13);
+   el('circle',{cx:(cx+br*1.05).toFixed(3),cy:(cy-br*.55).toFixed(3),r:small.toFixed(4),fill:c.inkColor,
+     'fill-opacity':(.25+strength*.37).toFixed(3),'data-effect':'blot'},parent);
+  }
+ }
+ function drawNaturalInk(parent,stroke,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity){
+  const basePath=pathFromStroke(stroke,locX,top,w,h,warp);
+  if(!basePath)return;
+  inkArtifacts(parent,stroke,basePath,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity);
+  if(!c.naturalPressure||stroke.length<2){el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':baseWidth.toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);return}
+  // The underlying continuous stroke keeps sharp corners and pen lifts intact;
+  // short smooth overlays simulate changing nib force without cutting letters apart.
+  el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*.78).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
+  let dist=[0],total=0;for(let j=1;j<stroke.length;j++){total+=Math.hypot(stroke[j][0]-stroke[j-1][0],stroke[j][1]-stroke[j-1][1]);dist.push(total)}
+  if(total<.001)return;
+  const pieces=Math.max(3,Math.min(14,Math.ceil(total/.075)));
+  function pointAt(t){const target=t*total;let j=1;while(j<dist.length-1&&dist[j]<target)j++;
+    const f=Math.max(0,Math.min(1,(target-dist[j-1])/Math.max(.0000001,dist[j]-dist[j-1])));
+    const a=stroke[j-1],b=stroke[j];return [a[0]+f*(b[0]-a[0]),a[1]+f*(b[1]-a[1]),(a[2]??.5)*(1-f)+(b[2]??.5)*f]}
+  const phase=rand(ch,idx,82+si)*6.283;
+  for(let k=0;k<pieces;k++){
+   const mid=(k+.5)/pieces,tip=Math.min(1,mid*6,(1-mid)*6),p=pointAt(mid);
+   const natural=.91+.12*Math.sin(mid*7.8+phase)+.055*Math.sin(mid*17.4+phase*1.7);
+   const pressure=(.92+.18*(p[2]-.5))*natural*(.82+.18*tip);
+   const segment=[];for(let t=0;t<=3;t++)segment.push(pointAt((k+t/3)/pieces));
+   el('path',{d:pathFromStroke(segment,locX,top,w,h,warp),fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*pressure).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
+  }
+ }
+ function drawAccentMark(svg,mark,base,idx,x,y,c,stack=0){
+  const bg=shapeFor(base,idx),v=variationFor(base,idx,c),p=placementFor(base,bg);
+  const bottom=y+c.u1+c.u2;
+  const width=(bg?baseGlyphWidth(base,bg,c):Math.max(.45,c.u2*(('ilI1'.includes(base))?.43:.72)*charHeightFactor(base)))*v.width;
+  const baseTop=bottom-c.u2*p.topEm*v.height+v.y+sharedDrift(idx,c);
+  const left=x+v.x;
+  const g=shapeFor(mark,idx+stack*11),mv=variationFor(mark,idx+stack*11,c);
+  let markW=Math.min(width*.78,c.u2*.92),markH=c.u2*.26;
+  if(g){const aspect=Math.max(.2,g.aspect);markH=Math.min(c.u2*.30,markW/aspect);markW=Math.min(markW,markH*aspect);}
+  else{markH=c.u2*.26;markW=Math.max(c.u2*.20,Math.min(markW,c.u2*.63));}
+  markW=Math.max(c.u2*.18,markW)*mv.width;
+  const isBelow=BELOW_MARKS.has(mark);
+  const gap=c.u2*(isBelow?.10:.09);
+  const center=left+width/2+(mv.x+v.x*.25)*.30*c.u2;
+  const top=isBelow?bottom+gap+stack*c.u2*.37:baseTop-gap-markH-stack*c.u2*.42;
+  const locX=center-markW/2;
+  const grp=el('g',{'data-accent-mark':mark,'data-on-letter':base,transform:`rotate(${(v.tilt+mv.tilt*.5).toFixed(3)} ${center.toFixed(3)} ${(top+markH/2).toFixed(3)})`},svg);
+  if(g){const warp=makeWarp(mark,idx+stack*11,mv.strength*.58);
+   for(let si=0;si<g.strokes.length;si++)drawNaturalInk(grp,g.strokes[si],locX,top,markW,markH,warp,c,mark,idx+stack*11,si,c.penWidth*mv.pen,mv.opacity);
+  }else{
+   // Fallback only for a mark without a sample; the base letter is drawn separately.
+   const fallback={'~':'˜','´':'´','`':'`','^':'ˆ','¨':'¨','˚':'˚','¸':'¸','¯':'¯','ˇ':'ˇ','˘':'˘'}[mark]||mark;
+   const txt=el('text',{x:center.toFixed(3),y:(top+markH*.96).toFixed(3),'text-anchor':'middle','font-family':'"Segoe Print", "Comic Sans MS", cursive','font-size':(c.u2*.64).toFixed(3),fill:c.inkColor,'data-fallback-accent':mark},grp);txt.textContent=fallback;
+  }
+ }
+ function drawChar(svg,ch,idx,x,y,c){
+  const composed=accentParts(ch,c);
+  if(composed){const grp=el('g',{'data-composite-letter':ch},svg);drawChar(grp,composed.base,idx,x,y,c);for(let j=0;j<composed.marks.length;j++)drawAccentMark(grp,composed.marks[j],composed.base,idx,x,y,c,j);return}
+  const g=shapeFor(ch,idx),v=variationFor(ch,idx,c);
+  const bottom=y+c.u1+c.u2;
+  if(!g){const attrs={x:x,y:bottom,'font-family':'"Comic Sans MS", "Segoe Print", cursive','font-size':Math.max(1.1,c.u2*1.28),'dominant-baseline':'alphabetic',fill:c.inkColor};
+   if(c.effectStrength>0&&(c.inkBleed||c.inkSmudge)){
+    const extra=el('text',{...attrs,opacity:(.18*c.effectStrength).toFixed(3),filter:'url(#ink-bleed)',transform:c.inkSmudge?'translate(0.15 0.07)':''},svg);extra.textContent=ch;
+   }const txt=el('text',attrs,svg);txt.textContent=ch;return}
+  const pos=placementFor(ch,g);
+  const w=baseGlyphWidth(ch,g,c)*v.width,h=c.u2*(pos.topEm-pos.bottomEm)*v.height;
+  const top=bottom-c.u2*pos.topEm*v.height+v.y+sharedDrift(idx,c),locX=x+v.x;
+  const grp=el('g',{transform:`rotate(${v.tilt.toFixed(3)} ${(locX+w/2).toFixed(3)} ${(top+h/2).toFixed(3)})`,'data-letter':ch},svg);
+  const warp=makeWarp(ch,idx,v.strength);
+  for(let si=0;si<g.strokes.length;si++){
+   const stroke=g.strokes[si];if(!stroke.length)continue;
+   const width=c.penWidth*v.pen*(1+(rand(ch,idx,70+si)-.5)*.10*v.strength);
+   drawNaturalInk(grp,stroke,locX,top,w,h,warp,c,ch,idx,si,width,v.opacity);
+  }
+ }
+
+ // A word/phrase capture stores the actual pen-lift strokes as a vector glyph.
+ // No invisible AI inference: exact text matches use the sample; all other text
+ // falls back to user-sampled individual characters.
+ function canonicalPhrase(s){return String(s||'').replace(/\s+/g,' ').trim().slice(0,60)}
+ function validateGlyph(g,maxAspect=80){return g&&Number.isFinite(g.aspect)&&g.aspect>.02&&g.aspect<maxAspect&&Array.isArray(g.strokes)&&g.strokes.length<300&&g.strokes.every(st=>Array.isArray(st)&&st.length<1200&&st.every(p=>Array.isArray(p)&&(p.length===2||p.length===3)&&p.every(n=>Number.isFinite(n)&&n>=-.05&&n<=1.05)))}
+ function validatePhraseProfiles(obj){const out={};if(!obj||typeof obj!=='object')return out;for(const [phrase,versions] of Object.entries(obj)){
+   const key=canonicalPhrase(phrase);if(!key||!Array.isArray(versions))continue;
+   const good=versions.filter(g=>validateGlyph(g,80)).slice(0,8);if(good.length)out[key]=good;
+  }return out}
+ function phraseCursor(e){const cv=$('phraseCanvas'),r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height,Math.max(.08,Math.min(1,e.pressure||.5))]}
+ function redrawPhraseCanvas(){const cv=$('phraseCanvas'),g=cv.getContext('2d');g.clearRect(0,0,cv.width,cv.height);g.fillStyle='white';g.fillRect(0,0,cv.width,cv.height);
+  g.lineWidth=1;g.strokeStyle='#c0cce0';g.setLineDash([8,6]);for(const y of [35,160]){g.beginPath();g.moveTo(14,y);g.lineTo(cv.width-14,y);g.stroke()}g.setLineDash([]);
+  g.strokeStyle=getCfg().inkColor;g.lineWidth=Math.max(1.4,Math.min(17,getCfg().penWidth/Math.max(1.5,getCfg().u2)*120));g.lineJoin='round';g.lineCap='round';
+  for(const st of phraseStrokes){if(!st.length)continue;g.beginPath();g.moveTo(st[0][0],st[0][1]);for(let i=1;i<st.length;i++)g.lineTo(st[i][0],st[i][1]);if(st.length===1)g.lineTo(st[0][0]+.02,st[0][1]+.02);g.stroke()}}
+ $('phraseCanvas').addEventListener('pointerdown',e=>{e.preventDefault();$('phraseCanvas').setPointerCapture(e.pointerId);phraseDrawing=true;phraseCurrentStroke=[phraseCursor(e)];phraseStrokes.push(phraseCurrentStroke);redrawPhraseCanvas()});
+ $('phraseCanvas').addEventListener('pointermove',e=>{if(!phraseDrawing||!phraseCurrentStroke)return;e.preventDefault();const p=phraseCursor(e),last=phraseCurrentStroke[phraseCurrentStroke.length-1];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=1.5){phraseCurrentStroke.push(p);redrawPhraseCanvas()}});
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('phraseCanvas').addEventListener(ev,()=>{phraseDrawing=false;phraseCurrentStroke=null});
+ $('phraseUndo').onclick=()=>{phraseStrokes.pop();redrawPhraseCanvas()};$('phraseClear').onclick=()=>{phraseStrokes=[];redrawPhraseCanvas()};
+ function cancelPhraseEdit(clear=true){editingPhrase=null;editingPhraseIndex=null;$('phraseSave').textContent='Save phrase';$('phraseCancelEdit').hidden=true;if(clear)phraseStrokes=[];redrawPhraseCanvas();renderPhraseGallery()}
+ $('phraseCancelEdit').onclick=()=>{cancelPhraseEdit();$('phraseStatus').textContent='Editing cancelled. Your saved sample is unchanged.'};
+ $('phraseSave').onclick=()=>{
+  const key=canonicalPhrase($('phraseText').value);if(key.length<2){$('phraseStatus').textContent='Enter a word or short phrase (at least 2 characters).';return}
+  const g=normalize(phraseStrokes,true);if(!g){$('phraseStatus').textContent='Draw the entire word or phrase in the box first.';return}
+  if(!validateGlyph(g,80)){$('phraseStatus').textContent='The drawing is invalid or too thin. Please write a legible sample.';return}
+  if(editingPhrase!==null&&editingPhrase!==key){$('phraseStatus').textContent='To change the phrase text, save it as a new sample. Editing can only replace the strokes.';return}
+  const v=phrases[key]||(phrases[key]=[]);if(editingPhrase===null&&v.length>=8){$('phraseStatus').textContent='This phrase already has 8 versions. Edit or delete one before adding more.';return}
+  const wasEdit=editingPhrase!==null;if(wasEdit)v[editingPhraseIndex]=g;else v.push(g);
+  const cfg=getCfg(),tooWide=g.aspect*cfg.u2>210-cfg.marginLeft-cfg.marginRight-.3;
+  cancelPhraseEdit();store();renderPhraseGallery();render();$('phraseStatus').innerHTML=tooWide?'<span class="warning">Saved “'+escapeText(key)+'”, but this sample is wider than one A4 writing line at your current letter height. Try capturing a shorter word/phrase to use it in the preview.</span>':'<span class="status">'+(wasEdit?'Updated':'Saved')+' your actual strokes for “'+escapeText(key)+'”. Exact matches now use them in the A4 preview.</span>';
+ };
+ function escapeText(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function phraseSvg(g){const svg=el('svg',{viewBox:'0 0 360 86','aria-label':'Saved handwriting sample'});const width=Math.min(334,g.aspect*68),height=Math.min(68,334/g.aspect),left=(360-width)/2,top=(86-height)/2;
+  const c=getCfg();for(const st of g.strokes)el('path',{d:pathFromStroke(st,left,top,width,height,(a,b)=>[a,b]),stroke:c.inkColor,'stroke-width':Math.max(.9,c.penWidth/c.u2*height).toFixed(2),fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},svg);return svg}
+ function loadPhraseVersion(key,index){const g=phrases[key]?.[index];if(!g)return;$('phraseText').value=key;const h=Math.min(125,900/g.aspect),w=h*g.aspect,l=(960-w)/2,t=(194-h)/2;
+  phraseStrokes=g.strokes.map(st=>st.map(p=>[l+p[0]*w,t+p[1]*h,...(p.length>2?[p[2]]:[])]));editingPhrase=key;editingPhraseIndex=index;
+  $('phraseSave').textContent='Save changes';$('phraseCancelEdit').hidden=false;redrawPhraseCanvas();renderPhraseGallery();$('phraseStatus').textContent='Editing “'+key+'” version '+(index+1)+'. Save to replace only this version.';
+  $('phraseCanvas').scrollIntoView({block:'nearest',behavior:'smooth'})}
+ function renderPhraseGallery(){const root=$('phraseGallery');root.replaceChildren();const keys=Object.keys(phrases).filter(k=>phrases[k]?.length).sort((a,b)=>a.localeCompare(b));
+  $('phraseCount').textContent=keys.length+' phrase'+(keys.length===1?'':'s');if(!keys.length){const d=document.createElement('div');d.className='empty-gallery';d.textContent='No word or phrase samples saved yet. Try a common heading or term you use often.';root.appendChild(d);return}
+  for(const key of keys){const list=phrases[key];for(let i=0;i<list.length;i++){
+    const item=document.createElement('div');item.className='phrase-item'+(editingPhrase===key&&editingPhraseIndex===i?' is-editing':'');
+    const title=document.createElement('div');title.className='row';const tx=document.createElement('span');tx.className='sample-text';tx.textContent=key;const meta=document.createElement('span');meta.className='sample-meta';meta.textContent='Version '+(i+1)+'/'+list.length;title.append(tx,meta);item.appendChild(title);
+    const mini=document.createElement('div');mini.className='ink-thumbnail';mini.appendChild(phraseSvg(list[i]));item.appendChild(mini);
+    const tools=document.createElement('div');tools.className='toolbar';const edit=document.createElement('button');edit.type='button';edit.className='btn';edit.textContent='Edit';edit.onclick=()=>loadPhraseVersion(key,i);
+    const del=document.createElement('button');del.type='button';del.className='btn danger';del.textContent='Delete';del.onclick=()=>{if(del.dataset.confirm==='yes'){phrases[key].splice(i,1);if(!phrases[key].length)delete phrases[key];if(editingPhrase===key)cancelPhraseEdit();store();renderPhraseGallery();render();$('phraseStatus').textContent='Deleted one saved version of “'+key+'”.';return}
+      del.dataset.confirm='yes';del.textContent='Confirm delete'};tools.append(edit,del);item.appendChild(tools);root.appendChild(item);
+  }}}
+ function matchedPhrase(text,pos,c,seq){if($('phraseMode').value!=='hybrid')return null;
+  const left=pos===0?'':text[pos-1];if(/[\p{L}\p{N}]/u.test(left))return null;
+  const maxWidth=c.paperW-c.marginLeft-c.marginRight;
+  const matches=Object.keys(phrases).filter(k=>phrases[k]?.length).map(key=>({key,searchKey:c.uppercase?key.toUpperCase():key})).filter(o=>{
+   if(!text.startsWith(o.searchKey,pos))return false;
+   const after=text[pos+o.searchKey.length]||'';return !/[\p{L}\p{N}]/u.test(after)
+  }).sort((a,b)=>b.searchKey.length-a.searchKey.length);
+  for(const match of matches){const arr=phrases[match.key],g=arr[(Math.floor(rand(match.key[0],0,102)*arr.length)+seq)%arr.length];
+   const v=variationFor(match.key[0],seq,c),w=Math.max(.4,c.u2*g.aspect*v.width);
+   if(w<=maxWidth-.3)return {key:match.key,actual:match.searchKey,g,w,advance:w+c.letterSpace*1.6,v};
+  }return null}
+ function drawPhrase(svg,match,idx,x,y,c){const {g,w,v,key}=match;const h=c.u2*v.height,top=y+c.u1+c.u2-h+v.y+sharedDrift(idx,c);
+  const left=x+v.x;const grp=el('g',{transform:`rotate(${(v.tilt*.40).toFixed(3)} ${(left+w/2).toFixed(3)} ${(top+h/2).toFixed(3)})`,'data-sample-kind':'phrase','data-phrase':key},svg);
+  const warp=makeWarp(key[0],idx,v.strength*.5);
+  for(let i=0;i<g.strokes.length;i++)drawNaturalInk(grp,g.strokes[i],left,top,w,h,warp,c,key[0],idx,i,c.penWidth*v.pen,v.opacity);
+ }
+ function makePage(c,pageIndex){
+  const pw=c.paperW,ph=c.paperH;
+  const wrapper=document.createElement('div');wrapper.className='sheet';wrapper.dataset.page=String(pageIndex+1);
+  wrapper.style.setProperty('--paper-ratio',pw+' / '+ph);
+  const svg=el('svg',{xmlns:svgNS,viewBox:`0 0 ${pw} ${ph}`,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':`Handwritten page ${pageIndex+1} (${c.paperSize} ${c.paperOrientation})`},wrapper);
+  el('rect',{x:0,y:0,width:pw,height:ph,fill:'#fff'},svg);
+  const defs=el('defs',{},svg);
+  let fil=el('filter',{id:'ink-bleed',x:'-100%',y:'-100%',width:'300%',height:'300%'},defs);
+  el('feGaussianBlur',{stdDeviation:(.095+c.effectStrength*.115).toFixed(3)},fil);
+  fil=el('filter',{id:'ink-smudge',x:'-120%',y:'-120%',width:'340%',height:'340%'},defs);
+  el('feGaussianBlur',{stdDeviation:(.16+c.effectStrength*.30).toFixed(3)},fil);
+  const group=el('g',{},svg);const pitch=c.u1+c.u2+c.u3;const maxY=ph-c.marginBottom;
+  const maxRows=Math.max(1,Math.floor((maxY-c.marginTop)/pitch));
+  for(let row=0;row<maxRows;row++){
+   const base=c.marginTop+row*pitch;if(base+c.u1+c.u2>maxY+.001)break;
+   if(c.guides){for(const at of [base+c.u1,base+c.u1+c.u2])el('line',{x1:c.marginLeft,y1:at,x2:pw-c.marginRight,y2:at,stroke:'#bec8d6','stroke-width':.11},group);
+    el('line',{x1:c.marginLeft,y1:base+c.u1+c.u2+c.u3,x2:pw-c.marginRight,y2:base+c.u1+c.u2+c.u3,stroke:'#e3e8ef','stroke-width':.08},group)}
+  }
+  if(c.marginGuides){for(const xx of [c.marginLeft,pw-c.marginRight])el('line',{x1:xx,y1:c.marginTop,x2:xx,y2:maxY,stroke:'#d6deeb','stroke-width':.1,'stroke-dasharray':'1.5 1.5'},group)}
+  return {wrapper,svg,pitch,maxRows,chars:0};
+ }
+ function syncPaperUI(c){
+  const custom=c.paperSize==='Custom';$('customPaperFields').hidden=!custom;
+  const desc=`${c.paperSize==='Custom'?'Custom':c.paperSize} ${c.paperOrientation} · ${c.paperW.toFixed(1).replace(/\.0$/,'')} × ${c.paperH.toFixed(1).replace(/\.0$/,'')} mm`;
+  $('paperDescription').textContent=desc+'. Preview, line wrapping, pagination and print all use these dimensions.';
+  $('paperInfo').textContent=desc+'.';
+  $('pageList').style.setProperty('--page-width-scale',String(c.paperW/210));
+  $('pageList').style.setProperty('--print-width',c.paperW+'mm');
+  $('pageList').style.setProperty('--print-height',c.paperH+'mm');
+  let style=$('dynamicPageStyle');if(!style){style=document.createElement('style');style.id='dynamicPageStyle';document.head.appendChild(style)}
+  style.textContent=`@page { size: ${c.paperW}mm ${c.paperH}mm; margin: 0; }`;
+  $('previewStats').dataset.paper=desc;
+ }
+ // V7: Offline, vector-based typesetting. It is intentionally a supported subset
+ // of LaTeX, rather than a fake claim to include a full TeX engine.
+ const GREEK={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Omega:'Ω',
+  times:'×',cdot:'·',div:'÷',pm:'±',mp:'∓',leq:'≤',le:'≤',geq:'≥',ge:'≥',neq:'≠',approx:'≈',equiv:'≡',infty:'∞',partial:'∂',nabla:'∇',sum:'∑',prod:'∏',int:'∫',oint:'∮',rightarrow:'→',to:'→',leftarrow:'←',leftrightarrow:'↔',degree:'°',circ:'°',ldots:'…',cdots:'⋯',quad:'  ',qquad:'    ',percent:'%',
+ };
+ // The command table is pure data. Unsupported commands remain visible instead
+ // of disappearing from the result.
+ function parseEquation(input){
+  let s=String(input||'').normalize('NFC').replace(/\r/g,''),p=0,issues=[];
+  const seq=items=>({kind:'seq',items});
+  function grouped(){if(s[p]==='{'){p++;const v=sequence('}');if(s[p]==='}')p++;else issues.push('Unclosed { group');return v}return atom()||seq([])}
+  function atom(){if(p>=s.length)return null;let ch=s[p++];
+   if(ch==='{'){const v=sequence('}');if(s[p]==='}')p++;else issues.push('Unclosed { group');return v}
+   if(ch==='\\'){
+    if(p>=s.length)return {kind:'glyph',value:'\\'};
+    const match=/^[a-zA-Z]+/.exec(s.slice(p));const cmd=match?match[0]:s[p++];if(match)p+=cmd.length;
+    if(['frac','dfrac','tfrac'].includes(cmd))return {kind:'frac',num:grouped(),den:grouped()};
+    if(cmd==='sqrt'){let index=null;if(s[p]==='['){p++;index=sequence(']');if(s[p]===']')p++;else issues.push('Unclosed root index')}return {kind:'root',value:grouped(),index}}
+    if(cmd==='boxed')return {kind:'box',value:grouped()};
+    if(['text','mathrm','mathbf','operatorname'].includes(cmd)){const node=grouped();return {kind:'textgroup',node}}
+    if(cmd==='overline')return {kind:'overline',value:grouped()};
+    if(cmd==='left'||cmd==='right')return atom()||seq([]);
+    if(cmd===','||cmd===';'||cmd===':'||cmd==='!'||cmd===' ')return {kind:'space',size:cmd===';'?1.3:cmd===':'?1.8:cmd===' '?2.2:.8};
+    if(cmd==='%')return {kind:'glyph',value:'%'};
+    if(cmd==='{'||cmd==='}'||cmd==='_'||cmd==='^'||cmd==='#'||cmd==='&'||cmd==='$')return {kind:'glyph',value:cmd};
+    if(GREEK[cmd]!==undefined)return {kind:'text',value:GREEK[cmd]};
+    issues.push('Unknown command \\'+cmd);return {kind:'text',value:cmd};
+   }
+   if(ch===' '||ch==='\t'||ch==='\n')return {kind:'space',size:ch===' '?1:1.5};
+   return {kind:'glyph',value:ch};
+  }
+  function sequence(stop){const items=[];let guard=0;
+   while(p<s.length&&guard++<1500){if(stop&&s[p]===stop)break;if(s[p]==='}'||s[p]===']'){issues.push('Unmatched '+s[p]);p++;continue}
+    if(s[p]==='^'||s[p]==='_'){const isSup=s[p++]==='^',script=grouped(),prev=items.length?items.pop():{kind:'text',value:'?'};
+     if(prev.kind==='scripts'){if(isSup)prev.sup=script;else prev.sub=script;items.push(prev)}else items.push({kind:'scripts',base:prev,sup:isSup?script:null,sub:isSup?null:script});continue}
+    const v=atom();if(v)items.push(v)}
+   if(guard>=1500)issues.push('Equation is too long');return seq(items);
+  }
+  const node=sequence('');return {node,issues};
+ }
+ function mathLayout(node,c,size,seqNo){
+  const U=c.u2,unit=size,blank=(w=0)=>({w,a:0,d:0,draw:()=>{}});
+  if(!node)return blank();
+  const k=node.kind;
+  if(k==='space')return blank(U*.38*(node.size||1)*unit);
+  if(k==='textgroup')return mathLayout(node.node,c,size,seqNo+3);
+  if(k==='text'){return mathLayout({kind:'seq',items:[...node.value].map(ch=>ch===' '?{kind:'space',size:1}:{kind:'glyph',value:ch})},c,size,seqNo)}
+  if(k==='glyph'){
+   const ch=node.value;const w=Math.max(.45,dimOf(ch,seqNo,c)-c.letterSpace*.12)*unit;
+   const comp=accentParts(ch,c);const a=U*(comp&&comp.marks.some(m=>!BELOW_MARKS.has(m))?1.58:1.19)*unit,d=U*(comp&&comp.marks.some(m=>BELOW_MARKS.has(m))?.48:.30)*unit;
+   return {w,a,d,draw(parent,x,y){const g=el('g',{transform:`translate(${x.toFixed(3)} ${y.toFixed(3)}) scale(${unit.toFixed(4)})`,'data-math-glyph':ch},parent);drawChar(g,ch,seqNo,0,-c.u1-c.u2,c)}};
+  }
+  if(k==='seq'){
+   const children=[],state={x:0,seq:seqNo},max=()=>{};let ascent=0,descent=0;
+   for(const child of node.items){const box=mathLayout(child,c,size,state.seq);children.push({x:state.x,box});state.x+=box.w;state.seq+=3;ascent=Math.max(ascent,box.a);descent=Math.max(descent,box.d)}
+   return {w:state.x,a:ascent,d:descent,draw(parent,x,y){for(const child of children)child.box.draw(parent,x+child.x,y)}};
+  }
+  if(k==='scripts'){
+   const b=mathLayout(node.base,c,size,seqNo),up=node.sup?mathLayout(node.sup,c,size*.64,seqNo+101):blank(),lo=node.sub?mathLayout(node.sub,c,size*.64,seqNo+203):blank();
+   const upY=-(b.a*.83+up.d*.35),loY=b.d+lo.a*.75;
+   const w=b.w+Math.max(up.w,lo.w)*.92,a=Math.max(b.a,node.sup?-upY+up.a:0),d=Math.max(b.d,node.sub?loY+lo.d:0);
+   return {w,a,d,draw(parent,x,y){b.draw(parent,x,y);if(node.sup)up.draw(parent,x+b.w-.10*unit,y+upY);if(node.sub)lo.draw(parent,x+b.w-.10*unit,y+loY)}};
+  }
+  if(k==='frac'){
+   const n=mathLayout(node.num,c,size*.80,seqNo+311),d=mathLayout(node.den,c,size*.80,seqNo+701);
+   const gap=.36*unit,lineW=Math.max(.12,c.penWidth*.81*unit),pad=.65*unit;
+   const w=Math.max(n.w,d.w)+pad*2,ny=-(gap+lineW/2+n.d),dy=gap+lineW/2+d.a;
+   return {w,a:-ny+n.a,d:dy+d.d,draw(parent,x,y){n.draw(parent,x+(w-n.w)/2,y+ny);d.draw(parent,x+(w-d.w)/2,y+dy);
+    mathStroke(parent,[[x,y],[x+w,y]],c,lineW,seqNo+1301,'fraction')}};
+  }
+  if(k==='root'){
+   // Draw the radical and its horizontal overbar as ONE scalable pen stroke.
+   // A fixed-size √ glyph cannot connect correctly to a bar for tall fractions,
+   // nested radicals, or long radicands. The radicand owns the bar's width.
+   const r=mathLayout(node.value,c,size,seqNo+409);
+   const idx=node.index?mathLayout(node.index,c,size*.47,seqNo+504):null;
+   const indexSpace=idx?Math.max(.44*unit,idx.w*.58):.10*unit;
+   const hookWidth=1.45*unit,insideGap=.32*unit,endGap=.35*unit;
+   const apexX=indexSpace+hookWidth;
+   const contentX=apexX+insideGap;
+   const w=contentX+r.w+endGap;
+   const top=-r.a-.39*unit;      // consistent gap over the highest symbol
+   const hookY=Math.min(.21*unit,Math.max(.08*unit,r.d*.26));
+   const introY=-Math.max(.40*unit,r.a*.18);
+   const indexY=top+1.23*unit;
+   const a=Math.max(-top,idx?(-indexY+idx.a):0);
+   const d=Math.max(r.d,hookY+.12*unit);
+   return {w,a,d,draw(parent,x,y){
+    const start=x+indexSpace,upper=y+top;
+    const points=[
+     [start+.05*unit,y+introY],
+     [start+.37*unit,y+introY-.16*unit],
+     [start+.74*unit,y+hookY],
+     [x+apexX,upper],
+     [x+w,upper]
+    ];
+    mathStroke(parent,points,c,Math.max(.10,c.penWidth*.77*unit),seqNo+1829,'radical');
+    r.draw(parent,x+contentX,y);
+    if(idx)idx.draw(parent,x+indexSpace-idx.w*.60,y+indexY);
+   }};
+  }
+  if(k==='box'||k==='overline'){
+   const b=mathLayout(node.value,c,size,seqNo+99),pad=.70*unit;
+   if(k==='overline')return {w:b.w,a:b.a+pad,d:b.d,draw(parent,x,y){b.draw(parent,x,y);mathStroke(parent,[[x,y-b.a-pad*.6],[x+b.w,y-b.a-pad*.6]],c,c.penWidth*unit,seqNo+2401,'overline')}};
+   return {w:b.w+2*pad,a:b.a+pad,d:b.d+pad,draw(parent,x,y){
+    b.draw(parent,x+pad,y);
+    // The border remains safely outside the answer, but each side is penned by hand.
+    const x0=x,y0=y-b.a-pad,x1=x+b.w+2*pad,y1=y+b.d+pad;
+    const rough=c.mathHandDrawn?c.mathRoughness/100:0;
+    const corner=Math.min(.12*unit,.10*pad)*rough;
+    const j=(i)=>(mathRand(seqNo+2921,i)-.5)*2*corner;
+    const corners=[[x0+j(1),y0+j(2)],[x1+j(3),y0+j(4)],[x1+j(5),y1+j(6)],[x0+j(7),y1+j(8)]];
+    mathStroke(parent,corners,c,Math.max(.1,c.penWidth*unit),seqNo+2911,'boxed',true);
+   }};
+  }
+  return blank();
+ }
+ // Seeded, gentle imperfections along multi-segment math strokes. Corner points
+ // are kept linked so a radical's hook always joins its overbar continuously.
+ function mathRand(seed,i){return hash((variationSeed + Math.imul(seed+1,1597334677) + Math.imul(i+1,3812015801))>>>0)}
+ function mathSketchPath(points,c,seed,closed=false){
+  const fmt=n=>n.toFixed(3);
+  if(!points.length)return '';
+  const rough=c.mathHandDrawn?c.mathRoughness/100:0;
+  let path=`M${fmt(points[0][0])} ${fmt(points[0][1])}`;
+  const count=closed?points.length:points.length-1;
+  for(let side=0;side<count;side++){
+   const a=points[side],b=points[(side+1)%points.length];
+   const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy);
+   if(len<.001)continue;
+   if(rough<=0){path+=` L${fmt(b[0])} ${fmt(b[1])}`;continue}
+   const nx=-dy/len,ny=dx/len;
+   // Make small sweeps, not independent sharp-edged noise. Reduce wobble
+   // on very short sections such as the tip of the radical.
+   const amplitude=Math.min(c.u2*.115,len*.105)*rough;
+   const steps=Math.max(2,Math.min(64,Math.ceil(len/Math.max(.35,c.u2*.52))));
+   const mid=[];
+   for(let i=0;i<=steps;i++){
+    const t=i/steps;
+    let offset=0;
+    if(i!==0&&i!==steps){
+     const wave=Math.sin(Math.PI*t)*Math.sin(2*Math.PI*t+(mathRand(seed,side*127+1)-.5)*2.2);
+     const texture=mathRand(seed,side*127+11+i)-.5;
+     offset=amplitude*(.83*wave+.57*texture);
+    }
+    mid.push([a[0]+dx*t+nx*offset,a[1]+dy*t+ny*offset]);
+   }
+   // Quadratic mid-point smoothing reduces the "sawtooth" look.
+   for(let i=1;i<mid.length-1;i++){
+    const q=mid[i],next=mid[i+1];
+    const mx=(q[0]+next[0])/2,my=(q[1]+next[1])/2;
+    path+=` Q${fmt(q[0])} ${fmt(q[1])} ${fmt(mx)} ${fmt(my)}`;
+   }
+   const penultimate=mid[mid.length-1];
+   path+=` Q${fmt(penultimate[0])} ${fmt(penultimate[1])} ${fmt(b[0])} ${fmt(b[1])}`;
+  }
+  if(closed)path+=' Z';
+  return path;
+ }
+ function mathStroke(parent,points,c,w,seed,kind='line',closed=false){
+  const d=mathSketchPath(points,c,seed,closed);
+  if(c.inkBleed&&c.effectStrength>0)el('path',{d,fill:'none',stroke:c.inkColor,'stroke-width':(w*1.75).toFixed(3),'stroke-opacity':(.13*c.effectStrength).toFixed(3),filter:'url(#ink-bleed)'},parent);
+  el('path',{d,fill:'none',stroke:c.inkColor,'stroke-width':Math.max(.075,w).toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round','data-math-geometry':'line','data-math-kind':kind},parent);
+ }
+ function splitMarkup(str){const out=[],rx=/\$\$([\s\S]*?)\$\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)|\$([^$\n]+?)\$/g;
+  let last=0,m;while((m=rx.exec(str))){if(m.index>0&&str[m.index-1]==='\\')continue;if(m.index>last)out.push({kind:'text',value:str.slice(last,m.index)});
+   out.push({kind:m[1]!==undefined||m[2]!==undefined?'display':'inline',value:m[1]??m[2]??m[3]??m[4]});last=rx.lastIndex}
+  if(last<str.length)out.push({kind:'text',value:str.slice(last)});return out;
+ }
+ function equationRows(formula,c,seqStart){
+  let src=String(formula||'').trim().replace(/\\begin\{(?:aligned|align\*?|gather\*?|gathered)\}/g,'').replace(/\\end\{(?:aligned|align\*?|gather\*?|gathered)\}/g,'');
+  const raw=src.split(/\\\\(?:\[[^\]]*\])?/);const result=[];let maxLeft=0,maxRight=0,maxSingle=0,hasAlign=false,issues=[];
+  const scale=Number($('equationSize').value)/100*1.05;
+  for(let i=0;i<raw.length;i++){
+   const t=raw[i].trim();if(!t&&i!==0)continue;
+   let alignPos=t.indexOf('&');const alignment=alignPos!==-1;let lhs=null,rhs=null,box=null;
+   if(alignment){hasAlign=true;const a=parseEquation(t.slice(0,alignPos)),b=parseEquation(t.slice(alignPos+1));issues.push(...a.issues,...b.issues);lhs=mathLayout(a.node,c,scale,seqStart+i*29);rhs=mathLayout(b.node,c,scale,seqStart+i*29+19);maxLeft=Math.max(maxLeft,lhs.w);maxRight=Math.max(maxRight,rhs.w)}
+   else{const p=parseEquation(t);issues.push(...p.issues);box=mathLayout(p.node,c,scale,seqStart+i*29);maxSingle=Math.max(maxSingle,box.w)}
+   result.push({align:alignment,lhs,rhs,box});
+  }
+  const width=Math.max(maxSingle,hasAlign?maxLeft+maxRight+.6:0);
+  const items=result.map((r,i)=>{
+   const a=r.align?Math.max(r.lhs.a,r.rhs.a):r.box.a,d=r.align?Math.max(r.lhs.d,r.rhs.d):r.box.d;
+   return {type:'display',height:Math.max(c.u1+c.u2+c.u3,a+d+c.u2*1.1),a,d,draw(parent,left,base,available){
+    const factor=Math.min(1,available/Math.max(.001,width));const g=el('g',{transform:`translate(${(left+($('equationAlign').value==='center'?(available-width*factor)/2:0)).toFixed(3)} ${base.toFixed(3)}) scale(${factor.toFixed(4)})`,'data-equation':'display'},parent);
+    if(r.align){r.lhs.draw(g,maxLeft-r.lhs.w,0);r.rhs.draw(g,maxLeft+.6,0)}else r.box.draw(g,($('equationAlign').value==='center'?(width-r.box.w)/2:0),0);
+   }};
+  });return {items,issues};
+ }
+ function renderEquationDraft(){const c=getCfg(),target=$('equationLive');target.replaceChildren();const rows=equationRows($('equationDraft').value,c,99999);
+  const fullWidth=Math.max(28,c.paperW-c.marginLeft-c.marginRight),totalH=Math.max(c.u2*3,rows.items.reduce((acc,row)=>acc+row.height,0));
+  const svg=el('svg',{viewBox:`0 0 ${fullWidth} ${totalH}`,'aria-label':'Equation editor live preview'},target);
+  let y=0;for(const item of rows.items){item.draw(svg,1,y+Math.max(item.a+.35,item.height*.5+(item.a-item.d)*.35),fullWidth-2);y+=item.height}
+  const contentIssues=target.dataset.mathContentWarnings||'';
+  const draftIssues=rows.issues.length?'Equation input notice: '+[...new Set(rows.issues)].slice(0,3).join('; '):'';
+  $('equationWarnings').textContent=[contentIssues,draftIssues].filter(Boolean).join(' · ');
+ }
+ function insertAtCursor(text){const t=$('content'),start=t.selectionStart,end=t.selectionEnd,current=t.value;t.value=current.slice(0,start)+text+current.slice(end);t.focus();t.setSelectionRange(start+text.length,start+text.length);refresh()}
+ function insertMathBlock(mode){const formula=$('equationDraft').value.trim()||'\\sigma = \\frac{P}{A}';
+  if(mode==='inline')insertAtCursor('$'+formula+'$');
+  else if(mode==='align'){
+   const eq=formula.indexOf('='),left=eq<0?formula:formula.slice(0,eq).trim(),right=eq<0?'':formula.slice(eq+1).trim();
+   const first=eq<0?left:left+' &= '+right;
+   insertAtCursor('\n$$\\begin{aligned}\n'+first+' '+String.raw`\\`+'\n&= \\boxed{\\text{result}}\n\\end{aligned}$$\n');
+  }
+  else insertAtCursor('\n$$'+formula+'$$\n');
+ }
+ $('insertInlineMath').onclick=()=>insertMathBlock('inline');
+ $('insertDisplayMath').onclick=()=>insertMathBlock('display');
+ $('insertAlignMath').onclick=()=>insertMathBlock('align');
+ for(const b of document.querySelectorAll('[data-math-template]'))b.onclick=()=>{const t=$('equationDraft'),a=t.selectionStart,z=t.selectionEnd,val=b.dataset.mathTemplate;t.value=t.value.slice(0,a)+val+t.value.slice(z);t.focus();t.setSelectionRange(a+val.length,a+val.length);renderEquationDraft();storeSettings()};
+ function render(){const c=getCfg();syncPaperUI(c);const pitch=c.u1+c.u2+c.u3;$('lineInfo').textContent=`${pitch.toFixed(2)} mm base writing row (formulas can take extra height)`;
+  const text=$('content').value.replace(/\r/g,'').replace(/\t/g,'    '),tokens=splitMarkup(text);
+  const maxWidth=c.paperW-c.marginLeft-c.marginRight,blocks=[];let line={type:'line',items:[],w:0,a:c.u2*1.1,d:c.u2*.12};
+  let characters=0,phraseHits=0,inlineCount=0,displayCount=0,seq=0,issues=[];
+  function flush(force=false){if(line.items.length||force){blocks.push(line);line={type:'line',items:[],w:0,a:c.u2*1.1,d:c.u2*.12}}}
+  function put(item){if(item.kind==='space'&&line.items.length===0)return;
+   if(line.w+item.w>maxWidth&&line.items.length){flush();if(item.kind==='space')return}
+   if(item.kind==='space'&&line.items.length===0)return;
+   if(item.kind==='math'&&item.w>maxWidth){const factor=maxWidth/item.w;item.scale=factor;item.w*=factor;item.a*=factor;item.d*=factor}
+   if(item.kind==='word'&&item.w>maxWidth){for(const g of item.letters)put({kind:'char',...g});return}
+   if(item.kind==='word'){for(const g of item.letters)line.items.push({kind:'char',...g});line.w+=item.w}
+   else{line.items.push(item);line.w+=item.w}
+   line.a=Math.max(line.a,item.a||c.u2*1.1);line.d=Math.max(line.d,item.d||c.u2*.12);
+  }
+  function textPart(str){str=str.normalize('NFC');if(c.uppercase)str=str.toUpperCase();let i=0;
+   while(i<str.length){if(str[i]==='\n'){flush(true);i++;continue}
+    if(str[i]===' '){put({kind:'space',w:dimOf(' ',seq++,c)});i++;continue}
+    const match=matchedPhrase(str,i,c,seq);if(match){put({kind:'phrase',w:match.advance,a:c.u2*1.1,d:c.u2*.15,match,idx:seq});i+=match.actual.length;seq+=match.actual.length;characters+=match.actual.replace(/\s/g,'').length;phraseHits++;continue}
+    let j=i;while(j<str.length&&str[j]!==' '&&str[j]!=='\n')j++;
+    const word=str.slice(i,j);const letters=[];let wordW=0;
+    for(const ch of word){const glyph={ch,w:dimOf(ch,seq,c),idx:seq};letters.push(glyph);wordW+=glyph.w;seq++;characters++}
+    // A combining accent is ink ABOVE the letter, not extra letter height.
+    // The line's ascent must remain unchanged, or baselineOffset below moves
+    // every letter of words such as NIÑO downward on its writing guide.
+    // Leave the glyph itself at its normal baseline, and overlay the accent.
+    put({kind:'word',letters,w:wordW,a:c.u2*1.1,d:[...word].some(ch=>(isLowercase(ch)&&LOWER_DESC.includes(ch))||(accentParts(ch,c)&&accentParts(ch,c).marks.some(m=>BELOW_MARKS.has(m))))?c.u2*.45:c.u2*.12});i=j;
+   }
+  }
+  for(const t of tokens){if(t.kind==='text'){textPart(t.value);continue}
+   if(t.kind==='inline'){
+    const parsed=parseEquation(t.value);issues.push(...parsed.issues);const box=mathLayout(parsed.node,c,Number($('equationSize').value)/100,seq+200);inlineCount++;
+    put({kind:'math',box,w:box.w,a:box.a,d:box.d,scale:1});seq+=Math.max(1,t.value.length);continue;
+   }
+   // A block equation always starts on a new line, and rows may span pages.
+   flush();const rows=equationRows(t.value,c,seq+300);issues.push(...rows.issues);displayCount+=rows.items.length;
+   for(const r of rows.items)blocks.push(r);seq+=t.value.length+100;
+  }
+  flush();
+  const frag=document.createDocumentFragment();let page=makePage(c,0),pageCount=1,y=c.marginTop;frag.appendChild(page.wrapper);const maxY=c.paperH-c.marginBottom;
+  function newPage(){page=makePage(c,pageCount++);frag.appendChild(page.wrapper);y=c.marginTop}
+  for(const block of blocks){
+   if(block.type==='display'){
+    const h=block.height;if(y+h>maxY&&y>c.marginTop+.01)newPage();
+    const baseline=y+Math.max(block.a+.4,(h+block.a-block.d)/2);
+    block.draw(page.svg,c.marginLeft,baseline,maxWidth);y+=h;continue;
+   }
+   const baselineOffset=Math.max(c.u1+c.u2,block.a+.40);const h=Math.max(pitch,baselineOffset+block.d+Math.max(.35,c.u3*.35));
+   if(y+h>maxY&&y>c.marginTop+.01)newPage();let x=c.marginLeft;const baseline=y+baselineOffset;
+   for(const item of block.items){
+    if(item.kind==='char')drawChar(page.svg,item.ch,item.idx,x,baseline-c.u1-c.u2,c);
+    else if(item.kind==='phrase')drawPhrase(page.svg,item.match,item.idx,x,baseline-c.u1-c.u2,c);
+    else if(item.kind==='math'){
+     const g=el('g',{transform:`translate(${x.toFixed(3)} ${baseline.toFixed(3)}) scale(${item.scale.toFixed(4)})`,'data-equation':'inline'},page.svg);item.box.draw(g,0,0);
+    }x+=item.w;
+   }y+=h;
+  }
+  $('pageList').replaceChildren(frag);
+  $('previewStats').textContent=`${pageCount} ${c.paperSize} ${c.paperOrientation} page${pageCount===1?'':'s'} · ${characters} letters · ${inlineCount} inline / ${displayCount} equation rows · ${phraseHits} phrase matches`;
+  $('matchStats').innerHTML='<strong>Sampled phrase matches:</strong> '+phraseHits+'. '+(phraseHits?'Matching phrases use your saved strokes.':'Other text is drawn from individual letters or a fallback font.');
+  $('equationLive').dataset.mathContentWarnings=issues.length?'Math in notes: '+[...new Set(issues)].slice(0,3).join('; '):'';
+  renderEquationDraft();
+ }
+ function updateEffectsUI(){const enabled=$('inkBlot').checked||$('inkBleed').checked||$('inkSmudge').checked;$('effectStrengthValue').textContent=enabled?$('effectStrength').value+'%':'Off · '+$('effectStrength').value+'%';}
+ function updateVariationUI(){const enabled=$('variation').checked,level=Number($('variationLevel').value);
+  $('realismBox').classList.toggle('is-off',!enabled);$('variationLevel').disabled=!enabled;
+  const tone=level===0?'none':level<25?'very subtle':level<55?'subtle':level<80?'noticeable':'strong';
+  $('variationText').textContent=level+'% · '+(enabled?tone:'off');$('variationPattern').textContent='Pattern '+variationPattern;
+ }
+ function updateThicknessUI(){const width=getCfg().penWidth;$('thicknessSlider').value=String(width);$('thicknessValue').textContent=width.toFixed(2)+' mm';$('thicknessLine').setAttribute('stroke-width',String(Math.max(1,Math.min(18,width*15))));redrawCanvas();renderGallery();redrawPhraseCanvas();renderPhraseGallery()}
+ function syncInkUI(){const color=getCfg().inkColor;$('inkHex').textContent=color.toUpperCase();$('thicknessLine').setAttribute('stroke',color);
+  document.querySelectorAll('[data-ink]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ink.toLowerCase()===color.toLowerCase())));
+  redrawCanvas();renderGallery();redrawPhraseCanvas();renderPhraseGallery();}
+ $('inkColor').addEventListener('input',()=>{syncInkUI();refresh()});
+ document.querySelectorAll('[data-ink]').forEach(b=>b.addEventListener('click',()=>{$('inkColor').value=b.dataset.ink;syncInkUI();refresh()}));
+ function syncZoomUI(){const v=clampZoom(previewZoom);previewZoom=v;$('zoomSlider').value=String(v);$('zoomValue').textContent=v+'%';$('pageList').style.setProperty('--preview-zoom',String(v/100));
+  $('zoomOut').disabled=v<=50;$('zoomIn').disabled=v>=250;storeSettings();}
+ function setZoom(v){previewZoom=clampZoom(v);syncZoomUI()}
+ $('zoomSlider').addEventListener('input',e=>setZoom(Number(e.target.value)));
+ $('zoomOut').addEventListener('click',()=>setZoom(previewZoom-10));
+ $('zoomIn').addEventListener('click',()=>setZoom(previewZoom+10));
+ $('zoomReset').addEventListener('click',()=>setZoom(100));
+ $('thicknessSlider').addEventListener('input',e=>{$('penWidth').value=e.target.value;updateThicknessUI();refresh()});
+ function updateMathRoughnessUI(){
+  const enabled=$('mathHandDrawn').checked,amount=Number($('mathRoughness').value);
+  $('mathRoughness').disabled=!enabled;
+  $('mathRoughnessBox').classList.toggle('is-off',!enabled);
+  const description=amount===0?'ruler-straight':amount<30?'very subtle':amount<65?'natural':'rough';
+  $('mathRoughnessValue').textContent=enabled?amount+'% · '+description:'Off · straight';
+ }
+ function refresh(){updateVariationUI();updateEffectsUI();updateMathRoughnessUI();storeSettings();render()}
+ $('shuffleBtn').onclick=()=>{const a=new Uint32Array(1);if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(a);variationSeed=a[0]>>>0}else{variationSeed=(Date.now()>>>0)}variationPattern++;refresh()};
+ for(const id of optionIds.concat(checkIds)){const e=$(id);e.addEventListener('input',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();if(id==='penWidth')updateThicknessUI();updateCaseStatus();refresh()});e.addEventListener('change',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();updateCaseStatus();refresh()})}
+ $('paperSize').addEventListener('change',refresh);$('paperOrientation').addEventListener('change',refresh);
+ $('content').addEventListener('input',refresh);$('equationSize').addEventListener('change',refresh);$('equationAlign').addEventListener('change',refresh);$('equationDraft').addEventListener('input',()=>{storeSettings();renderEquationDraft()});$('phraseMode').addEventListener('change',refresh);$('refreshBtn').onclick=refresh;
+ $('restoreBtn').onclick=()=>{for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;redrawCanvas();refresh()};
+ function printPage(){refresh();window.print()};$('printBtn').onclick=printPage;$('printTop').onclick=printPage;
+ load();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=!$('sampleTraceToggle').checked;select(chosen);updateAccentStatus();updateCaseStatus();syncInkUI();syncZoomUI();updateThicknessUI();updateVariationUI();updateEffectsUI();updateMathRoughnessUI();redrawPhraseCanvas();renderPhraseGallery();render();renderEquationDraft();
+})();
+</script>
+</body>
+</html>
