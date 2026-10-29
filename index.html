@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Handwriting Studio V7.8 · Y14.5M tracing references · 1–3–3 lettering</title>
+<title>Handwriting Studio V8.1 · Photo handwriting importer · 1–3–3 lettering</title>
 <style>
 :root{--bg:#f4f6fb;--panel:#fff;--line:#e1e6ed;--ink:#172332;--muted:#637386;--blue:#365fda;--soft:#e8efff;--green:#178160;--radius:16px}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:14px}
@@ -97,6 +97,22 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
 @page{size:210mm 297mm;margin:0}
 @media print{html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}header,.controls,.preview-top,.note{display:none!important}main{padding:0;margin:0;display:block;max-width:none}.preview-pane{position:static}.page-list{display:block;padding:0;margin:0;border:0;background:white;overflow:visible;max-height:none}.sheet{width:var(--print-width,210mm)!important;height:var(--print-height,297mm)!important;aspect-ratio:auto;page-break-after:always;break-after:page;box-shadow:none;border:0;border-radius:0;margin:0!important}.sheet:last-child{page-break-after:auto;break-after:auto}.sheet svg{width:100%!important;height:100%!important}}
 
+/* V8.1 interactive page editing. The hit areas are not exported or printed. */
+.preview-actions .edit-toggle[aria-pressed="true"]{background:#dfeafe;border-color:#7ba2ee;color:#163e91}
+.edit-help{font-size:11px;color:#5c7188;margin-top:7px}
+.sheet .page-edit-hit{pointer-events:none;fill:transparent;stroke:transparent;stroke-width:.13}
+.page-list.edit-mode .sheet .page-edit-hit{pointer-events:all;cursor:text}
+.page-list.edit-mode .sheet .page-edit-hit:hover,
+.page-list.edit-mode .sheet .page-edit-hit:focus{fill:#315fdd;fill-opacity:.09;stroke:#4d73d3;stroke-opacity:.55}
+.page-list.edit-mode .sheet .page-edit-hit[data-insert="true"]:hover{fill:#1e9c80;fill-opacity:.10;stroke:#1e9c80;stroke-opacity:.35}
+.page-edit-popover{position:fixed;z-index:1000;max-width:calc(100vw - 24px);width:360px;border:2px solid #426de2;border-radius:11px;box-shadow:0 15px 40px #182c4d35;background:white;padding:12px;display:grid;gap:8px;color:#283951}
+.page-edit-popover[hidden]{display:none!important}
+.page-edit-popover label{font-size:12px;font-weight:750;color:#2a4575}
+.page-edit-popover textarea{min-height:72px;max-height:190px;font:14px/1.5 ui-monospace,Consolas,monospace;resize:vertical;padding:9px;tab-size:4}
+.page-edit-popover .row{justify-content:flex-end;gap:7px}
+.page-edit-popover .edit-tip{font-size:10px;color:#657790;line-height:1.4}
+.page-edit-popover button{min-height:31px}
+@media print{.page-edit-popover,.page-edit-hit,.edit-help{display:none!important}}
 /* V7.8 tracing guide: system-installed fonts are used if available. No fonts bundled. */
 @font-face{font-family:"TraceY14Local";src:local("Y14.5M-2009"),local("Y145M-2009");font-weight:normal;font-style:normal}
 .tracing-panel{margin:11px 0 10px;border:1px solid #cbdaf0;border-radius:12px;background:#f3f7fe;padding:12px;display:grid;gap:9px}
@@ -127,10 +143,41 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
 .guide-chip.xheight{border-color:#1e8c75;border-top-style:dashed}
 .guide-chip.baseline{border-color:#be4f42}
 .guide-chip.desc{border-color:#8861b8;border-top-style:dotted}
+/* V7.9 tablet pressure capture controls */
+.pressure-panel{margin:12px 0 13px;padding:13px;border:1px solid #d8e5f6;border-radius:11px;background:#f5f9ff}
+.pressure-panel .pressure-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.pressure-panel .pressure-heading strong{font-size:13px;color:#284b84}
+.pressure-panel .checkline{font-weight:650}
+.pressure-panel input[type=range]{width:100%;accent-color:#365fda;cursor:pointer;margin:9px 0}
+.pressure-meter-line{display:flex;align-items:center;gap:11px;margin:10px 0 3px}
+.pressure-meter{height:9px;overflow:hidden;flex:1;background:#e0e8f3;border:1px solid #ccdbeb;border-radius:99px}
+#pressureMeterFill{display:block;height:100%;width:50%;background:linear-gradient(90deg,#81acef,#3159c9);transition:width 60ms linear}
+#pressureLive{min-width:41px;text-align:right;font-size:12px;font-variant-numeric:tabular-nums;font-weight:750;color:#284b84}
+.pressure-panel .hint{margin:5px 0 0}
+
+/* V8 camera/photo handwriting extraction */
+.photo-panel .sub{margin-bottom:12px}
+.photo-upload{border:1px dashed #adc2e3;background:#f8fbff;border-radius:12px;padding:14px}
+.photo-upload input[type=file]{max-width:100%;font-size:12px}
+.photo-workspace{position:relative;border:1px solid #dae3ef;background:#eef2f8;border-radius:10px;overflow:auto;max-height:460px;margin:12px 0}
+.photo-workspace canvas{display:block;width:100%;height:auto;cursor:crosshair;touch-action:none}
+.photo-workspace.is-empty{padding:28px;text-align:center;color:#64778b;font-size:12px}
+.photo-workspace.is-empty canvas{display:none}
+.photo-selected{background:#f4f8ff;border:1px solid #d9e6f7;padding:12px;border-radius:10px;margin-top:12px}
+.photo-selected .fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.photo-mini{border:1px solid #e4e9f4;border-radius:8px;background:white;width:100%;height:auto;aspect-ratio:320 / 125;margin:8px 0 10px}
+.photo-results{display:flex;gap:6px;flex-wrap:wrap;max-height:126px;overflow:auto;padding:5px 0}
+.photo-detect{min-width:41px;height:36px;border:1px solid #cbd7e8;background:#fff;border-radius:7px;cursor:pointer;font-weight:650;color:#31445f}
+.photo-detect.active{outline:2px solid #365fda;background:#eaf0ff}
+.photo-settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+.photo-settings input[type=range]{width:100%;accent-color:var(--blue)}
+.photo-panel button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:460px){.photo-settings{grid-template-columns:1fr}.photo-selected .fields{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
-<header><div><h1>Handwriting Studio <span style="color:#91b2ff">/ 1–3–3</span></h1><p>Capture your own lettering, then write and print pages with it. Everything runs locally in your browser.</p></div><span class="badge">V7.8 · TRACING REFERENCES • OFFLINE</span></header>
+<header><div><h1>Handwriting Studio <span style="color:#91b2ff">/ 1–3–3</span></h1><p>Capture your own lettering, then write and print pages with it. Everything runs locally in your browser.</p></div><span class="badge">V8.1 · EDITABLE PREVIEW • PHOTO IMPORT • OFFLINE</span></header>
 <main>
  <section class="controls">
   <div class="card">
@@ -168,6 +215,15 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
    <p class="hint">The colored guides and faint reference appear only while sampling, never on the printed page. At 100% the whole drawing area fits this panel.</p>
    <div id="sampleViewport"><div class="sample-box"><canvas id="drawCanvas" width="640" height="224" aria-label="Draw handwriting character here"></canvas></div></div>
    <p class="hint" id="letterGuideHelp">Uppercase: write from the top guide to the baseline. For lowercase, turn on “Include lowercase letters.”</p>
+   <div class="pressure-panel" aria-label="Drawing tablet pressure controls">
+    <div class="pressure-heading"><strong>Drawing tablet pen pressure</strong><span class="pill-new">V7.9</span></div>
+    <label class="checkline"><input type="checkbox" id="tabletPressure" checked> Use stylus pressure for stroke thickness</label>
+    <div class="row" style="margin-top:10px"><label class="small" for="pressureSensitivity">Pressure sensitivity</label><strong class="small" id="pressureSensitivityValue">100%</strong></div>
+    <input type="range" id="pressureSensitivity" min="0" max="200" step="10" value="100" aria-label="How strongly stylus pressure changes stroke thickness">
+    <div class="pressure-meter-line"><span class="small muted">Live pen pressure</span><div class="pressure-meter" role="progressbar" aria-label="Current pen pressure" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="pressureMeter"><span id="pressureMeterFill"></span></div><output id="pressureLive">50%</output></div>
+    <p class="hint" id="pressureStatus" role="status">Use a pressure-capable stylus in this canvas or the phrase sampler. A mouse draws at constant 50% pressure.</p>
+    <p class="hint">Pressure is saved with your sampled strokes, including imported/exported handwriting profiles, and affects the A4 preview and PDF. Set sensitivity to 0% for uniform strokes.</p>
+   </div>
    <div class="toolbar"><button class="btn" id="undoBtn">Undo stroke</button><button class="btn" id="redoBtn">Redo stroke</button><button class="btn" id="clearBtn">Clear drawing</button><button class="btn primary" id="saveBtn">Save character</button><button class="btn" id="cancelEditBtn" hidden>Cancel edit</button><button class="btn" id="nextBtn">Next missing</button></div>
    <div class="infobar" id="sampleStatus">Write the selected letter between the horizontal guides. Click “Save character.”</div>
    <div class="thickness-panel">
@@ -185,8 +241,36 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
    <input type="file" id="importFile" class="file-input" accept=".json,application/json" />
    <div class="note">Your letters and natural word/phrase samples stay in this browser. Export a profile (.json) to back them up or move to another computer.</div>
   </div>
+
+  <div class="card photo-panel" id="photoCard">
+   <h2><span class="step">2</span>Import handwriting from a photo <span class="pill-new">V8.0</span></h2>
+   <p class="sub">Upload a photo or scan of handwriting. The app can suggest separate ink regions, or you can drag over a letter to crop it precisely. Choose which character it represents, then save the extracted pen strokes to your existing handwriting library. No internet or server needed.</p>
+   <div class="photo-upload"><div class="field"><label for="photoFile">Handwriting image (PNG, JPEG, or WebP)</label><input type="file" id="photoFile" accept="image/png,image/jpeg,image/webp,image/*" /></div>
+    <p class="hint" style="margin:9px 0 0">Best results: one letter or symbol per space, written in dark ink on plain, evenly lit white paper. Connected letters and ruled paper may need manual cropping.</p>
+   </div>
+   <div class="photo-settings">
+    <div class="field"><label for="photoThreshold">Ink detection threshold: <output id="photoThresholdValue">165</output></label><input id="photoThreshold" type="range" min="75" max="235" step="5" value="165"></div>
+    <div class="stack"><label class="checkline"><input id="photoInvert" type="checkbox"> Light writing on dark background</label><label class="checkline"><input id="photoShowBoxes" type="checkbox" checked> Show detected letter regions</label></div>
+   </div>
+   <div class="toolbar" style="margin-top:10px"><button type="button" class="btn" id="photoDetect" disabled>Find separate letters</button><button type="button" class="btn" id="photoRotate" disabled>Rotate 90°</button><button type="button" class="btn" id="photoClearBox" disabled>Clear selection</button></div>
+   <div id="photoViewport" class="photo-workspace is-empty"><canvas id="photoCanvas" width="800" height="350" aria-label="Uploaded handwriting image: drag to select one letter"></canvas><span id="photoEmpty">Upload a handwriting image to begin.</span></div>
+   <div class="row"><strong class="small">Detected regions</strong><span class="small muted" id="photoRegionCount">No image loaded</span></div>
+   <div class="photo-results" id="photoCandidates" aria-label="Detected handwriting regions"></div>
+   <div class="photo-selected" style="margin:10px 0 12px">
+     <div class="field"><label for="photoBatchLabels">Optional bulk import: labels for detected regions, in reading order</label><input id="photoBatchLabels" type="text" placeholder="Example: ABCDEFG or abc123" autocomplete="off" spellcheck="false" /></div>
+     <div class="toolbar" style="margin-top:9px"><button class="btn" id="photoBatchSave" type="button" disabled>Save all labeled regions</button></div>
+     <p class="hint" style="margin:7px 0 0">Works best when each separated character forms one detected region. Enter one character for each numbered region; use the blue crop selection instead for split symbols such as i, j, !, and accented letters.</p>
+   </div>
+   <div class="photo-selected">
+    <div class="fields" style="margin:0 0 10px"><div class="field"><label for="photoChar">Assign selection to letter / symbol</label><input type="text" id="photoChar" value="A" maxlength="4" autocomplete="off" spellcheck="false"></div><div class="field"><label for="photoSource">Source of selection</label><input id="photoSource" value="Drag a region or choose a suggestion" readonly></div></div>
+    <canvas class="photo-mini" id="photoGlyphPreview" width="320" height="125" aria-label="Extracted handwriting stroke preview"></canvas>
+    <div class="toolbar"><button type="button" class="btn primary" id="photoSave" disabled>Save as letter version</button><button type="button" class="btn" id="photoSaveEdit" disabled>Save and edit strokes</button></div>
+    <p class="hint" id="photoStatus" role="status" style="margin:10px 0 0">Select one letter, then preview and save the extracted strokes. You can correct it afterward with your mouse or drawing tablet.</p>
+   </div>
+   <p class="note">Photo extraction estimates the stroke centerlines from pixels. It cannot recover real drawing-tablet pressure, stroke order, or reliably recognize every letter from a paragraph. You assign the character and can edit the result before using it.</p>
+  </div>
   <div class="card" id="phraseCard">
-   <h2><span class="step">2</span>Sample a natural word or phrase <span class="pill-new">NEW</span></h2>
+   <h2><span class="step">3</span>Sample a natural word or phrase <span class="pill-new">NEW</span></h2>
    <p class="sub">Write a word or short sentence in one natural motion. When the <strong>same text</strong> appears in your notes, the program uses your real connected strokes instead of assembling individual letters. For new text it uses your letter samples. This runs offline; it does not train an AI model.</p>
    <div class="field"><label for="phraseText">Text you will handwrite (up to 60 characters)</label><input id="phraseText" type="text" maxlength="60" placeholder="Example: SOIL MECHANICS" autocomplete="off" value="SOIL MECHANICS"></div>
    <div class="sample-box phrase-pad"><canvas id="phraseCanvas" width="960" height="194" aria-label="Draw the complete word or phrase here"></canvas></div>
@@ -196,7 +280,7 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
    <div id="phraseGallery" class="phrase-gallery" aria-live="polite"></div>
   </div>
   <div class="card">
-   <h2><span class="step">3</span>Write your content</h2>
+   <h2><span class="step">4</span>Write your content</h2>
    <p class="sub">Type or paste your notes. The program builds lines and automatically adds more pages when needed, using the selected paper size.</p>
    <textarea id="content" spellcheck="false" placeholder="Type the text you want written using your handwriting…">CIVIL ENGINEERING
 
@@ -312,8 +396,8 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   </div>
  </section>
  <section class="preview-pane">
-  <div class="preview-top"><div><h2>Live paper preview</h2><p id="previewStats">Preparing pages…</p></div>
-   <div class="preview-actions"><div class="zoom-controls" role="group" aria-label="Paper preview zoom">
+  <div class="preview-top"><div><h2>Editable paper preview</h2><p id="previewStats">Preparing pages…</p></div>
+   <div class="preview-actions"><button type="button" class="btn edit-toggle" id="editPageToggle" aria-pressed="false" title="Click a handwritten line or equation to edit it on the page">Edit on page: Off</button><button type="button" class="btn" id="addPageLine" title="Add a new handwritten line at the end of your notes">+ Line</button><div class="zoom-controls" role="group" aria-label="Paper preview zoom">
     <button type="button" class="btn" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
     <input type="range" id="zoomSlider" min="50" max="250" step="10" value="100" aria-label="Preview zoom percentage">
     <button type="button" class="btn" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
@@ -322,6 +406,13 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
    </div><button class="btn primary" id="printTop">Print / Save PDF</button></div>
   </div>
   <div class="page-list" id="pageList"></div>
+  <div class="edit-help" id="pageEditHint">Enable “Edit on page”, then click any line or equation. Type into the on-page editor and watch the writing update live. Ctrl+Enter saves, Esc cancels.</div>
+  <div class="page-edit-popover" id="pageEditPopover" hidden role="dialog" aria-label="Edit text on handwritten page">
+   <label id="pageEditLabel" for="pageEditInput">Edit handwritten line</label>
+   <textarea id="pageEditInput" spellcheck="false" aria-label="Text or equation source for selected page area"></textarea>
+   <div class="edit-tip">Edits update the handwriting preview and the main text box. Equations use their original $...$ or $$...$$ notation.</div>
+   <div class="row"><button type="button" class="btn" id="pageEditCancel">Cancel</button><button type="button" class="btn primary" id="pageEditDone">Done</button></div>
+  </div>
   <p class="note">Use the + / − buttons or slider to zoom in and out. At larger zoom levels, scroll sideways to inspect the page. Zoom affects the screen preview only; the PDF keeps your selected paper dimensions.</p>
  </section>
 </main>
@@ -339,6 +430,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  const PHRASES='handwriting_studio_133_phrases_v5';
  const PAPER_PRESETS={A4:[210,297],A3:[297,420],A5:[148,210],Letter:[215.9,279.4],Legal:[215.9,355.6],B5:[176,250]};
  const svgNS='http://www.w3.org/2000/svg';
+ let pageEditEnabled=false;let pageEditState=null;
  let phrases={};let phraseStrokes=[];let phraseCurrentStroke=null;let phraseDrawing=false;let editingPhrase=null;let editingPhraseIndex=null;let samples={};let chosen='A';let strokes=[];let activeStroke=null;let drawing=false;let redoStrokes=[];let variationSeed=10091;let variationPattern=1;let viewVersion=0;let editVersion=null;let previewZoom=100;
  const $=id=>document.getElementById(id);
  const isColor=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
@@ -406,9 +498,9 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
    e.target.value='';
  });
 
- const optionIds=['u1','u2','u3','marginTop','marginLeft','marginRight','marginBottom','letterSpace','penWidth','variationLevel','effectStrength','mathRoughness','customPaperWidth','customPaperHeight','sampleTraceOpacity'];
- const checkIds=['mathSymbolsGrid','uppercase','guides','marginGuides','variation','lowercaseGrid','accentGrid','composeAccents','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle'];
- const defaults={u1:1,u2:3,u3:3,marginTop:17,marginLeft:16,marginRight:14,marginBottom:15,letterSpace:0.5,penWidth:0.2,variationLevel:35,mathSymbolsGrid:true,accentGrid:true,composeAccents:true,uppercase:true,guides:true,marginGuides:false,variation:true,lowercaseGrid:false,naturalPressure:true,inkBlot:false,inkBleed:false,inkSmudge:false,mathHandDrawn:true,mathRoughness:45,effectStrength:50,customPaperWidth:210,customPaperHeight:297,sampleTraceOpacity:20,sampleTraceToggle:true,paperSize:'A4',paperOrientation:'portrait',inkColor:'#1c2a43'};
+ const optionIds=['u1','u2','u3','marginTop','marginLeft','marginRight','marginBottom','letterSpace','penWidth','variationLevel','effectStrength','mathRoughness','customPaperWidth','customPaperHeight','sampleTraceOpacity','pressureSensitivity'];
+ const checkIds=['mathSymbolsGrid','uppercase','guides','marginGuides','variation','lowercaseGrid','accentGrid','composeAccents','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle','tabletPressure'];
+ const defaults={u1:1,u2:3,u3:3,marginTop:17,marginLeft:16,marginRight:14,marginBottom:15,letterSpace:0.5,penWidth:0.2,variationLevel:35,mathSymbolsGrid:true,accentGrid:true,composeAccents:true,uppercase:true,guides:true,marginGuides:false,variation:true,lowercaseGrid:false,naturalPressure:true,inkBlot:false,inkBleed:false,inkSmudge:false,mathHandDrawn:true,mathRoughness:45,effectStrength:50,customPaperWidth:210,customPaperHeight:297,sampleTraceOpacity:20,sampleTraceToggle:true,pressureSensitivity:100,tabletPressure:true,paperSize:'A4',paperOrientation:'portrait',inkColor:'#1c2a43'};
  function load(){try{const obj=JSON.parse(localStorage.getItem(KEY)||'{}');if(obj&&typeof obj==='object')samples=obj}catch(e){samples={}}
  try{const obj=JSON.parse(localStorage.getItem(PHRASES)||'{}');if(obj&&typeof obj==='object')phrases=obj}catch(e){phrases={}}
  try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
@@ -458,6 +550,39 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   $('caseStatus').textContent=on?'Uppercase conversion is ON: lowercase letters in your typed notes will become capitals. Uncheck this option to keep lowercase handwriting.':'Lowercase is preserved: your typed a–z characters use lowercase samples (or the fallback font if not sampled).';
   $('caseStatus').style.borderColor=on?'#eccf89':'#a7d6bc';
  }
+ // Pointer Events exposes tablet pen pressure (0–1). Non-pen devices remain fixed-width.
+ // Preserve the RAW pressure in saved points, then apply sensitivity non-destructively
+ // when rendering. This keeps all earlier JSON handwriting profiles compatible.
+ function inputPressure(e){
+  if(!$('tabletPressure').checked||e.pointerType!=='pen')return .5;
+  return Number.isFinite(e.pressure)&&e.pressure>0?Math.max(.05,Math.min(1,e.pressure)):.5;
+ }
+ function pressureFactor(p,c){
+  if(!c.tabletPressure)return 1;
+  const k=Math.max(0,Math.min(2,c.pressureSensitivity/100));
+  return Math.max(.2,Math.min(2.5,1+(Math.max(.05,Math.min(1,p??.5))-.5)*1.7*k));
+ }
+ function isPressureStroke(st,c){return c.tabletPressure&&c.pressureSensitivity>0&&st.some(pt=>pt.length>2&&Math.abs(pt[2]-.5)>.018)}
+ function showPressure(e){
+  const pen=e.pointerType==='pen';
+  const raw=pen&&Number.isFinite(e.pressure)?Math.max(0,Math.min(1,e.pressure)):.5;
+  const pct=Math.round(raw*100);
+  $('pressureLive').textContent=pct+'%';$('pressureMeterFill').style.width=pct+'%';$('pressureMeter').setAttribute('aria-valuenow',String(pct));
+  if(pen){$('pressureStatus').textContent=$('tabletPressure').checked?'Pen detected. Pressure '+pct+'%. Light and firm strokes will have different widths.':'Pen detected. Pressure capture is turned off.';}
+  else if(e.type==='pointerdown')$('pressureStatus').textContent='Mouse or touch detected. Strokes use constant 50% pressure. Tablet pressure requires a compatible stylus and browser.';
+ }
+ function inkCanvasStroke(g,st,base,c){
+  if(!st.length)return;
+  g.strokeStyle=c.inkColor;g.fillStyle=c.inkColor;g.lineCap='round';g.lineJoin='round';
+  if(st.length===1){g.beginPath();g.arc(st[0][0],st[0][1],Math.max(.6,base*pressureFactor(st[0][2],c))/2,0,Math.PI*2);g.fill();return}
+  const pressured=isPressureStroke(st,c);
+  if(!pressured){g.lineWidth=base;g.beginPath();g.moveTo(st[0][0],st[0][1]);for(let i=1;i<st.length;i++)g.lineTo(st[i][0],st[i][1]);g.stroke();return}
+  // Rounded short segments produce a continuous variable-width pen stroke.
+  for(let i=1;i<st.length;i++){
+   const a=st[i-1],b=st[i];g.lineWidth=base*pressureFactor(((a[2]??.5)+(b[2]??.5))/2,c);
+   g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
+  }
+ }
  function redrawCanvas(){
   const c=$('drawCanvas'),w=c.width,h=c.height;
   ctx.clearRect(0,0,w,h);
@@ -488,15 +613,22 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
    }
   }
   ctx.restore();
-  ctx.lineWidth=Math.max(1.1,Math.min(20,getCfg().penWidth/Math.max(1.5,getCfg().u2)*127));
-  ctx.strokeStyle=getCfg().inkColor;ctx.lineJoin='round';ctx.lineCap='round';
-  for(const st of strokes){if(!st.length)continue;ctx.beginPath();ctx.moveTo(st[0][0],st[0][1]);
-   if(st.length===1){ctx.lineTo(st[0][0]+.01,st[0][1]+.01)}else{for(let i=1;i<st.length;i++)ctx.lineTo(st[i][0],st[i][1])}ctx.stroke()}
+  const cfg=getCfg(),base=Math.max(1.1,Math.min(20,cfg.penWidth/Math.max(1.5,cfg.u2)*127));
+  for(const st of strokes)inkCanvasStroke(ctx,st,base,cfg);
  }
- function cursor(e){const rect=$('drawCanvas').getBoundingClientRect();return [(e.clientX-rect.left)*$('drawCanvas').width/rect.width,(e.clientY-rect.top)*$('drawCanvas').height/rect.height,Math.max(.08,Math.min(1,e.pressure||.5))]}
- $('drawCanvas').addEventListener('pointerdown',e=>{e.preventDefault();$('drawCanvas').setPointerCapture(e.pointerId);drawing=true;activeStroke=[cursor(e)];strokes.push(activeStroke);redoStrokes=[];redrawCanvas()});
- $('drawCanvas').addEventListener('pointermove',e=>{if(!drawing||!activeStroke)return;e.preventDefault();const p=cursor(e),l=activeStroke[activeStroke.length-1];if(Math.hypot(p[0]-l[0],p[1]-l[1])>=1.3){activeStroke.push(p);redrawCanvas()}});
- function endStroke(){drawing=false;activeStroke=null}for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('drawCanvas').addEventListener(ev,endStroke);
+ let activePointerId=null;
+ function cursor(e){const rect=$('drawCanvas').getBoundingClientRect();return [(e.clientX-rect.left)*$('drawCanvas').width/rect.width,(e.clientY-rect.top)*$('drawCanvas').height/rect.height,inputPressure(e)]}
+ function acceptPoint(st,p,minDist=0.55){const l=st[st.length-1];if(!l||Math.hypot(p[0]-l[0],p[1]-l[1])>=minDist||Math.abs(p[2]-l[2])>.09){st.push(p);return true}return false}
+ $('drawCanvas').addEventListener('pointerdown',e=>{if(drawing)return;e.preventDefault();activePointerId=e.pointerId;
+   $('drawCanvas').setPointerCapture(e.pointerId);drawing=true;activeStroke=[cursor(e)];strokes.push(activeStroke);redoStrokes=[];showPressure(e);redrawCanvas()});
+ $('drawCanvas').addEventListener('pointermove',e=>{if(!drawing||!activeStroke||e.pointerId!==activePointerId)return;e.preventDefault();
+   const events=typeof e.getCoalescedEvents==='function'?e.getCoalescedEvents():[];
+   let changed=false;for(const ev of events.length?events:[e])changed=acceptPoint(activeStroke,cursor(ev))||changed;
+   showPressure(e);if(changed)redrawCanvas();});
+ function endStroke(e){if(activePointerId!==null&&e?.pointerId!==activePointerId)return;
+   if(e&&drawing&&activeStroke&&e.type==='pointerup'){const p=cursor(e);if(e.pointerType==='pen'&&!(e.pressure>0))p[2]=activeStroke[activeStroke.length-1][2];acceptPoint(activeStroke,p,.05);}
+   drawing=false;activeStroke=null;activePointerId=null;redrawCanvas();}
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('drawCanvas').addEventListener(ev,endStroke);
  $('undoBtn').onclick=()=>{const last=strokes.pop();if(last)redoStrokes.push(last);redrawCanvas()};
  $('redoBtn').onclick=()=>{const last=redoStrokes.pop();if(last)strokes.push(last);redrawCanvas()};
  $('clearBtn').onclick=()=>{strokes=[];redoStrokes=[];redrawCanvas()};
@@ -510,12 +642,22 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   // Older profiles without these optional metrics still work using letter-shape defaults.
   return {aspect:Number((w/h).toFixed(4)),strokes:data,topEm:Number(Math.max(-.42,Math.min(1.42,(175-minY)/127)).toFixed(4)),bottomEm:Number(Math.max(-.48,Math.min(1.35,(175-maxY)/127)).toFixed(4))};}
  function showVersion(index){const versions=samples[chosen]||[];if(index<0||index>=versions.length)return;viewVersion=index;renderGallery()}
+ function drawGalleryInk(parent,st,x,y,w,h,weight,c){
+  if(!st?.length)return;
+  const has=isPressureStroke(st,c);
+  if(!has){el('path',{d:pathFromStroke(st,x,y,w,h,(a,b)=>[a,b]),fill:'none',stroke:c.inkColor,'stroke-width':weight,'stroke-linecap':'round','stroke-linejoin':'round'},parent);return}
+  for(let i=1;i<st.length;i++){
+   const q=[st[i-1],st[i]];const p=((q[0][2]??.5)+(q[1][2]??.5))/2;
+   el('path',{d:pathFromStroke(q,x,y,w,h,(a,b)=>[a,b]),fill:'none',stroke:c.inkColor,'stroke-width':(weight*pressureFactor(p,c)).toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
+  }
+  if(st.length===1)el('circle',{cx:x+st[0][0]*w,cy:y+st[0][1]*h,r:weight*pressureFactor(st[0][2],c)/2,fill:c.inkColor},parent);
+ }
  function versionSvg(g,large=false){const svg=el('svg',{viewBox:'0 0 240 110',role:'img','aria-label':'Handwritten sample strokes'});
   const maxWidth=large?212:208,maxHeight=large?86:82;
   const height=Math.min(maxHeight,maxWidth/g.aspect),width=height*g.aspect,x=(240-width)/2,y=(110-height)/2;
   el('line',{x1:12,y1:99,x2:228,y2:99,stroke:'#e5ebf5','stroke-width':.8,'stroke-dasharray':'3 3'},svg);
   const weight=Math.max(.65,Math.min(12,height*getCfg().penWidth/getCfg().u2));
-  for(const stroke of g.strokes){if(stroke.length)el('path',{d:pathFromStroke(stroke,x,y,width,height,(a,b)=>[a,b]),fill:'none',stroke:getCfg().inkColor,'stroke-width':weight,'stroke-linecap':'round','stroke-linejoin':'round'},svg)}return svg;
+  const c=getCfg();for(const stroke of g.strokes)drawGalleryInk(svg,stroke,x,y,width,height,weight,c);return svg;
  }
  function renderGallery(){const versions=samples[chosen]||[],grid=$('versionGallery');grid.replaceChildren();$('galleryCount').textContent=versions.length+' saved / 12 max';$('variantCount').textContent=versions.length+' saved version(s)';
   if(viewVersion>=versions.length)viewVersion=Math.max(0,versions.length-1);
@@ -556,7 +698,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  };
  for(const b of document.querySelectorAll('[data-accent-pick]'))b.addEventListener('click',()=>{const ch=b.dataset.accentPick;if(isLowercase(ch)&&!$('lowercaseGrid').checked){$('lowercaseGrid').checked=true;$('uppercase').checked=false}if(ACCENT_MARKS.includes(ch))$('accentGrid').checked=true;select(ch);});
  $('nextBtn').onclick=()=>{let arr=[...alphabet()],i=arr.indexOf(chosen);for(let k=1;k<=arr.length;k++){let c=arr[(i+k)%arr.length];if(!(samples[c]||[]).length){select(c);return}}select(arr[(i+1)%arr.length])};
- $('exportBtn').onclick=()=>{const obj={format:'HandwritingStudio133',version:'7.8',samples,phrases};downloadBlob(new Blob([JSON.stringify(obj)],{type:'application/json'}),'my-handwriting-v7-8-133.json')};
+ $('exportBtn').onclick=()=>{const obj={format:'HandwritingStudio133',version:'8.0',samples,phrases};downloadBlob(new Blob([JSON.stringify(obj)],{type:'application/json'}),'my-handwriting-v8-133.json')};
  function downloadBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
  $('importBtn').onclick=()=>$('importFile').click();
  $('importFile').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{const obj=JSON.parse(await file.text());const data=obj.samples||obj;if(!data||typeof data!=='object')throw Error('Not a handwriting profile');const clean={};for(const [k,v] of Object.entries(data)){if(k.length===1&&Array.isArray(v)){const valid=v.filter(g=>Number.isFinite(g.aspect)&&g.aspect>0&&g.aspect<40&&Array.isArray(g.strokes)&&g.strokes.every(s=>Array.isArray(s)&&s.every(p=>Array.isArray(p)&&(p.length===2||p.length===3)&&p.every(n=>Number.isFinite(n)&&n>=-.05&&n<=1.05))));if(valid.length)clean[k]=valid.slice(0,12)}}samples=clean;phrases=validatePhraseProfiles(obj.phrases||{});store();glyphList();select(chosen);renderPhraseGallery();render();updateAccentStatus();$('sampleStatus').innerHTML='<span class="status">Handwriting profile imported.</span>'}catch(err){alert('Cannot import this profile: '+err.message)}e.target.value=''};
@@ -655,13 +797,14 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   const basePath=pathFromStroke(stroke,locX,top,w,h,warp);
   if(!basePath)return;
   inkArtifacts(parent,stroke,basePath,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity);
-  if(!c.naturalPressure||stroke.length<2){el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':baseWidth.toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);return}
-  // The underlying continuous stroke keeps sharp corners and pen lifts intact;
-  // short smooth overlays simulate changing nib force without cutting letters apart.
-  el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*.78).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
+  const hasPenPressure=isPressureStroke(stroke,c);
+  if((!c.naturalPressure&&!hasPenPressure)||stroke.length<2){el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*pressureFactor(stroke[0]?.[2],c)).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);return}
+  // Keep the stroke connected. When real tablet pressure is present the core is
+  // narrow so thin pen marks are not hidden under a thick uniform baseline.
+  el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*(hasPenPressure?.22:.78)).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
   let dist=[0],total=0;for(let j=1;j<stroke.length;j++){total+=Math.hypot(stroke[j][0]-stroke[j-1][0],stroke[j][1]-stroke[j-1][1]);dist.push(total)}
   if(total<.001)return;
-  const pieces=Math.max(3,Math.min(14,Math.ceil(total/.075)));
+  const pieces=hasPenPressure?Math.max(8,Math.min(64,Math.ceil(total/.035))):Math.max(3,Math.min(14,Math.ceil(total/.075)));
   function pointAt(t){const target=t*total;let j=1;while(j<dist.length-1&&dist[j]<target)j++;
     const f=Math.max(0,Math.min(1,(target-dist[j-1])/Math.max(.0000001,dist[j]-dist[j-1])));
     const a=stroke[j-1],b=stroke[j];return [a[0]+f*(b[0]-a[0]),a[1]+f*(b[1]-a[1]),(a[2]??.5)*(1-f)+(b[2]??.5)*f]}
@@ -669,7 +812,8 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   for(let k=0;k<pieces;k++){
    const mid=(k+.5)/pieces,tip=Math.min(1,mid*6,(1-mid)*6),p=pointAt(mid);
    const natural=.91+.12*Math.sin(mid*7.8+phase)+.055*Math.sin(mid*17.4+phase*1.7);
-   const pressure=(.92+.18*(p[2]-.5))*natural*(.82+.18*tip);
+   const synthetic=c.naturalPressure?((.92+.18*(p[2]-.5))*natural*(.82+.18*tip)):1;
+   const pressure=pressureFactor(p[2],c)*synthetic;
    const segment=[];for(let t=0;t<=3;t++)segment.push(pointAt((k+t/3)/pieces));
    el('path',{d:pathFromStroke(segment,locX,top,w,h,warp),fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*pressure).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);
   }
@@ -729,14 +873,20 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
    const key=canonicalPhrase(phrase);if(!key||!Array.isArray(versions))continue;
    const good=versions.filter(g=>validateGlyph(g,80)).slice(0,8);if(good.length)out[key]=good;
   }return out}
- function phraseCursor(e){const cv=$('phraseCanvas'),r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height,Math.max(.08,Math.min(1,e.pressure||.5))]}
+ function phraseCursor(e){const cv=$('phraseCanvas'),r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height,inputPressure(e)]}
  function redrawPhraseCanvas(){const cv=$('phraseCanvas'),g=cv.getContext('2d');g.clearRect(0,0,cv.width,cv.height);g.fillStyle='white';g.fillRect(0,0,cv.width,cv.height);
   g.lineWidth=1;g.strokeStyle='#c0cce0';g.setLineDash([8,6]);for(const y of [35,160]){g.beginPath();g.moveTo(14,y);g.lineTo(cv.width-14,y);g.stroke()}g.setLineDash([]);
-  g.strokeStyle=getCfg().inkColor;g.lineWidth=Math.max(1.4,Math.min(17,getCfg().penWidth/Math.max(1.5,getCfg().u2)*120));g.lineJoin='round';g.lineCap='round';
-  for(const st of phraseStrokes){if(!st.length)continue;g.beginPath();g.moveTo(st[0][0],st[0][1]);for(let i=1;i<st.length;i++)g.lineTo(st[i][0],st[i][1]);if(st.length===1)g.lineTo(st[0][0]+.02,st[0][1]+.02);g.stroke()}}
- $('phraseCanvas').addEventListener('pointerdown',e=>{e.preventDefault();$('phraseCanvas').setPointerCapture(e.pointerId);phraseDrawing=true;phraseCurrentStroke=[phraseCursor(e)];phraseStrokes.push(phraseCurrentStroke);redrawPhraseCanvas()});
- $('phraseCanvas').addEventListener('pointermove',e=>{if(!phraseDrawing||!phraseCurrentStroke)return;e.preventDefault();const p=phraseCursor(e),last=phraseCurrentStroke[phraseCurrentStroke.length-1];if(Math.hypot(p[0]-last[0],p[1]-last[1])>=1.5){phraseCurrentStroke.push(p);redrawPhraseCanvas()}});
- for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('phraseCanvas').addEventListener(ev,()=>{phraseDrawing=false;phraseCurrentStroke=null});
+  const c=getCfg(),base=Math.max(1.4,Math.min(17,c.penWidth/Math.max(1.5,c.u2)*120));for(const st of phraseStrokes)inkCanvasStroke(g,st,base,c)}
+ let phrasePointerId=null;
+ $('phraseCanvas').addEventListener('pointerdown',e=>{if(phraseDrawing)return;e.preventDefault();phrasePointerId=e.pointerId;
+   $('phraseCanvas').setPointerCapture(e.pointerId);phraseDrawing=true;phraseCurrentStroke=[phraseCursor(e)];phraseStrokes.push(phraseCurrentStroke);showPressure(e);redrawPhraseCanvas()});
+ $('phraseCanvas').addEventListener('pointermove',e=>{if(!phraseDrawing||!phraseCurrentStroke||phrasePointerId!==e.pointerId)return;e.preventDefault();const events=typeof e.getCoalescedEvents==='function'?e.getCoalescedEvents():[];
+   let changed=false;for(const ev of events.length?events:[e])changed=acceptPoint(phraseCurrentStroke,phraseCursor(ev),.8)||changed;
+   showPressure(e);if(changed)redrawPhraseCanvas()});
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('phraseCanvas').addEventListener(ev,e=>{
+  if(phrasePointerId!==e.pointerId)return;
+  if(e.type==='pointerup'&&phraseDrawing&&phraseCurrentStroke){const p=phraseCursor(e);if(e.pointerType==='pen'&&!(e.pressure>0))p[2]=phraseCurrentStroke[phraseCurrentStroke.length-1][2];acceptPoint(phraseCurrentStroke,p,.05);}
+  phraseDrawing=false;phraseCurrentStroke=null;phrasePointerId=null;redrawPhraseCanvas()});
  $('phraseUndo').onclick=()=>{phraseStrokes.pop();redrawPhraseCanvas()};$('phraseClear').onclick=()=>{phraseStrokes=[];redrawPhraseCanvas()};
  function cancelPhraseEdit(clear=true){editingPhrase=null;editingPhraseIndex=null;$('phraseSave').textContent='Save phrase';$('phraseCancelEdit').hidden=true;if(clear)phraseStrokes=[];redrawPhraseCanvas();renderPhraseGallery()}
  $('phraseCancelEdit').onclick=()=>{cancelPhraseEdit();$('phraseStatus').textContent='Editing cancelled. Your saved sample is unchanged.'};
@@ -752,7 +902,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  };
  function escapeText(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  function phraseSvg(g){const svg=el('svg',{viewBox:'0 0 360 86','aria-label':'Saved handwriting sample'});const width=Math.min(334,g.aspect*68),height=Math.min(68,334/g.aspect),left=(360-width)/2,top=(86-height)/2;
-  const c=getCfg();for(const st of g.strokes)el('path',{d:pathFromStroke(st,left,top,width,height,(a,b)=>[a,b]),stroke:c.inkColor,'stroke-width':Math.max(.9,c.penWidth/c.u2*height).toFixed(2),fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},svg);return svg}
+  const c=getCfg();for(const st of g.strokes)drawGalleryInk(svg,st,left,top,width,height,Math.max(.9,c.penWidth/c.u2*height),c);return svg}
  function loadPhraseVersion(key,index){const g=phrases[key]?.[index];if(!g)return;$('phraseText').value=key;const h=Math.min(125,900/g.aspect),w=h*g.aspect,l=(960-w)/2,t=(194-h)/2;
   phraseStrokes=g.strokes.map(st=>st.map(p=>[l+p[0]*w,t+p[1]*h,...(p.length>2?[p[2]]:[])]));editingPhrase=key;editingPhraseIndex=index;
   $('phraseSave').textContent='Save changes';$('phraseCancelEdit').hidden=false;redrawPhraseCanvas();renderPhraseGallery();$('phraseStatus').textContent='Editing “'+key+'” version '+(index+1)+'. Save to replace only this version.';
@@ -981,9 +1131,9 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   el('path',{d,fill:'none',stroke:c.inkColor,'stroke-width':Math.max(.075,w).toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round','data-math-geometry':'line','data-math-kind':kind},parent);
  }
  function splitMarkup(str){const out=[],rx=/\$\$([\s\S]*?)\$\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)|\$([^$\n]+?)\$/g;
-  let last=0,m;while((m=rx.exec(str))){if(m.index>0&&str[m.index-1]==='\\')continue;if(m.index>last)out.push({kind:'text',value:str.slice(last,m.index)});
-   out.push({kind:m[1]!==undefined||m[2]!==undefined?'display':'inline',value:m[1]??m[2]??m[3]??m[4]});last=rx.lastIndex}
-  if(last<str.length)out.push({kind:'text',value:str.slice(last)});return out;
+  let last=0,m;while((m=rx.exec(str))){if(m.index>0&&str[m.index-1]==='\\')continue;if(m.index>last)out.push({kind:'text',value:str.slice(last,m.index),start:last,end:m.index});
+   out.push({kind:m[1]!==undefined||m[2]!==undefined?'display':'inline',value:m[1]??m[2]??m[3]??m[4],start:m.index,end:rx.lastIndex});last=rx.lastIndex}
+  if(last<str.length)out.push({kind:'text',value:str.slice(last),start:last,end:str.length});return out;
  }
  function equationRows(formula,c,seqStart){
   let src=String(formula||'').trim().replace(/\\begin\{(?:aligned|align\*?|gather\*?|gathered)\}/g,'').replace(/\\end\{(?:aligned|align\*?|gather\*?|gathered)\}/g,'');
@@ -1028,12 +1178,16 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  $('insertAlignMath').onclick=()=>insertMathBlock('align');
  for(const b of document.querySelectorAll('[data-math-template]'))b.onclick=()=>{const t=$('equationDraft'),a=t.selectionStart,z=t.selectionEnd,val=b.dataset.mathTemplate;t.value=t.value.slice(0,a)+val+t.value.slice(z);t.focus();t.setSelectionRange(a+val.length,a+val.length);renderEquationDraft();storeSettings()};
  function render(){const c=getCfg();syncPaperUI(c);const pitch=c.u1+c.u2+c.u3;$('lineInfo').textContent=`${pitch.toFixed(2)} mm base writing row (formulas can take extra height)`;
-  const text=$('content').value.replace(/\r/g,'').replace(/\t/g,'    '),tokens=splitMarkup(text);
-  const maxWidth=c.paperW-c.marginLeft-c.marginRight,blocks=[];let line={type:'line',items:[],w:0,a:c.u2*1.1,d:c.u2*.12};
+  // Keep source offsets aligned with the actual editable textarea, even for Unicode accents.
+  const input=$('content');const canonical=input.value.normalize('NFC').replace(/\r/g,'').replace(/\t/g,'    ');
+  if(input.value!==canonical)input.value=canonical;
+  const text=canonical,tokens=splitMarkup(text);
+  const maxWidth=c.paperW-c.marginLeft-c.marginRight,blocks=[];
+  const freshLine=(at=0)=>({type:'line',items:[],w:0,a:c.u2*1.1,d:c.u2*.12,at});let line=freshLine(0);
   let characters=0,phraseHits=0,inlineCount=0,displayCount=0,seq=0,issues=[];
-  function flush(force=false){if(line.items.length||force){blocks.push(line);line={type:'line',items:[],w:0,a:c.u2*1.1,d:c.u2*.12}}}
+  function flush(force=false,nextAt=null){if(line.items.length||force){blocks.push(line);line=freshLine(nextAt===null?(line.items.length?line.items[line.items.length-1].end:line.at):nextAt)}}
   function put(item){if(item.kind==='space'&&line.items.length===0)return;
-   if(line.w+item.w>maxWidth&&line.items.length){flush();if(item.kind==='space')return}
+   if(line.w+item.w>maxWidth&&line.items.length){flush(false,item.start);if(item.kind==='space')return}
    if(item.kind==='space'&&line.items.length===0)return;
    if(item.kind==='math'&&item.w>maxWidth){const factor=maxWidth/item.w;item.scale=factor;item.w*=factor;item.a*=factor;item.d*=factor}
    if(item.kind==='word'&&item.w>maxWidth){for(const g of item.letters)put({kind:'char',...g});return}
@@ -1041,13 +1195,13 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
    else{line.items.push(item);line.w+=item.w}
    line.a=Math.max(line.a,item.a||c.u2*1.1);line.d=Math.max(line.d,item.d||c.u2*.12);
   }
-  function textPart(str){str=str.normalize('NFC');if(c.uppercase)str=str.toUpperCase();let i=0;
-   while(i<str.length){if(str[i]==='\n'){flush(true);i++;continue}
-    if(str[i]===' '){put({kind:'space',w:dimOf(' ',seq++,c)});i++;continue}
-    const match=matchedPhrase(str,i,c,seq);if(match){put({kind:'phrase',w:match.advance,a:c.u2*1.1,d:c.u2*.15,match,idx:seq});i+=match.actual.length;seq+=match.actual.length;characters+=match.actual.replace(/\s/g,'').length;phraseHits++;continue}
+  function textPart(str,sourceBase){if(c.uppercase)str=str.toUpperCase();let i=0;
+   while(i<str.length){if(str[i]==='\n'){if(!line.items.length)line.at=sourceBase+i;flush(true,sourceBase+i+1);i++;continue}
+    if(str[i]===' '){put({kind:'space',w:dimOf(' ',seq++,c),start:sourceBase+i,end:sourceBase+i+1});i++;continue}
+    const match=matchedPhrase(str,i,c,seq);if(match){put({kind:'phrase',w:match.advance,a:c.u2*1.1,d:c.u2*.15,match,idx:seq,start:sourceBase+i,end:sourceBase+i+match.actual.length});i+=match.actual.length;seq+=match.actual.length;characters+=match.actual.replace(/\s/g,'').length;phraseHits++;continue}
     let j=i;while(j<str.length&&str[j]!==' '&&str[j]!=='\n')j++;
     const word=str.slice(i,j);const letters=[];let wordW=0;
-    for(const ch of word){const glyph={ch,w:dimOf(ch,seq,c),idx:seq};letters.push(glyph);wordW+=glyph.w;seq++;characters++}
+    let cursor=sourceBase+i;for(const ch of word){const glyph={ch,w:dimOf(ch,seq,c),idx:seq,start:cursor,end:cursor+ch.length};letters.push(glyph);wordW+=glyph.w;seq++;characters++;cursor+=ch.length}
     // A combining accent is ink ABOVE the letter, not extra letter height.
     // The line's ascent must remain unchanged, or baselineOffset below moves
     // every letter of words such as NIÑO downward on its writing guide.
@@ -1055,23 +1209,30 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
     put({kind:'word',letters,w:wordW,a:c.u2*1.1,d:[...word].some(ch=>(isLowercase(ch)&&LOWER_DESC.includes(ch))||(accentParts(ch,c)&&accentParts(ch,c).marks.some(m=>BELOW_MARKS.has(m))))?c.u2*.45:c.u2*.12});i=j;
    }
   }
-  for(const t of tokens){if(t.kind==='text'){textPart(t.value);continue}
+  for(const t of tokens){if(t.kind==='text'){textPart(t.value,t.start);continue}
    if(t.kind==='inline'){
     const parsed=parseEquation(t.value);issues.push(...parsed.issues);const box=mathLayout(parsed.node,c,Number($('equationSize').value)/100,seq+200);inlineCount++;
-    put({kind:'math',box,w:box.w,a:box.a,d:box.d,scale:1});seq+=Math.max(1,t.value.length);continue;
+    put({kind:'math',box,w:box.w,a:box.a,d:box.d,scale:1,start:t.start,end:t.end});seq+=Math.max(1,t.value.length);continue;
    }
    // A block equation always starts on a new line, and rows may span pages.
    flush();const rows=equationRows(t.value,c,seq+300);issues.push(...rows.issues);displayCount+=rows.items.length;
-   for(const r of rows.items)blocks.push(r);seq+=t.value.length+100;
+   for(const r of rows.items){r.start=t.start;r.end=t.end;blocks.push(r)}seq+=t.value.length+100;
   }
   flush();
   const frag=document.createDocumentFragment();let page=makePage(c,0),pageCount=1,y=c.marginTop;frag.appendChild(page.wrapper);const maxY=c.paperH-c.marginBottom;
   function newPage(){page=makePage(c,pageCount++);frag.appendChild(page.wrapper);y=c.marginTop}
+  function editHit(atY,height,start,end,display=false,insert=false){
+   if(!Number.isFinite(start)||!Number.isFinite(end))return;
+   const rect=el('rect',{class:'page-edit-hit',x:c.marginLeft-.7,y:Math.max(.1,atY),width:maxWidth+1.4,height:Math.max(pitch*.7,height),
+    'data-start':start,'data-end':end,'data-page':pageCount,'data-display':display?'true':'false',
+    'data-insert':insert?'true':'false','aria-label':insert?'Add text here':(display?'Edit equation':'Edit handwritten line'),tabindex:'0'},page.svg);
+   return rect;
+  }
   for(const block of blocks){
    if(block.type==='display'){
     const h=block.height;if(y+h>maxY&&y>c.marginTop+.01)newPage();
     const baseline=y+Math.max(block.a+.4,(h+block.a-block.d)/2);
-    block.draw(page.svg,c.marginLeft,baseline,maxWidth);y+=h;continue;
+    block.draw(page.svg,c.marginLeft,baseline,maxWidth);editHit(y,h,block.start,block.end,true);y+=h;continue;
    }
    const baselineOffset=Math.max(c.u1+c.u2,block.a+.40);const h=Math.max(pitch,baselineOffset+block.d+Math.max(.35,c.u3*.35));
    if(y+h>maxY&&y>c.marginTop+.01)newPage();let x=c.marginLeft;const baseline=y+baselineOffset;
@@ -1081,14 +1242,96 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
     else if(item.kind==='math'){
      const g=el('g',{transform:`translate(${x.toFixed(3)} ${baseline.toFixed(3)}) scale(${item.scale.toFixed(4)})`,'data-equation':'inline'},page.svg);item.box.draw(g,0,0);
     }x+=item.w;
-   }y+=h;
+   }const sourceItems=block.items.filter(a=>a.start!==undefined);const start=sourceItems.length?Math.min(...sourceItems.map(a=>a.start)):block.at;
+   const end=sourceItems.length?Math.max(...sourceItems.map(a=>a.end)):block.at;
+   editHit(y,h,start,end,false);y+=h;
   }
+  // Blank lines after the last rendered paragraph can be used for adding notes on the final page.
+  if(pageCount&&y<maxY-pitch*.7){for(let blank=y,row=0;blank+pitch*.5<=maxY&&row<70;blank+=pitch,row++){
+   editHit(blank,pitch,text.length,text.length,false,true);
+  }}
   $('pageList').replaceChildren(frag);
   $('previewStats').textContent=`${pageCount} ${c.paperSize} ${c.paperOrientation} page${pageCount===1?'':'s'} · ${characters} letters · ${inlineCount} inline / ${displayCount} equation rows · ${phraseHits} phrase matches`;
   $('matchStats').innerHTML='<strong>Sampled phrase matches:</strong> '+phraseHits+'. '+(phraseHits?'Matching phrases use your saved strokes.':'Other text is drawn from individual letters or a fallback font.');
   $('equationLive').dataset.mathContentWarnings=issues.length?'Math in notes: '+[...new Set(issues)].slice(0,3).join('; '):'';
   renderEquationDraft();
  }
+ // V8.1: editing the document right on its handwritten SVG preview.
+ function positionPageEditor(rect){
+  const modal=$('pageEditPopover');const width=Math.min(410,window.innerWidth-24),height=225;
+  modal.style.width=width+'px';
+  const x=Math.max(12,Math.min(window.innerWidth-width-12,rect.left+Math.min(32,rect.width*.14)));
+  const below=rect.bottom+10,above=rect.top-height-8;
+  const py=below+height<window.innerHeight-10?below:Math.max(10,above);
+  modal.style.left=x+'px';modal.style.top=py+'px';
+ }
+ function livePageEdit(){if(!pageEditState)return;
+  const st=pageEditState;
+  $('content').value=st.before+$('pageEditInput').value+st.after;
+  storeSettings();render();
+ }
+ function finishPageEdit(commit){if(!pageEditState)return;
+  if(!commit){$('content').value=pageEditState.original;storeSettings();render()}
+  pageEditState=null;$('pageEditPopover').hidden=true;
+ }
+ function startPageEdit(hit,ev){
+  if(!pageEditEnabled)return;
+  if(pageEditState)finishPageEdit(true);
+  const source=$('content').value;
+  let start=Number(hit.dataset.start),end=Number(hit.dataset.end);
+  if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end<start||end>source.length)return;
+  const adding=hit.dataset.insert==='true';let before=source.slice(0,start),after=source.slice(end);
+  if(adding){start=source.length;end=start;before=source;
+   // Append at least one newline. More blank rows insert line breaks to approximate the click height.
+   const gaps=[...hit.parentElement.querySelectorAll('.page-edit-hit[data-insert="true"]')];
+   const row=Math.max(0,gaps.indexOf(hit));let newlines=Math.min(row+1,30);
+   if(before.endsWith('\n'))newlines=Math.max(0,newlines-1);
+   before+='\n'.repeat(newlines);
+  }
+  pageEditState={before,after,original:source};
+  const modal=$('pageEditPopover'),field=$('pageEditInput');
+  $('pageEditLabel').textContent=adding?'Add handwriting on this line':(hit.dataset.display==='true'?'Edit this equation':'Edit this handwritten line');
+  field.value=adding?'':source.slice(start,end);
+  modal.hidden=false;positionPageEditor(hit.getBoundingClientRect());
+  field.focus();field.setSelectionRange(field.value.length,field.value.length);
+  if(adding)livePageEdit();
+ }
+ $('editPageToggle').addEventListener('click',()=>{
+  if(pageEditState)finishPageEdit(true);
+  pageEditEnabled=!pageEditEnabled;
+  $('pageList').classList.toggle('edit-mode',pageEditEnabled);
+  $('editPageToggle').textContent='Edit on page: '+(pageEditEnabled?'On':'Off');
+  $('editPageToggle').setAttribute('aria-pressed',String(pageEditEnabled));
+  $('pageEditHint').textContent=pageEditEnabled?'Click a text or equation row to edit. Click a blank row on the last page to add text. The changes appear as you type.':'Enable “Edit on page” to click and edit any handwritten row or equation.';
+ });
+ $('pageList').addEventListener('click',ev=>{
+  const hit=ev.target.closest&&ev.target.closest('.page-edit-hit');
+  if(hit)startPageEdit(hit,ev);
+ });
+ $('pageList').addEventListener('keydown',ev=>{
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches('.page-edit-hit')){ev.preventDefault();startPageEdit(ev.target,ev)}
+ });
+ $('addPageLine').addEventListener('click',()=>{
+  if(!pageEditEnabled)$('editPageToggle').click();
+  if(pageEditState)finishPageEdit(true);
+  const source=$('content').value;
+  const separator=source.endsWith('\n')?'':'\n';
+  pageEditState={before:source+separator,after:'',original:source};
+  $('pageEditLabel').textContent='Add a new handwritten line';
+  const modal=$('pageEditPopover'),field=$('pageEditInput');
+  field.value='';modal.hidden=false;
+  const rect=$('pageList').getBoundingClientRect();
+  positionPageEditor({left:rect.left+15,right:rect.right,top:rect.top+45,bottom:rect.top+70,width:150});
+  livePageEdit();field.focus();
+ });
+ $('pageEditInput').addEventListener('input',livePageEdit);
+ $('pageEditInput').addEventListener('keydown',ev=>{
+  if(ev.key==='Escape'){ev.preventDefault();finishPageEdit(false)}
+  if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey)){ev.preventDefault();finishPageEdit(true)}
+  if(ev.key==='Tab'){ev.preventDefault();const t=ev.target,a=t.selectionStart,z=t.selectionEnd;t.setRangeText('    ',a,z,'end');livePageEdit()}
+ });
+ $('pageEditCancel').addEventListener('click',()=>finishPageEdit(false));
+ $('pageEditDone').addEventListener('click',()=>finishPageEdit(true));
  function updateEffectsUI(){const enabled=$('inkBlot').checked||$('inkBleed').checked||$('inkSmudge').checked;$('effectStrengthValue').textContent=enabled?$('effectStrength').value+'%':'Off · '+$('effectStrength').value+'%';}
  function updateVariationUI(){const enabled=$('variation').checked,level=Number($('variationLevel').value);
   $('realismBox').classList.toggle('is-off',!enabled);$('variationLevel').disabled=!enabled;
@@ -1109,6 +1352,15 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  $('zoomIn').addEventListener('click',()=>setZoom(previewZoom+10));
  $('zoomReset').addEventListener('click',()=>setZoom(100));
  $('thicknessSlider').addEventListener('input',e=>{$('penWidth').value=e.target.value;updateThicknessUI();refresh()});
+ function updateTabletUI(){
+  const on=$('tabletPressure').checked,v=Number($('pressureSensitivity').value);
+  $('pressureSensitivity').disabled=!on;
+  $('pressureSensitivityValue').textContent=on?v+'%':'Off';
+  redrawCanvas();redrawPhraseCanvas();renderGallery();renderPhraseGallery();refresh();
+ }
+ $('tabletPressure').addEventListener('change',updateTabletUI);
+ $('pressureSensitivity').addEventListener('input',updateTabletUI);
+
  function updateMathRoughnessUI(){
   const enabled=$('mathHandDrawn').checked,amount=Number($('mathRoughness').value);
   $('mathRoughness').disabled=!enabled;
@@ -1118,12 +1370,201 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  }
  function refresh(){updateVariationUI();updateEffectsUI();updateMathRoughnessUI();storeSettings();render()}
  $('shuffleBtn').onclick=()=>{const a=new Uint32Array(1);if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(a);variationSeed=a[0]>>>0}else{variationSeed=(Date.now()>>>0)}variationPattern++;refresh()};
- for(const id of optionIds.concat(checkIds)){const e=$(id);e.addEventListener('input',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();if(id==='penWidth')updateThicknessUI();updateCaseStatus();refresh()});e.addEventListener('change',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();updateCaseStatus();refresh()})}
+ for(const id of optionIds.concat(checkIds)){if(id==='pressureSensitivity'||id==='tabletPressure')continue;const e=$(id);e.addEventListener('input',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();if(id==='penWidth')updateThicknessUI();updateCaseStatus();refresh()});e.addEventListener('change',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();updateCaseStatus();refresh()})}
  $('paperSize').addEventListener('change',refresh);$('paperOrientation').addEventListener('change',refresh);
  $('content').addEventListener('input',refresh);$('equationSize').addEventListener('change',refresh);$('equationAlign').addEventListener('change',refresh);$('equationDraft').addEventListener('input',()=>{storeSettings();renderEquationDraft()});$('phraseMode').addEventListener('change',refresh);$('refreshBtn').onclick=refresh;
- $('restoreBtn').onclick=()=>{for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;redrawCanvas();refresh()};
+ $('restoreBtn').onclick=()=>{for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle','tabletPressure'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;$('pressureSensitivityValue').textContent=$('pressureSensitivity').value+'%';$('pressureSensitivity').disabled=false;redrawCanvas();redrawPhraseCanvas();refresh()};
  function printPage(){refresh();window.print()};$('printBtn').onclick=printPage;$('printTop').onclick=printPage;
- load();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=!$('sampleTraceToggle').checked;select(chosen);updateAccentStatus();updateCaseStatus();syncInkUI();syncZoomUI();updateThicknessUI();updateVariationUI();updateEffectsUI();updateMathRoughnessUI();redrawPhraseCanvas();renderPhraseGallery();render();renderEquationDraft();
+ // V8.0: Local photo-to-vector handwriting import. Photos stay entirely inside this browser.
+ const photoCanvas=$('photoCanvas'),photoCtx=photoCanvas.getContext('2d');
+ const photoPreview=$('photoGlyphPreview'),photoPreviewCtx=photoPreview.getContext('2d');
+ let photoRaster=null,photoRegions=[],photoSelection=null,photoDragging=false,photoDragOrigin=null,photoSourceKind='';
+ let photoCandidateIndex=-1,photoExtracted=null;
+ function photoMessage(message,warning=false){$('photoStatus').textContent=message;$('photoStatus').style.color=warning?'#a45d15':'#526478'}
+ function photoPoint(ev){const r=photoCanvas.getBoundingClientRect();return {x:Math.max(0,Math.min(photoCanvas.width,(ev.clientX-r.left)*photoCanvas.width/r.width)),y:Math.max(0,Math.min(photoCanvas.height,(ev.clientY-r.top)*photoCanvas.height/r.height))}}
+ function photoRect(a,b){return {x:Math.min(a.x,b.x),y:Math.min(a.y,b.y),w:Math.abs(b.x-a.x),h:Math.abs(b.y-a.y)}}
+ function photoBounds(r){if(!r)return null;const x=Math.max(0,Math.floor(r.x)),y=Math.max(0,Math.floor(r.y));return {x,y,w:Math.max(1,Math.min(photoCanvas.width-x,Math.ceil(r.x+r.w)-x)),h:Math.max(1,Math.min(photoCanvas.height-y,Math.ceil(r.y+r.h)-y))}}
+ function photoRender(){
+  if(!photoRaster)return;
+  photoCanvas.width=photoRaster.width;photoCanvas.height=photoRaster.height;
+  photoCtx.drawImage(photoRaster,0,0);
+  if($('photoShowBoxes').checked){photoCtx.save();photoCtx.lineWidth=Math.max(1.3,photoCanvas.width/550);photoRegions.forEach((r,i)=>{
+   photoCtx.strokeStyle=i===photoCandidateIndex?'#365fda':'rgba(22,145,114,.72)';photoCtx.strokeRect(r.x,r.y,r.w,r.h);
+   if(i<80){photoCtx.fillStyle=i===photoCandidateIndex?'#365fda':'#18876d';photoCtx.font=`bold ${Math.max(12,Math.floor(photoCanvas.width/66))}px sans-serif`;photoCtx.fillText(String(i+1),r.x+2,Math.max(13,r.y-3));}
+  });photoCtx.restore();}
+  if(photoSelection){photoCtx.save();photoCtx.fillStyle='rgba(54,95,218,.10)';photoCtx.strokeStyle='#365fda';photoCtx.lineWidth=Math.max(2,photoCanvas.width/450);photoCtx.setLineDash([7,4]);photoCtx.fillRect(photoSelection.x,photoSelection.y,photoSelection.w,photoSelection.h);photoCtx.strokeRect(photoSelection.x,photoSelection.y,photoSelection.w,photoSelection.h);photoCtx.restore();}
+ }
+ function photoSetSelected(rect,source,index=-1){photoSelection=photoBounds(rect);photoCandidateIndex=index;photoSourceKind=source;$('photoSource').value=source==='Detected'?'Detected #'+(index+1):source;$('photoClearBox').disabled=false;photoRender();photoUpdateExtraction();photoMarkCandidates();}
+ function photoMarkCandidates(){for(const [i,b] of [...$('photoCandidates').children].entries())b.classList.toggle('active',i===photoCandidateIndex)}
+ function photoMaskData(imageData,threshold,invert=false){const a=imageData.data,n=imageData.width*imageData.height,mask=new Uint8Array(n);
+  for(let i=0;i<n;i++){let p=i*4;let gray=.299*a[p]+.587*a[p+1]+.114*a[p+2];let dark=invert?gray>255-threshold:gray<threshold;mask[i]=(a[p+3]>40&&dark)?1:0;}return mask;}
+ function photoDetectRegions(){if(!photoRaster)return;
+  const w=photoRaster.width,h=photoRaster.height;
+  const im=photoRaster.getContext('2d',{willReadFrequently:true}).getImageData(0,0,w,h);
+  const data=photoMaskData(im,Number($('photoThreshold').value),$('photoInvert').checked);
+  const visited=new Uint8Array(w*h),queue=new Int32Array(w*h),out=[];
+  const minArea=Math.max(7,Math.floor(w*h/140000));
+  for(let start=0;start<data.length;start++){
+   if(!data[start]||visited[start])continue;
+   let head=0,tail=1;queue[0]=start;visited[start]=1;
+   let minX=w,minY=h,maxX=0,maxY=0,area=0;
+   while(head<tail){const id=queue[head++],x=id%w,y=(id/w)|0;area++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);
+    for(let dy=-1;dy<=1;dy++){const yy=y+dy;if(yy<0||yy>=h)continue;for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const xx=x+dx;if(xx<0||xx>=w)continue;const np=yy*w+xx;if(data[np]&&!visited[np]){visited[np]=1;queue[tail++]=np;}}}
+   }
+   if(area>=minArea&&(maxX-minX>=2||maxY-minY>=3)&&area<w*h*.3){
+    const pad=3;out.push({x:Math.max(0,minX-pad),y:Math.max(0,minY-pad),w:Math.min(w-1,maxX+pad)-Math.max(0,minX-pad)+1,h:Math.min(h-1,maxY+pad)-Math.max(0,minY-pad)+1,area});
+   }
+  }
+  // Keep reading order roughly top-to-bottom. Dots, accents and disconnected letter strokes
+  // may be separate detections; drag a rectangle around the entire character to merge them.
+  out.sort((a,b)=>Math.abs(a.y-b.y)>Math.max(13,Math.min(a.h,b.h)*.5)?a.y-b.y:a.x-b.x);
+  photoRegions=out.slice(0,180);photoCandidateIndex=-1;$('photoBatchSave').disabled=!photoRegions.length;
+  const panel=$('photoCandidates');panel.replaceChildren();
+  photoRegions.forEach((r,i)=>{const b=document.createElement('button');b.type='button';b.className='photo-detect';b.textContent=String(i+1);b.title=`Region ${i+1}: ${Math.round(r.w)}×${Math.round(r.h)} pixels`;b.onclick=()=>photoSetSelected(r,'Detected',i);panel.append(b)});
+  $('photoRegionCount').textContent=out.length>180?'Showing 180 of '+out.length+' ink regions':out.length+' regions found';
+  photoRender();if(!photoRegions.length)photoMessage('No separate dark-ink regions found. Adjust the threshold or drag a selection manually.',true);
+  else photoMessage(photoRegions.length+' possible ink regions found. Choose a number, or drag a rectangle around a complete letter. Dots and disconnected strokes may need a combined manual selection.');
+ }
+ function photoThin(mask,w,h){const out=new Uint8Array(mask),drops=[];
+  const at=(x,y)=>out[y*w+x];
+  for(let iter=0;iter<65;iter++){let removed=0;
+   for(let pass=0;pass<2;pass++){
+    drops.length=0;
+    for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+     const i=y*w+x;if(!out[i])continue;
+     const p2=at(x,y-1),p3=at(x+1,y-1),p4=at(x+1,y),p5=at(x+1,y+1),p6=at(x,y+1),p7=at(x-1,y+1),p8=at(x-1,y),p9=at(x-1,y-1);
+     const n=p2+p3+p4+p5+p6+p7+p8+p9;if(n<2||n>6)continue;
+     const ring=[p2,p3,p4,p5,p6,p7,p8,p9,p2];let transitions=0;for(let j=0;j<8;j++)if(!ring[j]&&ring[j+1])transitions++;if(transitions!==1)continue;
+     if(pass===0){if(p2*p4*p6||p4*p6*p8)continue;}
+     else if(p2*p4*p8||p2*p6*p8)continue;
+     drops.push(i);
+    }
+    for(const id of drops)out[id]=0;removed+=drops.length;
+   }
+   if(!removed)break;
+  }
+  return out;
+ }
+ function photoTrace(mask,w,h){
+  const offsets=[-w-1,-w,-w+1,-1,1,w-1,w,w+1];
+  const nodes=[],neighbors=new Map();
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+   const id=y*w+x;if(!mask[id])continue;nodes.push(id);
+   const near=[];for(const d of offsets){const ni=id+d,nx=ni%w;if(ni<0||ni>=mask.length||Math.abs(nx-x)>1)continue;if(mask[ni])near.push(ni);}neighbors.set(id,near);
+  }
+  const seen=new Set(),paths=[];
+  const edge=(a,b)=>a<b?a+':'+b:b+':'+a;
+  function travel(from,to){const result=[from],max=mask.length+1;let last=from,current=to,k=edge(last,current);seen.add(k);let iterations=0;
+   while(iterations++<max){result.push(current);const ns=neighbors.get(current)||[];
+    if(ns.length!==2)break;
+    const next=ns[0]===last?ns[1]:ns[0];const key=edge(current,next);if(seen.has(key))break;
+    last=current;current=next;seen.add(key);
+   }
+   if(result.length)paths.push(result);
+  }
+  for(const id of nodes){const ns=neighbors.get(id)||[];if(!ns.length){paths.push([id]);continue}if(ns.length!==2)for(const next of ns){if(!seen.has(edge(id,next)))travel(id,next);}}
+  for(const id of nodes){for(const next of neighbors.get(id)||[]){if(!seen.has(edge(id,next)))travel(id,next);}}
+  return paths;
+ }
+ function photoExtract(rect){if(!photoRaster||!rect||rect.w<4||rect.h<4)return null;
+  const region=photoBounds(rect),side=180,scale=Math.min(1,side/Math.max(region.w,region.h)),w=Math.max(3,Math.round(region.w*scale)),h=Math.max(3,Math.round(region.h*scale));
+  const raster=document.createElement('canvas');raster.width=w+2;raster.height=h+2;const rctx=raster.getContext('2d',{willReadFrequently:true});
+  rctx.fillStyle=$('photoInvert').checked?'#000':'#fff';rctx.fillRect(0,0,w+2,h+2);rctx.imageSmoothingEnabled=true;
+  rctx.drawImage(photoRaster,region.x,region.y,region.w,region.h,1,1,w,h);
+  const im=rctx.getImageData(0,0,w+2,h+2),iw=w+2,ih=h+2;
+  const mask=photoMaskData(im,Number($('photoThreshold').value),$('photoInvert').checked);
+  let ink=0,minX=iw,minY=ih,maxX=0,maxY=0;
+  for(let y=0;y<ih;y++)for(let x=0;x<iw;x++){const id=y*iw+x;if(mask[id]){ink++;minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}}
+  if(ink<7)return null;
+  if(ink>.85*iw*ih)return {error:'Too much dark area in selection. Tighten the crop or lower the detection threshold.'};
+  const thin=photoThin(mask,iw,ih),paths=photoTrace(thin,iw,ih);
+  if(!paths.length)return {error:'Cannot find pen strokes. Try raising the detection threshold.'};
+  // Exclude tiny disconnected speckles while preserving legitimate dots and accent marks.
+  const meaningful=paths.filter(p=>p.length>=Math.max(2,Math.floor(Math.sqrt(ink)/11)));
+  const pathList=(meaningful.length?meaningful:paths).sort((a,b)=>b.length-a.length).slice(0,170);
+  const bw=Math.max(1,maxX-minX),bh=Math.max(1,maxY-minY);
+  const strokes=pathList.map(path=>{
+   const step=Math.max(1,Math.ceil(path.length/95)),picked=path.filter((_,i)=>i%step===0||i===path.length-1);
+   return picked.map(id=>[Math.max(0,Math.min(1,((id%iw)-minX)/bw)),Math.max(0,Math.min(1,(((id/iw)|0)-minY)/bh)),.5]);
+  }).filter(st=>st.length);
+  if(!strokes.length)return null;
+  return {aspect:Number((bw/Math.max(1,bh)).toFixed(4)),strokes,ink,paths:strokes.length};
+ }
+ function photoUpdateExtraction(){photoExtracted=photoExtract(photoSelection);const c=photoPreviewCtx,w=photoPreview.width,h=photoPreview.height;
+  c.clearRect(0,0,w,h);c.fillStyle='#fff';c.fillRect(0,0,w,h);
+  c.strokeStyle='#dae3ef';c.setLineDash([4,5]);c.beginPath();c.moveTo(12,109);c.lineTo(308,109);c.stroke();c.setLineDash([]);
+  const valid=photoExtracted&&!photoExtracted.error;
+  $('photoSave').disabled=!valid;$('photoSaveEdit').disabled=!valid;
+  if(!photoSelection){photoMessage('Drag around one complete letter or select a detected region to extract it.');return;}
+  if(!valid){photoMessage(photoExtracted?.error||'This selection contains too little ink. Enlarge the region or adjust the threshold.',true);return;}
+  const g=photoExtracted,hh=Math.min(96,278/Math.max(.08,g.aspect)),ww=hh*g.aspect,ox=(w-ww)/2,oy=(h-hh)/2;
+  c.strokeStyle='#182b45';c.lineWidth=2.1;c.lineJoin='round';c.lineCap='round';
+  for(const st of g.strokes){if(st.length===1){c.beginPath();c.arc(ox+st[0][0]*ww,oy+st[0][1]*hh,1.3,0,Math.PI*2);c.fillStyle='#182b45';c.fill();continue}
+   c.beginPath();for(let i=0;i<st.length;i++){const p=st[i],x=ox+p[0]*ww,y=oy+p[1]*hh;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}
+  photoMessage(`Extracted ${g.paths} stroke segments. Preview represents approximate pen centerlines, not the original pen movements. Enter the correct character and save.`);
+ }
+ async function photoReadFile(file){if(!file)return;const img=new Image(),url=URL.createObjectURL(file);
+  try{await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('Unsupported or damaged image.'));img.src=url});
+   const max=1250,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(img.naturalWidth*scale);c.height=Math.round(img.naturalHeight*scale);
+   const cx=c.getContext('2d',{willReadFrequently:true});cx.fillStyle='#fff';cx.fillRect(0,0,c.width,c.height);cx.drawImage(img,0,0,c.width,c.height);photoRaster=c;photoRegions=[];photoSelection=null;photoCandidateIndex=-1;$('photoBatchSave').disabled=true;
+   $('photoViewport').classList.remove('is-empty');$('photoEmpty').hidden=true;for(const id of ['photoDetect','photoRotate'])$(id).disabled=false;
+   $('photoClearBox').disabled=true;$('photoRegionCount').textContent='Choose Find separate letters';$('photoCandidates').replaceChildren();$('photoSource').value='Drag on image';photoRender();photoUpdateExtraction();
+   photoMessage('Image loaded locally. Click Find separate letters, or drag around any character to select it.');
+  }finally{URL.revokeObjectURL(url)}
+ }
+ $('photoFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{await photoReadFile(f);}catch(error){photoMessage('Could not read photo: '+error.message,true)}});
+ photoCanvas.addEventListener('pointerdown',e=>{if(!photoRaster)return;e.preventDefault();photoCanvas.setPointerCapture(e.pointerId);photoDragging=true;photoDragOrigin=photoPoint(e);photoSelection=photoRect(photoDragOrigin,photoDragOrigin);photoCandidateIndex=-1;photoSourceKind='Manual crop';photoRender()});
+ photoCanvas.addEventListener('pointermove',e=>{if(!photoDragging)return;e.preventDefault();photoSelection=photoRect(photoDragOrigin,photoPoint(e));photoRender()});
+ function photoEndDrag(e){if(!photoDragging)return;photoDragging=false;const r=photoRect(photoDragOrigin,photoPoint(e));if(r.w<4||r.h<4){photoSelection=null;photoRender();return}photoSetSelected(r,'Manual crop');}
+ photoCanvas.addEventListener('pointerup',photoEndDrag);photoCanvas.addEventListener('pointercancel',()=>{photoDragging=false;photoRender()});
+ $('photoDetect').onclick=photoDetectRegions;
+ $('photoThreshold').addEventListener('input',()=>{$('photoThresholdValue').textContent=$('photoThreshold').value;photoUpdateExtraction()});
+ $('photoInvert').addEventListener('change',photoUpdateExtraction);
+ $('photoShowBoxes').addEventListener('change',photoRender);
+ $('photoClearBox').onclick=()=>{photoSelection=null;photoCandidateIndex=-1;photoSourceKind='';$('photoSource').value='Drag on image';$('photoClearBox').disabled=true;photoRender();photoUpdateExtraction();photoMarkCandidates()};
+ $('photoRotate').onclick=()=>{if(!photoRaster)return;const old=photoRaster,c=document.createElement('canvas');c.width=old.height;c.height=old.width;const g=c.getContext('2d',{willReadFrequently:true});g.translate(c.width,0);g.rotate(Math.PI/2);g.drawImage(old,0,0);photoRaster=c;photoSelection=null;photoRegions=[];photoCandidateIndex=-1;$('photoBatchSave').disabled=true;$('photoCandidates').replaceChildren();$('photoRegionCount').textContent='Find separate letters after rotation';photoRender();photoUpdateExtraction()};
+ $('photoChar').addEventListener('input',()=>{const v=$('photoChar').value.trim();if(v.length===1&&isLowercase(v)&&!$('lowercaseGrid').checked)photoMessage('Lowercase import is supported. Saving will enable lowercase characters automatically.');});
+ function photoSaveGlyph(andEdit){const ch=$('photoChar').value.trim();const parts=[...ch];if(parts.length!==1||ch===' '){photoMessage('Enter exactly one letter, number, punctuation mark, or symbol as the character label.',true);return}
+  const g=photoExtracted;if(!g||g.error){photoMessage('Select a valid handwritten character before saving.',true);return}
+  if(samples[ch]?.length>=12){photoMessage('Already 12 versions for '+ch+'. Delete one in Saved letter versions first.',true);return}
+  if(isLowercase(ch)){$('lowercaseGrid').checked=true;$('uppercase').checked=false}
+  if(MATH_SYMBOLS.includes(ch))$('mathSymbolsGrid').checked=true;
+  if(ACCENT_MARKS.includes(ch))$('accentGrid').checked=true;
+  const pos=defaultPlacement(ch);
+  const version={aspect:g.aspect,strokes:g.strokes,topEm:pos.topEm,bottomEm:pos.bottomEm};
+  if(!samples[ch])samples[ch]=[];
+  samples[ch].push(version);const index=samples[ch].length-1;
+  store();glyphList();select(ch);viewVersion=index;renderGallery();render();updateAccentStatus();
+  if(andEdit){loadVersion(index);$('photoStatus').textContent=`Added ${ch} from photo and loaded it for correction in the sampling canvas above. Click Save changes after editing.`;}
+  else photoMessage(`Saved photo-extracted ${ch} as version ${index+1}. It now appears in your generated notes and in Saved letter versions.`);
+ }
+ $('photoSave').onclick=()=>photoSaveGlyph(false);
+ $('photoSaveEdit').onclick=()=>photoSaveGlyph(true);
+
+ $('photoBatchSave').onclick=()=>{
+  const labels=[...$('photoBatchLabels').value.replace(/\s/g,'')];
+  if(!photoRegions.length){photoMessage('Detect separate letters first.',true);return}
+  if(labels.length!==photoRegions.length){photoMessage(`Found ${photoRegions.length} ink regions but received ${labels.length} labels. There must be exactly one label for each region.`,true);return}
+  if(labels.length>100){photoMessage('For reliability, import at most 100 regions at once. Try a smaller photo.',true);return}
+  if(!confirm(`Import ${labels.length} photo regions as these characters: ${labels.join(' ')}? Check the numbered boxes match the reading order first.`))return;
+  const imported=[],skipped=[];
+  for(let i=0;i<labels.length;i++){
+   const ch=labels[i];if(ch===' '||((samples[ch]||[]).length>=12)){skipped.push(i+1);continue}
+   const shape=photoExtract(photoRegions[i]);if(!shape||shape.error){skipped.push(i+1);continue}
+   const pos=defaultPlacement(ch);
+   const version={aspect:shape.aspect,strokes:shape.strokes,topEm:pos.topEm,bottomEm:pos.bottomEm};
+   if(!samples[ch])samples[ch]=[];
+   samples[ch].push(version);imported.push(ch);
+   if(isLowercase(ch)){$('lowercaseGrid').checked=true;$('uppercase').checked=false}
+   if(MATH_SYMBOLS.includes(ch))$('mathSymbolsGrid').checked=true;
+   if(ACCENT_MARKS.includes(ch))$('accentGrid').checked=true;
+  }
+  store();glyphList();if(imported.length)select(imported[0]);else select(chosen);render();updateAccentStatus();
+  photoMessage(`Bulk import: saved ${imported.length} character version(s). ${skipped.length?'Skipped regions '+skipped.join(', ')+'.':'Review them in the saved-letter gallery.'}`);
+ };
+
+
+ load();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=!$('sampleTraceToggle').checked;select(chosen);updateAccentStatus();updateCaseStatus();syncInkUI();syncZoomUI();updateThicknessUI();updateVariationUI();updateEffectsUI();updateMathRoughnessUI();$('pressureSensitivityValue').textContent=$('tabletPressure').checked?$('pressureSensitivity').value+'%':'Off';$('pressureSensitivity').disabled=!$('tabletPressure').checked;redrawPhraseCanvas();renderPhraseGallery();render();renderEquationDraft();
 })();
 </script>
 </body>
