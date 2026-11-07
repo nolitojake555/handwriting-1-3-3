@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Handwriting Studio V8.1 · Photo handwriting importer · 1–3–3 lettering</title>
+<title>Handwriting Studio V8.2 · Photo handwriting importer · 1–3–3 lettering</title>
 <style>
 :root{--bg:#f4f6fb;--panel:#fff;--line:#e1e6ed;--ink:#172332;--muted:#637386;--blue:#365fda;--soft:#e8efff;--green:#178160;--radius:16px}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:14px}
@@ -97,6 +97,10 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
 @page{size:210mm 297mm;margin:0}
 @media print{html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}header,.controls,.preview-top,.note{display:none!important}main{padding:0;margin:0;display:block;max-width:none}.preview-pane{position:static}.page-list{display:block;padding:0;margin:0;border:0;background:white;overflow:visible;max-height:none}.sheet{width:var(--print-width,210mm)!important;height:var(--print-height,297mm)!important;aspect-ratio:auto;page-break-after:always;break-after:page;box-shadow:none;border:0;border-radius:0;margin:0!important}.sheet:last-child{page-break-after:auto;break-after:auto}.sheet svg{width:100%!important;height:100%!important}}
 
+@media print {body.fast-print .sheet svg [filter] {filter:none!important}}
+/* V8.2: the browser can skip painting off-screen pages during screen preview. */
+@media screen { .sheet { content-visibility:auto; contain-intrinsic-size:auto 900px; } }
+@media print { .sheet { content-visibility:visible!important; contain-intrinsic-size:none!important; } }
 /* V8.1 interactive page editing. The hit areas are not exported or printed. */
 .preview-actions .edit-toggle[aria-pressed="true"]{background:#dfeafe;border-color:#7ba2ee;color:#163e91}
 .edit-help{font-size:11px;color:#5c7188;margin-top:7px}
@@ -390,6 +394,17 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
     <div class="toolbar"><button class="btn" id="shuffleBtn" type="button">Try another variation pattern</button><span class="small muted" id="variationPattern">Pattern 1</span></div>
    </div>
    <div class="infobar"><strong id="paperInfo">A4 portrait: 210 × 297 mm.</strong> <span id="lineInfo">7 mm per writing row</span>. Unrecorded characters use a basic fallback font.</div>
+   <div class="realism-box" id="performanceBox">
+    <label for="renderQuality">Rendering performance</label>
+    <select id="renderQuality" style="margin:9px 0 4px;display:block;width:100%;border:1px solid #d6deea;border-radius:8px;padding:9px;color:#29394b;background:white">
+     <option value="fast">Fast — long notes / smaller PDF</option>
+     <option value="balanced" selected>Balanced — recommended</option>
+     <option value="original">Original — maximum legacy detail (slower)</option>
+    </select>
+    <p class="hint" style="margin:4px 0 10px">Fast and Balanced use one variable-width vector outline per pen stroke instead of dozens of overlapping stroke segments. They retain stylus pressure, organic lines, sampled letter shapes and ink effects.</p>
+    <label class="checkline" style="display:flex;font-weight:400"><input type="checkbox" id="fastPrint" checked> Optimize printing (skip heavy blur filters in the PDF)</label>
+    <p class="hint" style="margin:5px 0 0">Turn this off for the softest bleed and smudge in the final PDF. Your handwriting still has blots and other ink marks when it is on.</p>
+   </div>
    <hr />
    <div class="toolbar"><button class="btn primary" id="printBtn">Print / Save PDF</button><button class="btn" id="refreshBtn">Refresh preview</button><button class="btn" id="restoreBtn">Default layout</button></div>
    <div class="note">For printing, use <strong>scale 100%</strong>, <strong>zero extra margins</strong>, and <strong>Background graphics</strong> for the full ink effects. The program requests your selected paper size; confirm the print dialog matches it. Choose “Save as PDF” for a file.</div>
@@ -503,10 +518,10 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  const defaults={u1:1,u2:3,u3:3,marginTop:17,marginLeft:16,marginRight:14,marginBottom:15,letterSpace:0.5,penWidth:0.2,variationLevel:35,mathSymbolsGrid:true,accentGrid:true,composeAccents:true,uppercase:true,guides:true,marginGuides:false,variation:true,lowercaseGrid:false,naturalPressure:true,inkBlot:false,inkBleed:false,inkSmudge:false,mathHandDrawn:true,mathRoughness:45,effectStrength:50,customPaperWidth:210,customPaperHeight:297,sampleTraceOpacity:20,sampleTraceToggle:true,pressureSensitivity:100,tabletPressure:true,paperSize:'A4',paperOrientation:'portrait',inkColor:'#1c2a43'};
  function load(){try{const obj=JSON.parse(localStorage.getItem(KEY)||'{}');if(obj&&typeof obj==='object')samples=obj}catch(e){samples={}}
  try{const obj=JSON.parse(localStorage.getItem(PHRASES)||'{}');if(obj&&typeof obj==='object')phrases=obj}catch(e){phrases={}}
- try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
+ try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(['fast','balanced','original'].includes(cfg.renderQuality))$('renderQuality').value=cfg.renderQuality;if(cfg.fastPrint!==undefined)$('fastPrint').checked=!!cfg.fastPrint;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
  }
  function store(){try{localStorage.setItem(KEY,JSON.stringify(samples));localStorage.setItem(PHRASES,JSON.stringify(phrases))}catch(e){$('sampleStatus').textContent='Browser storage full: please export your handwriting profile.'}}
- function storeSettings(){const o={};for(const id of optionIds)o[id]=$(id).value;for(const id of checkIds)o[id]=$(id).checked;o.content=$('content').value;o.equationDraft=$('equationDraft').value;o.equationSize=$('equationSize').value;o.equationAlign=$('equationAlign').value;o.phraseMode=$('phraseMode').value;o.paperSize=$('paperSize').value;o.paperOrientation=$('paperOrientation').value;o.inkColor=$('inkColor').value;o.previewZoom=previewZoom;o.variationSeed=variationSeed;o.variationPattern=variationPattern;try{localStorage.setItem(SETTINGS,JSON.stringify(o))}catch(e){}}
+ function storeSettings(){const o={};for(const id of optionIds)o[id]=$(id).value;for(const id of checkIds)o[id]=$(id).checked;o.content=$('content').value;o.equationDraft=$('equationDraft').value;o.equationSize=$('equationSize').value;o.equationAlign=$('equationAlign').value;o.phraseMode=$('phraseMode').value;o.renderQuality=$('renderQuality').value;o.fastPrint=$('fastPrint').checked;o.paperSize=$('paperSize').value;o.paperOrientation=$('paperOrientation').value;o.inkColor=$('inkColor').value;o.previewZoom=previewZoom;o.variationSeed=variationSeed;o.variationPattern=variationPattern;try{localStorage.setItem(SETTINGS,JSON.stringify(o))}catch(e){}}
  function alphabet(){return [...new Set([...ABC,...($('lowercaseGrid').checked?EXTRA:''),...($('mathSymbolsGrid').checked?MATH_SYMBOLS:''),...($('accentGrid').checked?ACCENT_MARKS:'')])].join('')}
  function glyphList(){const root=$('charGrid');root.replaceChildren();for(const char of alphabet()){const b=document.createElement('button');b.className='glyph'+(chosen===char?' active':'')+((samples[char]||[]).length?' saved':'');b.title='Sample '+char;b.textContent=char;b.type='button';b.addEventListener('click',()=>select(char));root.appendChild(b)}
  const count=[...alphabet()].filter(c=>(samples[c]||[]).length>0).length;$('count').textContent=`${count} of ${[...alphabet()].length} sampled`;}
@@ -705,7 +720,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  $('resetBtn').onclick=()=>{if(confirm('Delete all saved letters AND phrases in this browser? Export a backup first if needed.')){samples={};phrases={};store();select(chosen);renderPhraseGallery();render();updateAccentStatus()}};
  function cfgNum(id,fallback){const v=Number($(id).value);return Number.isFinite(v)?v:fallback}
  function getCfg(){const c={};for(const id of optionIds)c[id]=cfgNum(id,defaults[id]);for(const id of checkIds)c[id]=$(id).checked;c.u1=Math.max(0,Math.min(8,c.u1));c.u2=Math.max(1.5,Math.min(12,c.u2));c.u3=Math.max(.5,Math.min(15,c.u3));c.marginTop=Math.max(0,Math.min(60,c.marginTop));c.marginBottom=Math.max(0,Math.min(60,c.marginBottom));c.marginLeft=Math.max(0,Math.min(60,c.marginLeft));c.marginRight=Math.max(0,Math.min(60,c.marginRight));c.letterSpace=Math.max(0,Math.min(5,c.letterSpace));c.penWidth=Math.max(.05,Math.min(1.5,c.penWidth));c.variationLevel=Math.max(0,Math.min(100,c.variationLevel));c.mathRoughness=Math.max(0,Math.min(100,c.mathRoughness));c.inkColor=isColor($('inkColor').value)?$('inkColor').value:defaults.inkColor;
- c.inkBlot=!!c.inkBlot;c.inkBleed=!!c.inkBleed;c.inkSmudge=!!c.inkSmudge;
+ c.renderQuality=$('renderQuality').value;c.inkBlot=!!c.inkBlot;c.inkBleed=!!c.inkBleed;c.inkSmudge=!!c.inkSmudge;
  c.effectStrength=Math.max(0,Math.min(100,c.effectStrength))/100;
  c.paperSize=$('paperSize').value;c.paperOrientation=$('paperOrientation').value;
  let dims=c.paperSize==='Custom'?[c.customPaperWidth,c.customPaperHeight]:(PAPER_PRESETS[c.paperSize]||PAPER_PRESETS.A4);
@@ -793,11 +808,65 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
      'fill-opacity':(.25+strength*.37).toFixed(3),'data-effect':'blot'},parent);
   }
  }
+ // V8.2: Render varying pen width as ONE vector outline (rather than 8–64
+ // overlapping short SVG paths). This greatly reduces SVG/PDF node count while
+ // retaining the shape and true stylus-pressure values of every sampled stroke.
+ function drawOptimizedStroke(parent,stroke,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity,hasPenPressure){
+  const dist=[0];let total=0;
+  for(let j=1;j<stroke.length;j++){
+   total+=Math.hypot(stroke[j][0]-stroke[j-1][0],stroke[j][1]-stroke[j-1][1]);dist.push(total);
+  }
+  if(total<.00001)return false;
+  const steps=c.renderQuality==='fast'?Math.min(28,Math.max(8,Math.ceil(total/.055))):Math.min(70,Math.max(16,Math.ceil(total/.022)));
+  // This binary-search-free monotone interpolator handles pen lifts separately.
+  let seg=1;
+  function at(t){const target=t*total;
+   while(seg<dist.length-1&&dist[seg]<target)seg++;
+   while(seg>1&&dist[seg-1]>target)seg--;
+   const a=stroke[seg-1],b=stroke[seg],span=Math.max(.0000001,dist[seg]-dist[seg-1]);
+   const f=Math.max(0,Math.min(1,(target-dist[seg-1])/span));
+   const [xx,yy]=warp(a[0]+f*(b[0]-a[0]),a[1]+f*(b[1]-a[1]));
+   return {x:locX+xx*w,y:top+yy*h,p:(a[2]??.5)*(1-f)+(b[2]??.5)*f};
+  }
+  const pts=[],phase=rand(ch,idx,82+si)*6.283;
+  for(let i=0;i<=steps;i++){
+   const t=i/steps,p=at(t),tip=Math.min(1,t*steps*1.3,(1-t)*steps*1.3);
+   const natural=.91+.12*Math.sin(t*7.8+phase)+.055*Math.sin(t*17.4+phase*1.7);
+   const synthetic=c.naturalPressure?((.92+.18*(p.p-.5))*natural*(.82+.18*tip)):1;
+   const radius=Math.max(.002,baseWidth*pressureFactor(p.p,c)*synthetic/2);
+   pts.push({...p,r:radius});
+  }
+  const left=[],right=[];
+  for(let i=0;i<pts.length;i++){
+   const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)];
+   let dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy);
+   if(l<.00001){dx=1;dy=0;l=1}
+   const nx=-dy/l,ny=dx/l,p=pts[i];
+   left.push([p.x+nx*p.r,p.y+ny*p.r]);right.push([p.x-nx*p.r,p.y-ny*p.r]);
+  }
+  const xy=p=>p[0].toFixed(3)+' '+p[1].toFixed(3);
+  // Bezier rounded pen caps, with smooth interpolation along both outline edges.
+  const end=pts[pts.length-1],before=pts[pts.length-2],start=pts[0],after=pts[1];
+  let dx=end.x-before.x,dy=end.y-before.y,l=Math.max(.00001,Math.hypot(dx,dy));
+  const capEnd=[end.x+end.r*dx/l,end.y+end.r*dy/l];
+  dx=after.x-start.x;dy=after.y-start.y;l=Math.max(.00001,Math.hypot(dx,dy));
+  const capStart=[start.x-start.r*dx/l,start.y-start.r*dy/l];
+  let d='M'+xy(left[0]);
+  for(let i=1;i<left.length;i++)d+=' L'+xy(left[i]);
+  d+=' Q'+xy(capEnd)+' '+xy(right[right.length-1]);
+  for(let i=right.length-2;i>=0;i--)d+=' L'+xy(right[i]);
+  d+=' Q'+xy(capStart)+' '+xy(left[0])+' Z';
+  el('path',{d,fill:c.inkColor,'fill-opacity':opacity.toFixed(3),'data-optimized-stroke':c.renderQuality},parent);
+  return true;
+ }
  function drawNaturalInk(parent,stroke,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity){
   const basePath=pathFromStroke(stroke,locX,top,w,h,warp);
   if(!basePath)return;
   inkArtifacts(parent,stroke,basePath,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity);
   const hasPenPressure=isPressureStroke(stroke,c);
+  if(c.renderQuality!=='original'&&(c.naturalPressure||hasPenPressure)&&stroke.length>=2){
+   if(drawOptimizedStroke(parent,stroke,locX,top,w,h,warp,c,ch,idx,si,baseWidth,opacity,hasPenPressure))return;
+  }
   if((!c.naturalPressure&&!hasPenPressure)||stroke.length<2){el('path',{d:basePath,fill:'none',stroke:c.inkColor,'stroke-width':(baseWidth*pressureFactor(stroke[0]?.[2],c)).toFixed(4),'stroke-opacity':opacity.toFixed(3),'stroke-linecap':'round','stroke-linejoin':'round'},parent);return}
   // Keep the stroke connected. When real tablet pressure is present the core is
   // narrow so thin pen marks are not hidden under a thick uniform baseline.
@@ -1268,7 +1337,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  function livePageEdit(){if(!pageEditState)return;
   const st=pageEditState;
   $('content').value=st.before+$('pageEditInput').value+st.after;
-  storeSettings();render();
+  scheduleRender(140);
  }
  function finishPageEdit(commit){if(!pageEditState)return;
   if(!commit){$('content').value=pageEditState.original;storeSettings();render()}
@@ -1368,12 +1437,21 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   const description=amount===0?'ruler-straight':amount<30?'very subtle':amount<65?'natural':'rough';
   $('mathRoughnessValue').textContent=enabled?amount+'% · '+description:'Off · straight';
  }
- function refresh(){updateVariationUI();updateEffectsUI();updateMathRoughnessUI();storeSettings();render()}
+ let pendingRender=0;
+ function scheduleRender(delay=175){storeSettings();if(pendingRender)clearTimeout(pendingRender);pendingRender=setTimeout(()=>{pendingRender=0;render()},delay)}
+ function refresh(){if(pendingRender){clearTimeout(pendingRender);pendingRender=0}updateVariationUI();updateEffectsUI();updateMathRoughnessUI();storeSettings();render()}
  $('shuffleBtn').onclick=()=>{const a=new Uint32Array(1);if(window.crypto&&window.crypto.getRandomValues){window.crypto.getRandomValues(a);variationSeed=a[0]>>>0}else{variationSeed=(Date.now()>>>0)}variationPattern++;refresh()};
- for(const id of optionIds.concat(checkIds)){if(id==='pressureSensitivity'||id==='tabletPressure')continue;const e=$(id);e.addEventListener('input',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();if(id==='penWidth')updateThicknessUI();updateCaseStatus();refresh()});e.addEventListener('change',()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();updateCaseStatus();refresh()})}
- $('paperSize').addEventListener('change',refresh);$('paperOrientation').addEventListener('change',refresh);
- $('content').addEventListener('input',refresh);$('equationSize').addEventListener('change',refresh);$('equationAlign').addEventListener('change',refresh);$('equationDraft').addEventListener('input',()=>{storeSettings();renderEquationDraft()});$('phraseMode').addEventListener('change',refresh);$('refreshBtn').onclick=refresh;
- $('restoreBtn').onclick=()=>{for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle','tabletPressure'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;$('pressureSensitivityValue').textContent=$('pressureSensitivity').value+'%';$('pressureSensitivity').disabled=false;redrawCanvas();redrawPhraseCanvas();refresh()};
+ for(const id of optionIds.concat(checkIds)){if(id==='pressureSensitivity'||id==='tabletPressure')continue;const e=$(id);
+  const event=e.type==='checkbox'?'change':'input';
+  e.addEventListener(event,()=>{if(id==='lowercaseGrid'&&$('lowercaseGrid').checked)$('uppercase').checked=false;
+   if(id==='lowercaseGrid'||id==='mathSymbolsGrid'||id==='accentGrid')glyphList();
+   if(id==='penWidth')updateThicknessUI();updateCaseStatus();
+   if(event==='input')scheduleRender(110);else refresh();
+  });
+ }
+ $('renderQuality').addEventListener('change',refresh);$('fastPrint').addEventListener('change',()=>{document.body.classList.toggle('fast-print',$('fastPrint').checked);storeSettings()});document.body.classList.toggle('fast-print',$('fastPrint').checked);$('paperSize').addEventListener('change',refresh);$('paperOrientation').addEventListener('change',refresh);
+ $('content').addEventListener('input',()=>scheduleRender(175));$('equationSize').addEventListener('change',refresh);$('equationAlign').addEventListener('change',refresh);$('equationDraft').addEventListener('input',()=>{storeSettings();renderEquationDraft()});$('phraseMode').addEventListener('change',refresh);$('refreshBtn').onclick=refresh;
+ $('restoreBtn').onclick=()=>{$('renderQuality').value='balanced';$('fastPrint').checked=true;document.body.classList.add('fast-print');for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle','tabletPressure'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;$('pressureSensitivityValue').textContent=$('pressureSensitivity').value+'%';$('pressureSensitivity').disabled=false;redrawCanvas();redrawPhraseCanvas();refresh()};
  function printPage(){refresh();window.print()};$('printBtn').onclick=printPage;$('printTop').onclick=printPage;
  // V8.0: Local photo-to-vector handwriting import. Photos stay entirely inside this browser.
  const photoCanvas=$('photoCanvas'),photoCtx=photoCanvas.getContext('2d');
