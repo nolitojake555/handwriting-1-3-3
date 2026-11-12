@@ -1,9 +1,11 @@
+<!doctype html>
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Handwriting Studio V8.2 · Photo handwriting importer · 1–3–3 lettering</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Handwriting Studio V8.4 · Clean workspace</title>
 <style>
 :root{--bg:#f4f6fb;--panel:#fff;--line:#e1e6ed;--ink:#172332;--muted:#637386;--blue:#365fda;--soft:#e8efff;--green:#178160;--radius:16px}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:14px}
@@ -90,6 +92,17 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
 .math-roughness input[type=range]{width:100%;accent-color:#365fda;margin:9px 0 0}
 .math-roughness .hint{margin:5px 0 0}
 .math-roughness.is-off .roughness-slider{opacity:.5}
+
+/* V8.3 equation zoom: no changes to the final printed formula scale. */
+.equation-zoom-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:9px 0 8px}
+.equation-zoom-controls .btn{min-height:30px;padding:5px 10px}
+.equation-zoom-controls input[type=range]{width:min(180px,44%);accent-color:#365fda}
+.equation-zoom-controls output{min-width:48px;font-weight:750;font-size:12px;color:#34445e;text-align:center}
+.equation-live{justify-content:flex-start;overflow:auto;max-height:480px;align-items:flex-start}
+.equation-live svg{width:auto;min-width:0;height:auto;max-width:none;max-height:none;flex:0 0 auto}
+.export-status{font-size:12px;color:#4d6077;min-height:15px;margin-top:8px}
+.export-status.is-error{color:#ae3f32}
+
 [hidden]{display:none!important}
 
 @media(max-width:1050px){main{grid-template-columns:1fr;max-width:800px}.preview-pane{position:static}.page-list{max-height:none;padding:16px}.sheet{width:calc(100% * var(--preview-zoom,1))}}
@@ -178,115 +191,113 @@ textarea{width:100%;min-height:150px;border:1px solid #d1dbe7;border-radius:10px
 .photo-panel button:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:460px){.photo-settings{grid-template-columns:1fr}.photo-selected .fields{grid-template-columns:1fr}}
 
+
+/* V8.4 Workspace redesign: persistent page preview, compact tools, progressive disclosure */
+:root{--bg:#edf1f6;--panel:#ffffff;--line:#e1e7ef;--ink:#18263a;--muted:#64748b;--blue:#355ec9;--soft:#eaf0fe;--radius:14px}
+html{height:100%}body{min-height:100vh;color:var(--ink);background:#edf1f6;font-size:13px}
+button,input,select,textarea{font-family:inherit}button{transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
+.studio-header{height:66px;background:#fff;border-bottom:1px solid #dce3eb;color:var(--ink);padding:0 24px;display:flex;align-items:center;flex-wrap:nowrap;box-shadow:0 1px 2px #13263c05}
+.studio-header h1{font-size:18px;letter-spacing:-.55px;font-weight:760}.brand-accent{color:#355ec9}
+.studio-header p{margin:3px 0 0;color:#77859a;font-size:11px}.header-meta{display:flex;align-items:center;gap:12px}
+.offline-note{font-size:11px;color:#408b6e;font-weight:650;white-space:nowrap}.version-badge{background:#eff3f9;color:#667a96;border:1px solid #e4e9f1;border-radius:7px;padding:5px 8px;font-size:10px;font-weight:750}
+.studio-shell{padding:0;max-width:none;margin:0;display:grid;grid-template-columns:minmax(375px,470px) minmax(0,1fr);gap:0;align-items:stretch;min-height:calc(100vh - 66px);height:calc(100vh - 66px)}
+.studio-sidebar{display:grid;grid-template-columns:82px minmax(0,1fr);min-width:0;min-height:0;border-right:1px solid #dbe3ed;background:#fbfcfe}
+.studio-nav{background:#f6f8fb;border-right:1px solid #e0e6ee;padding:12px 7px;display:flex;flex-direction:column;gap:5px;overflow-y:auto}
+.studio-nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62px;gap:5px;width:100%;border:1px solid transparent;border-radius:11px;background:transparent;color:#687890;cursor:pointer;padding:7px 2px;text-align:center}
+.studio-nav-icon{display:flex;align-items:center;justify-content:center;font-size:21px;line-height:24px;font-weight:650;height:24px;min-width:26px}
+.studio-nav-label{font-size:10px;line-height:1.17;max-width:73px;font-weight:700}
+.studio-nav-btn:hover{background:#e9eff8;color:#244781}
+.studio-nav-btn[aria-pressed="true"]{background:#e6edfd;color:#2855bb;border-color:#d4e2ff;box-shadow:inset 3px 0 #436ddd}
+.studio-nav-btn:focus-visible{outline:2px solid #4e77e1;outline-offset:2px}
+.studio-sidebar>.controls{display:block;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px 18px 28px;background:#fbfcfe}
+.tool-panel{border:0;box-shadow:none;background:transparent;border-radius:0;padding:0!important;min-width:0}
+.tool-panel[hidden]{display:none!important}
+.tool-panel h2{font-size:19px;letter-spacing:-.45px;margin:0 0 5px;font-weight:750}
+.compact-kicker{font-size:11px;color:#78869b;margin:0 0 18px;line-height:1.4}
+.tool-panel>p.sub{display:none}
+.tool-panel>.note,.tool-panel>p.hint{font-size:11px}
+.tool-panel .row{flex-wrap:wrap}
+.tool-panel .infobar{padding:9px 10px;font-size:11px;line-height:1.45}
+.section-kicker{color:#8a97a8;font-size:10px;font-weight:800;letter-spacing:.095em;margin:15px 0 8px}
+#content{min-height:270px;resize:vertical;background:white;font-size:13px;line-height:1.75;border-color:#d2deea;box-shadow:0 1px 3px #1b365008}
+#content:focus,#glyphSearch:focus{border-color:#6991e4;outline:3px solid #b7d0ff66}
+#content+.stack{padding-top:10px}.quiet-stats{background:transparent!important;border:0!important;padding:4px 0!important;margin-top:6px!important;color:#8392a6!important}
+.studio-disclosure{margin:14px 0 0;padding:0;background:#fff;border:1px solid #dfe6ef;border-radius:11px;overflow:hidden}
+.studio-disclosure>summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:12px;color:#3b4b62;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.studio-disclosure>summary::-webkit-details-marker{display:none}
+.studio-disclosure>summary:after{content:'+';font-size:18px;line-height:12px;color:#8c9ab0;font-weight:500}
+.studio-disclosure[open]>summary:after{content:'−'}
+.studio-disclosure[open]>summary{border-bottom:1px solid #e7ecf3;background:#f9fbff}
+.studio-disclosure> :not(summary){margin-left:12px;margin-right:12px}
+.studio-disclosure> :last-child{margin-bottom:12px}
+.studio-disclosure .row,.studio-disclosure .toolbar{margin-top:9px}
+#sampleViewport{margin:12px 0 4px;background:white}
+#sampleViewport .sample-box{margin:0}
+#saveBtn{background:#355ec9;color:white;border-color:#355ec9}
+#sampleStatus{margin:10px 0 12px}
+.character-picker{padding:0;margin:0 0 10px}
+.character-filter-row input{width:100%;background:#fff;border:1px solid #d9e2ee;border-radius:9px;padding:9px 11px;margin:0 0 8px;font-size:12px}
+#charGrid{max-height:158px;overflow:auto;align-content:start;scrollbar-width:thin;grid-template-columns:repeat(8,minmax(0,1fr));border-radius:8px;margin:8px 0}
+.glyph{height:32px}
+.character-picker>.row .stack{gap:4px}.character-picker>.row{display:block}
+.character-picker>.row .muted{display:inline-block;margin-top:5px}
+#letterAdvanced .tracing-panel{padding:9px;margin:10px 0;border:1px solid #dfe5ee}
+#letterAdvanced .pressure-panel{margin:12px 0}
+.thickness-panel,.ink-panel,.ink-effects,.realism-box,.paper-panel,.equation-panel{border-color:#dfe6ee;background:#fff}
+.thickness-panel{margin:12px 0 0;padding:10px}
+#equationPanel{margin:0;padding:12px}
+#equationPanel h3{font-size:13px}
+#equationDraft{min-height:118px}
+#eqZoomSlider{max-width:130px}
+#photoCard .photo-workspace{max-height:390px;overflow:auto}
+#phraseCard .phrase-pad{margin-top:12px}
+#phraseCard .phrase-gallery{max-height:360px;overflow:auto}
+#savedLetterVersions .gallery{max-height:345px;overflow:auto}
+#savedLetterVersions .version-viewer{margin-top:12px}
+#savedLetterVersions .gallery-header{margin-top:13px}
+#savedLetterVersions .toolbar{margin-bottom:8px}
+#pageList{background:#e9edf3;scrollbar-gutter:stable;scrollbar-width:thin;max-height:none;flex:1;min-height:0;overflow:auto;padding:24px 20px 48px;border:0;border-radius:0}
+.preview-pane{position:relative;top:auto;display:flex;flex-direction:column;min-width:0;min-height:0;background:#e9edf3}
+.studio-preview-top>div:first-child{flex:0 0 180px;min-width:0}.studio-preview-top #previewStats{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.tool-panel[data-view=write] #caseStatus,.tool-panel[data-view=write] .stack p.hint{display:none!important}
+.studio-preview-top{background:white;border:0;border-bottom:1px solid #dce4ef;border-radius:0;padding:10px 20px;min-height:66px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:none}
+.preview-top h2{font-size:13px;font-weight:760;margin:0 0 3px}
+.preview-top p{font-size:11px}
+.preview-actions{gap:7px;margin-left:auto;justify-content:flex-end}
+.preview-actions .btn{min-height:33px;padding:7px 9px;font-size:11px}
+#editPageToggle{min-width:100px}
+#wordTop{background:#f5f7fb}
+#zoomSlider{width:70px}.zoom-controls{padding:3px 5px;gap:4px;border:0;background:#f1f4f9}
+.zoom-controls .btn{min-height:29px;padding:4px 7px}
+.zoom-controls output{min-width:40px;font-size:11px}
+.page-list .sheet{box-shadow:0 12px 30px #23364d22,0 1px 3px #23364d11;margin-bottom:28px}
+#pageEditHint{display:none!important}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+#renderQuality,#paperSize,#paperOrientation,.tool-panel select{max-width:100%}
+#photoCard .note{font-size:11px}
+#pagePreviewEmpty{color:#71819b}
+@media(min-width:1450px){.studio-shell{grid-template-columns:500px minmax(0,1fr)}.studio-sidebar{grid-template-columns:86px minmax(0,1fr)}.studio-sidebar>.controls{padding:23px 23px 30px}}
+@media(max-width:1050px){.studio-shell{grid-template-columns:1fr;min-height:calc(100vh - 66px);height:auto;display:flex;flex-direction:column}.studio-sidebar{grid-template-columns:1fr;display:flex;flex-direction:column;min-height:0;flex:none;border-right:0;border-bottom:1px solid #dce4ef}.studio-nav{flex-direction:row;gap:6px;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid #e0e6ee;scrollbar-width:thin;padding:8px 12px}.studio-nav-btn{min-width:86px;min-height:50px;flex-direction:row;gap:5px;padding:7px 8px}.studio-nav-icon{font-size:17px;height:auto}.studio-nav-label{font-size:10px}.studio-nav-btn[aria-pressed="true"]{box-shadow:inset 0 -3px #436ddd}.studio-sidebar>.controls{padding:15px 18px 22px;max-height:min(53vh,520px);overflow:auto}.preview-pane{position:relative;min-height:620px;height:calc(100vh - 66px)}#pageList{min-height:0;max-height:none}.sheet{width:min(calc(100% * var(--preview-zoom,1)),calc(680px * var(--page-width-scale,1) * var(--preview-zoom,1)))}}
+@media(max-width:580px){.studio-header{height:56px;padding:0 13px}.studio-header h1{font-size:16px}.studio-header p{font-size:10px}.offline-note{display:none}.studio-shell{min-height:calc(100vh - 56px)}.studio-nav{padding:7px 8px}.studio-nav-btn{min-width:75px}.studio-sidebar>.controls{padding:16px 13px;max-height:none}.tool-panel[data-view=write] #content{min-height:190px}.studio-preview-top>div:first-child{flex:1 1 100%}.studio-preview-top #previewStats{max-width:100%}.preview-pane{min-height:500px;height:86vh}.studio-preview-top{padding:10px;gap:10px}.preview-actions{margin-left:0;gap:5px;width:100%;justify-content:flex-start}.zoom-controls input[type=range]{width:56px}.preview-actions .btn{font-size:11px;padding:6px 7px}#pageList{padding:14px 8px 25px}.studio-header .version-badge{font-size:9px}}
+@media print{
+ .studio-header,.studio-nav,.studio-sidebar,.studio-preview-top{display:none!important}
+ html,body{height:auto!important;overflow:visible!important;background:white!important}
+ .studio-shell{display:block!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important}
+ .preview-pane{position:static!important;display:block!important;height:auto!important;min-height:0!important;background:white!important;border:0!important}
+ #pageList{padding:0!important;margin:0!important;border:0!important;display:block!important;overflow:visible!important;max-height:none!important;height:auto!important}
+ .sheet{width:var(--print-width,210mm)!important;height:var(--print-height,297mm)!important;aspect-ratio:auto!important;margin:0!important;page-break-after:always;break-after:page;box-shadow:none!important;border:0!important;border-radius:0!important;content-visibility:visible!important}
+ .sheet:last-child{page-break-after:auto;break-after:auto}
+ .sheet svg{height:100%!important;width:100%!important}
+ .page-edit-popover{display:none!important}
+}
 </style>
 </head>
 <body>
-<header><div><h1>Handwriting Studio <span style="color:#91b2ff">/ 1–3–3</span></h1><p>Capture your own lettering, then write and print pages with it. Everything runs locally in your browser.</p></div><span class="badge">V8.1 · EDITABLE PREVIEW • PHOTO IMPORT • OFFLINE</span></header>
-<main>
- <section class="controls">
-  <div class="card">
-   <h2><span class="step">1</span>Sample your handwriting</h2>
-   <p class="sub">Select a character, write it in the box using your mouse, stylus or finger, then save it. Repeat for the characters you need. You can save more than one version of a letter. The realism settings below create subtle new shapes even if you only sample each letter once. You can also sample complete words or phrases in the next panel.</p>
-   <div class="row"><span class="selected" id="selectedChar">Selected: A</span><span class="muted small" id="count">Sample characters and math symbols</span></div>
-   <div class="char-grid" id="charGrid" aria-label="Characters to sample"></div>
-   <div class="row"><div class="stack"><label class="checkline"><input type="checkbox" id="lowercaseGrid"> Include lowercase letters</label><label class="checkline"><input type="checkbox" id="mathSymbolsGrid" checked> Include mathematical symbols (sample them using your own handwriting)</label><label class="checkline"><input type="checkbox" id="accentGrid" checked> Include accent marks for composite letters</label></div><span class="small muted" id="variantCount"></span></div>
-   <div class="accent-help" id="accentHelp">
-    <div class="row"><strong>Build accented letters from saved parts</strong><span class="pill-new">V7.5</span></div>
-    <p class="hint" style="margin:7px 0">Sample each letter and its separate accent mark once. Accents overlay the letter without moving it off its guide. For example, <strong>Ñ = N + ~</strong> and <strong>ñ = n + ~</strong>. The same mark can be reused on different letters.</p>
-    <label class="checkline"><input type="checkbox" id="composeAccents" checked> Compose accents automatically (use individual saved letters + marks)</label>
-    <div class="toolbar" style="margin-top:9px"><button class="btn" type="button" data-accent-pick="N">Sample N</button><button class="btn" type="button" data-accent-pick="n">Sample n</button><button class="btn" type="button" data-accent-pick="~">Sample ~</button><button class="btn" type="button" data-accent-pick="´">Sample ´</button><button class="btn" type="button" data-accent-pick="`">Sample `</button></div>
-    <div id="accentStatus" class="hint" role="status" style="margin-top:8px">Ñ and ñ are built from your samples automatically.</div>
-   </div>
-   <div class="sample-controls" aria-label="Drawing workspace controls">
-     <label for="sampleZoom">Drawing zoom <output id="sampleZoomLabel">100%</output></label>
-     <input type="range" id="sampleZoom" min="75" max="300" value="100" step="25" aria-label="Drawing area zoom">
-     <button type="button" class="btn" id="sampleZoomReset">Reset zoom</button>
-     <label><input type="checkbox" id="sampleGuideToggle" checked> Show letter guides</label>
-     <label><input type="checkbox" id="sampleGridToggle"> Fine grid</label>
-   </div>
-   <div id="sampleGuideLegend" class="sample-guide-legend" aria-label="Letter guide line meanings">
-     <span><i class="guide-chip cap"></i>Cap height</span>
-     <span><i class="guide-chip xheight"></i>Lowercase x-height</span>
-     <span><i class="guide-chip baseline"></i>Baseline</span>
-     <span><i class="guide-chip desc"></i>Descenders</span>
-   </div>
-   <div class="tracing-panel" aria-label="Letter tracing template">
-    <div class="tracing-heading"><strong>Tracing template · Y14.5M-2009</strong><span class="pill-new">NEW</span></div>
-    <div class="tracing-row"><label><input type="checkbox" id="sampleTraceToggle" checked> Show faint letter / symbol</label><label for="sampleTraceOpacity">Opacity <output id="sampleTraceOpacityLabel">20%</output></label><input id="sampleTraceOpacity" type="range" min="5" max="55" step="5" value="20" aria-label="Tracing template opacity"></div>
-    <div class="tracing-row"><label class="trace-file-label" for="sampleTraceFontFile">Load exact Y14.5M-2009 font<input id="sampleTraceFontFile" type="file" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" /></label><span id="sampleTraceFontStatus" class="trace-status" role="status">Uses the installed font when available; otherwise a clean fallback.</span></div>
-    <p>The reference changes automatically when you select A, a, ~, +, √, or another symbol. It stays behind your pen strokes, lines up with the guides, and is never saved or printed. If the exact font is not installed, load your own <strong>Y14.5M-2009.ttf</strong> file above. <a href="https://www.fontspace.com/y145m-2009-font-f9006" target="_blank" rel="noopener noreferrer">Font information and source</a>.</p>
-   </div>
-   <p class="hint">The colored guides and faint reference appear only while sampling, never on the printed page. At 100% the whole drawing area fits this panel.</p>
-   <div id="sampleViewport"><div class="sample-box"><canvas id="drawCanvas" width="640" height="224" aria-label="Draw handwriting character here"></canvas></div></div>
-   <p class="hint" id="letterGuideHelp">Uppercase: write from the top guide to the baseline. For lowercase, turn on “Include lowercase letters.”</p>
-   <div class="pressure-panel" aria-label="Drawing tablet pressure controls">
-    <div class="pressure-heading"><strong>Drawing tablet pen pressure</strong><span class="pill-new">V7.9</span></div>
-    <label class="checkline"><input type="checkbox" id="tabletPressure" checked> Use stylus pressure for stroke thickness</label>
-    <div class="row" style="margin-top:10px"><label class="small" for="pressureSensitivity">Pressure sensitivity</label><strong class="small" id="pressureSensitivityValue">100%</strong></div>
-    <input type="range" id="pressureSensitivity" min="0" max="200" step="10" value="100" aria-label="How strongly stylus pressure changes stroke thickness">
-    <div class="pressure-meter-line"><span class="small muted">Live pen pressure</span><div class="pressure-meter" role="progressbar" aria-label="Current pen pressure" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" id="pressureMeter"><span id="pressureMeterFill"></span></div><output id="pressureLive">50%</output></div>
-    <p class="hint" id="pressureStatus" role="status">Use a pressure-capable stylus in this canvas or the phrase sampler. A mouse draws at constant 50% pressure.</p>
-    <p class="hint">Pressure is saved with your sampled strokes, including imported/exported handwriting profiles, and affects the A4 preview and PDF. Set sensitivity to 0% for uniform strokes.</p>
-   </div>
-   <div class="toolbar"><button class="btn" id="undoBtn">Undo stroke</button><button class="btn" id="redoBtn">Redo stroke</button><button class="btn" id="clearBtn">Clear drawing</button><button class="btn primary" id="saveBtn">Save character</button><button class="btn" id="cancelEditBtn" hidden>Cancel edit</button><button class="btn" id="nextBtn">Next missing</button></div>
-   <div class="infobar" id="sampleStatus">Write the selected letter between the horizontal guides. Click “Save character.”</div>
-   <div class="thickness-panel">
-    <div class="row"><label for="thicknessSlider"><strong>Stroke thickness</strong> (printed lettering)</label><strong id="thicknessValue">0.20 mm</strong></div>
-    <input type="range" id="thicknessSlider" min="0.05" max="1.5" step="0.05" value="0.2" aria-label="Handwriting stroke thickness in millimeters" />
-    <svg class="thickness-swatch" id="thicknessSwatch" viewBox="0 0 250 26" aria-label="Stroke thickness example"><path id="thicknessLine" d="M18 13 Q70 8 120 13 T232 13" stroke="#1c2a43" stroke-linecap="round" fill="none" stroke-width="3"/></svg>
-    <p class="hint" style="margin:7px 0 0">Changes the drawing preview and every handwritten letter on the A4 page. Does not overwrite the shape of your saved samples.</p>
-   </div>
-   <div class="gallery-header"><h3>Saved letter versions</h3><span class="muted small" id="galleryCount">No versions</span></div>
-   <p class="hint" style="margin:0 0 10px">View all samples for the selected character. Select <strong>View</strong> to enlarge, <strong>Edit</strong> to modify an existing version, or <strong>Delete</strong> to remove only that version. Multiple versions are rotated naturally in the page.</p>
-   <div class="version-viewer" id="versionViewer" hidden><div class="row"><strong id="viewingLabel" class="small">Viewing sample</strong><span class="small muted">Exact saved strokes</span></div><div id="viewingArtwork"></div></div>
-   <div class="gallery" id="versionGallery" aria-live="polite"></div>
-   <hr />
-   <div class="toolbar"><button class="btn" id="exportBtn">Export handwriting profile</button><button class="btn" id="importBtn">Import profile</button><button class="btn danger" id="resetBtn">Erase all samples</button></div>
-   <input type="file" id="importFile" class="file-input" accept=".json,application/json" />
-   <div class="note">Your letters and natural word/phrase samples stay in this browser. Export a profile (.json) to back them up or move to another computer.</div>
-  </div>
-
-  <div class="card photo-panel" id="photoCard">
-   <h2><span class="step">2</span>Import handwriting from a photo <span class="pill-new">V8.0</span></h2>
-   <p class="sub">Upload a photo or scan of handwriting. The app can suggest separate ink regions, or you can drag over a letter to crop it precisely. Choose which character it represents, then save the extracted pen strokes to your existing handwriting library. No internet or server needed.</p>
-   <div class="photo-upload"><div class="field"><label for="photoFile">Handwriting image (PNG, JPEG, or WebP)</label><input type="file" id="photoFile" accept="image/png,image/jpeg,image/webp,image/*" /></div>
-    <p class="hint" style="margin:9px 0 0">Best results: one letter or symbol per space, written in dark ink on plain, evenly lit white paper. Connected letters and ruled paper may need manual cropping.</p>
-   </div>
-   <div class="photo-settings">
-    <div class="field"><label for="photoThreshold">Ink detection threshold: <output id="photoThresholdValue">165</output></label><input id="photoThreshold" type="range" min="75" max="235" step="5" value="165"></div>
-    <div class="stack"><label class="checkline"><input id="photoInvert" type="checkbox"> Light writing on dark background</label><label class="checkline"><input id="photoShowBoxes" type="checkbox" checked> Show detected letter regions</label></div>
-   </div>
-   <div class="toolbar" style="margin-top:10px"><button type="button" class="btn" id="photoDetect" disabled>Find separate letters</button><button type="button" class="btn" id="photoRotate" disabled>Rotate 90°</button><button type="button" class="btn" id="photoClearBox" disabled>Clear selection</button></div>
-   <div id="photoViewport" class="photo-workspace is-empty"><canvas id="photoCanvas" width="800" height="350" aria-label="Uploaded handwriting image: drag to select one letter"></canvas><span id="photoEmpty">Upload a handwriting image to begin.</span></div>
-   <div class="row"><strong class="small">Detected regions</strong><span class="small muted" id="photoRegionCount">No image loaded</span></div>
-   <div class="photo-results" id="photoCandidates" aria-label="Detected handwriting regions"></div>
-   <div class="photo-selected" style="margin:10px 0 12px">
-     <div class="field"><label for="photoBatchLabels">Optional bulk import: labels for detected regions, in reading order</label><input id="photoBatchLabels" type="text" placeholder="Example: ABCDEFG or abc123" autocomplete="off" spellcheck="false" /></div>
-     <div class="toolbar" style="margin-top:9px"><button class="btn" id="photoBatchSave" type="button" disabled>Save all labeled regions</button></div>
-     <p class="hint" style="margin:7px 0 0">Works best when each separated character forms one detected region. Enter one character for each numbered region; use the blue crop selection instead for split symbols such as i, j, !, and accented letters.</p>
-   </div>
-   <div class="photo-selected">
-    <div class="fields" style="margin:0 0 10px"><div class="field"><label for="photoChar">Assign selection to letter / symbol</label><input type="text" id="photoChar" value="A" maxlength="4" autocomplete="off" spellcheck="false"></div><div class="field"><label for="photoSource">Source of selection</label><input id="photoSource" value="Drag a region or choose a suggestion" readonly></div></div>
-    <canvas class="photo-mini" id="photoGlyphPreview" width="320" height="125" aria-label="Extracted handwriting stroke preview"></canvas>
-    <div class="toolbar"><button type="button" class="btn primary" id="photoSave" disabled>Save as letter version</button><button type="button" class="btn" id="photoSaveEdit" disabled>Save and edit strokes</button></div>
-    <p class="hint" id="photoStatus" role="status" style="margin:10px 0 0">Select one letter, then preview and save the extracted strokes. You can correct it afterward with your mouse or drawing tablet.</p>
-   </div>
-   <p class="note">Photo extraction estimates the stroke centerlines from pixels. It cannot recover real drawing-tablet pressure, stroke order, or reliably recognize every letter from a paragraph. You assign the character and can edit the result before using it.</p>
-  </div>
-  <div class="card" id="phraseCard">
-   <h2><span class="step">3</span>Sample a natural word or phrase <span class="pill-new">NEW</span></h2>
-   <p class="sub">Write a word or short sentence in one natural motion. When the <strong>same text</strong> appears in your notes, the program uses your real connected strokes instead of assembling individual letters. For new text it uses your letter samples. This runs offline; it does not train an AI model.</p>
-   <div class="field"><label for="phraseText">Text you will handwrite (up to 60 characters)</label><input id="phraseText" type="text" maxlength="60" placeholder="Example: SOIL MECHANICS" autocomplete="off" value="SOIL MECHANICS"></div>
-   <div class="sample-box phrase-pad"><canvas id="phraseCanvas" width="960" height="194" aria-label="Draw the complete word or phrase here"></canvas></div>
-   <div class="toolbar"><button class="btn" id="phraseUndo" type="button">Undo stroke</button><button class="btn" id="phraseClear" type="button">Clear</button><button class="btn primary" id="phraseSave" type="button">Save phrase</button><button class="btn" id="phraseCancelEdit" type="button" hidden>Cancel edit</button></div>
-   <div class="infobar" id="phraseStatus">Write the phrase as you normally would, left to right, between the guide lines. Avoid squeezing long sentences into the box; shorter samples work best.</div>
-   <div class="gallery-header"><h3>Saved word / phrase samples</h3><span id="phraseCount" class="muted small">0 phrases</span></div>
-   <div id="phraseGallery" class="phrase-gallery" aria-live="polite"></div>
-  </div>
-  <div class="card">
-   <h2><span class="step">4</span>Write your content</h2>
-   <p class="sub">Type or paste your notes. The program builds lines and automatically adds more pages when needed, using the selected paper size.</p>
-   <textarea id="content" spellcheck="false" placeholder="Type the text you want written using your handwriting…">CIVIL ENGINEERING
+<header class="studio-header"><div class="brand-block"><h1>Handwriting <span class="brand-accent">Studio</span></h1><p>Design your writing, see every page instantly.</p></div><div class="header-meta"><span class="offline-note">● Works offline</span><span class="version-badge">V8.4</span></div></header>
+<main class="studio-shell"><aside class="studio-sidebar"><nav aria-label="Handwriting Studio tools" class="studio-nav"><button aria-label="Write" aria-pressed="true" class="studio-nav-btn" data-target="write" title="Write" type="button"><span aria-hidden="true" class="studio-nav-icon">✎</span><span class="studio-nav-label">Write</span></button><button aria-label="Letters" aria-pressed="false" class="studio-nav-btn" data-target="letters" title="Letters" type="button"><span aria-hidden="true" class="studio-nav-icon">Aa</span><span class="studio-nav-label">Letters</span></button><button aria-label="Photo import" aria-pressed="false" class="studio-nav-btn" data-target="photo" title="Photo import" type="button"><span aria-hidden="true" class="studio-nav-icon">▧</span><span class="studio-nav-label">Photo import</span></button><button aria-label="Phrases" aria-pressed="false" class="studio-nav-btn" data-target="phrases" title="Phrases" type="button"><span aria-hidden="true" class="studio-nav-icon">≈</span><span class="studio-nav-label">Phrases</span></button><button aria-label="Equations" aria-pressed="false" class="studio-nav-btn" data-target="equations" title="Equations" type="button"><span aria-hidden="true" class="studio-nav-icon">∑</span><span class="studio-nav-label">Equations</span></button><button aria-label="Appearance" aria-pressed="false" class="studio-nav-btn" data-target="appearance" title="Appearance" type="button"><span aria-hidden="true" class="studio-nav-icon">◐</span><span class="studio-nav-label">Appearance</span></button><button aria-label="Page &amp; export" aria-pressed="false" class="studio-nav-btn" data-target="page" title="Page &amp; export" type="button"><span aria-hidden="true" class="studio-nav-icon">▤</span><span class="studio-nav-label">Page &amp; export</span></button></nav><section class="controls"><div class="card tool-panel" data-view="write">
+<h2>Write your notes</h2><p class="compact-kicker">Type here or edit directly on the page</p>
+<p class="sub">Type or paste your notes. The program builds lines and automatically adds more pages when needed, using the selected paper size.</p>
+<div class="section-kicker">DOCUMENT TEXT</div><textarea id="content" placeholder="Write or paste your notes here…" spellcheck="false">CIVIL ENGINEERING
 
 SOIL MECHANICS
 
@@ -298,139 +309,243 @@ THE STRENGTH OF SOIL DEPENDS ON ITS PROPERTIES AND THE LOADS APPLIED TO IT.
 
 STRESS: $\sigma = \frac{P}{A}$
 
-$$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{aligned}$$</textarea>
-   <div class="stack" style="margin-top:12px"><label class="checkline"><input type="checkbox" id="uppercase" checked> Convert text to uppercase (traditional engineering lettering)</label>
-   <div class="infobar" id="caseStatus" role="status">Uppercase conversion is enabled. Switch it off to use lowercase samples in your notes.</div>
-   <p class="hint">Accented letters work directly in notes and equations. Try <strong>NIÑO, niño, mañana, lápiz, café, naïve</strong>. Each accent uses your saved base letter and accent-mark sample, with no separate Ñ or ñ sample needed.</p>
-   <div class="field"><label for="phraseMode">Handwriting composition</label><select id="phraseMode"><option value="hybrid">Hybrid: real phrase samples + individual letters (recommended)</option><option value="letters">Individual letters only</option></select></div></div>
-   <div class="infobar" id="matchStats">Saved phrase matches will appear here after you start sampling.</div>
-   <div class="equation-panel" id="equationPanel">
-    <div class="row"><h3>Equation editor <span class="pill-new">NEW</span></h3><span class="small muted">Math notation + your handwriting</span></div>
-    <p class="hint">Build a formula below, then insert it at the cursor in your notes. Use <code>$...$</code> for an inline equation or <code>$$...$$</code> for a centered equation on its own line. You can also type LaTeX directly in your notes.</p>
-    <div class="equation-template-toolbar" id="equationTemplates">
-      <button class="btn" type="button" data-math-template="\frac{a}{b}" title="Fraction">a/b</button>
-      <button class="btn" type="button" data-math-template="\sqrt{x}" title="Square root">√</button>
-      <button class="btn" type="button" data-math-template="x^{2}" title="Exponent">x²</button>
-      <button class="btn" type="button" data-math-template="M_{u}" title="Subscript">Mᵤ</button>
-      <button class="btn" type="button" data-math-template="\sigma" title="Greek sigma">σ</button>
-      <button class="btn" type="button" data-math-template="\Delta" title="Delta">Δ</button>
-      <button class="btn" type="button" data-math-template="\sum_{i=1}^{n}" title="Summation">∑</button>
-      <button class="btn" type="button" data-math-template="\int_{0}^{L}" title="Integral">∫</button>
-      <button class="btn" type="button" data-math-template="\boxed{x}" title="Boxed answer">□</button>
-    </div>
-    <div class="field"><label for="equationDraft">Equation input (LaTeX-style)</label><textarea id="equationDraft" rows="2" spellcheck="false" placeholder="\sigma = \frac{P}{A}">\sigma = \frac{P}{A}</textarea></div>
-    <div class="equation-live" id="equationLive" aria-label="Equation preview"></div>
-    <div class="toolbar" style="margin-top:10px"><button type="button" class="btn primary" id="insertInlineMath">Insert inline</button><button type="button" class="btn primary" id="insertDisplayMath">Insert centered equation</button><button type="button" class="btn" id="insertAlignMath">Insert aligned solution</button></div>
-    <div class="fields" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:0">
-     <div class="field"><label for="equationSize">Equation size</label><select id="equationSize"><option value="80">Small (80%)</option><option value="100" selected>Normal (100%)</option><option value="120">Large (120%)</option><option value="150">Extra large (150%)</option></select></div>
-     <div class="field"><label for="equationAlign">Standalone alignment</label><select id="equationAlign"><option value="center">Center</option><option value="left">Left</option></select></div>
-    </div>
-    <div class="math-roughness" id="mathRoughnessBox">
-     <label class="checkline"><input type="checkbox" id="mathHandDrawn" checked> Hand-drawn fraction bars, radicals, and answer boxes</label>
-     <div class="roughness-slider">
-      <div class="row"><label for="mathRoughness">Line irregularity</label><strong id="mathRoughnessValue" class="small">45% · natural</strong></div>
-      <input type="range" id="mathRoughness" min="0" max="100" step="1" value="45" aria-describedby="mathRoughnessHint">
-      <p class="hint" id="mathRoughnessHint">Adds tiny, smooth pen wobbles and imperfect corners to equation lines. 0% gives straight ruler lines. The same pattern is used in PDF output.</p>
-     </div>
-    </div>
-    <p class="hint">Supported: fractions, stacked solutions, superscripts, subscripts, roots, Greek letters, summations, integrals, and boxed answers. Special symbols use your saved stroke samples where available. Square-root signs now stretch over the full expression inside their braces. For example, use <code>\sqrt{x+\int_0^L f(t)dt}</code> to place the integral under the root.</p>
-    <p class="small warning" id="equationWarnings" role="status" aria-live="polite"></p>
-   </div>
-   <div class="ink-panel">
-    <label for="inkColor">Handwriting ink color</label>
-    <div class="ink-picker"><input type="color" id="inkColor" value="#1c2a43" aria-label="Choose handwritten text color"><strong id="inkHex">#1C2A43</strong><span class="small muted">Pick any color</span></div>
-    <div class="ink-presets" aria-label="Ink color presets">
-     <button type="button" class="ink-preset" data-ink="#1c2a43" style="background:#1c2a43" aria-label="Dark ink" title="Dark ink"></button>
-     <button type="button" class="ink-preset" data-ink="#111111" style="background:#111111" aria-label="Black ink" title="Black ink"></button>
-     <button type="button" class="ink-preset" data-ink="#1449ad" style="background:#1449ad" aria-label="Blue ink" title="Blue ink"></button>
-     <button type="button" class="ink-preset" data-ink="#147273" style="background:#147273" aria-label="Teal ink" title="Teal ink"></button>
-     <button type="button" class="ink-preset" data-ink="#ad2525" style="background:#ad2525" aria-label="Red ink" title="Red ink"></button>
-    </div>
-    <p class="hint">Applies to the writing, saved-letter previews and printed/PDF pages. Your saved letter shapes stay unchanged.</p>
-   </div>
-   <div class="ink-effects" id="inkEffectsPanel">
-    <h3>Realistic ink effects <span class="pill-new">NEW</span></h3>
-    <p class="hint">Toggle effects separately to imitate ink soaking into paper, tiny excess-ink spots, or an accidental drag. Only the generated writing is affected, not the original saved samples.</p>
-    <div class="effect-switches">
-     <label class="effect-row"><input type="checkbox" id="inkBlot"><span><strong>Ink blots</strong><small>Occasional extra-dark dots around a stroke</small></span></label>
-     <label class="effect-row"><input type="checkbox" id="inkBleed"><span><strong>Ink bleed</strong><small>Soft, slightly feathered stroke edges</small></span></label>
-     <label class="effect-row"><input type="checkbox" id="inkSmudge"><span><strong>Ink smudges</strong><small>Faint, sideways dragged ink marks</small></span></label>
-    </div>
-    <div class="row" style="margin-top:13px"><label for="effectStrength" class="small"><strong>Effects strength</strong></label><strong id="effectStrengthValue" class="small">50%</strong></div>
-    <input type="range" id="effectStrength" min="0" max="100" step="5" value="50" aria-label="Ink effects strength">
-    <p class="hint">At 0%, effects are invisible. At high strength they become more noticeable. Effects are reproducible in the preview and PDF.</p>
-   </div>
-  </div>
-  <div class="card">
-   <h2><span class="step">4</span>Set paper & lettering layout</h2>
-   <p class="sub">Choose paper dimensions and orientation. The 1–3–3 lettering guide uses 1 mm upper offset, 3 mm writing height, and 3 mm gap by default.</p>
-   <div class="paper-panel">
-    <div class="fields" style="margin-top:0">
-     <div class="field"><label for="paperSize">Paper size</label><select id="paperSize"><option value="A4">A4 (210 × 297 mm)</option><option value="A3">A3 (297 × 420 mm)</option><option value="A5">A5 (148 × 210 mm)</option><option value="Letter">US Letter (8.5 × 11 in)</option><option value="Legal">US Legal (8.5 × 14 in)</option><option value="B5">ISO B5 (176 × 250 mm)</option><option value="Custom">Custom dimensions</option></select></div>
-     <div class="field"><label for="paperOrientation">Orientation</label><select id="paperOrientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
-    </div>
-    <div class="fields custom-paper" id="customPaperFields" hidden>
-     <div class="field"><label for="customPaperWidth">Width (mm)</label><input id="customPaperWidth" type="number" min="100" max="600" step="0.1" value="210"></div>
-     <div class="field"><label for="customPaperHeight">Height (mm)</label><input id="customPaperHeight" type="number" min="100" max="600" step="0.1" value="297"></div>
-    </div>
-    <p class="hint" id="paperDescription">A4 portrait · 210 × 297 mm. Printed page and guide lines will fit this size.</p>
-   </div>
-   <div class="fields">
-    <div class="field"><label for="u1">First band (mm)</label><input type="number" min="0" max="8" step="0.25" id="u1" value="1"></div>
-    <div class="field"><label for="u2">Letter height (mm)</label><input type="number" min="1.5" max="12" step="0.25" id="u2" value="3"></div>
-    <div class="field"><label for="u3">Line gap (mm)</label><input type="number" min="0.5" max="15" step="0.25" id="u3" value="3"></div>
-    <div class="field"><label for="marginTop">Top margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginTop" value="17"></div>
-    <div class="field"><label for="marginLeft">Left margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginLeft" value="16"></div>
-    <div class="field"><label for="marginRight">Right margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginRight" value="14"></div>
-    <div class="field"><label for="marginBottom">Bottom margin (mm)</label><input type="number" min="0" max="60" step="1" id="marginBottom" value="15"></div>
-    <div class="field"><label for="letterSpace">Letter spacing (mm)</label><input type="number" min="0" max="5" step="0.1" id="letterSpace" value="0.5"></div>
-    <div class="field"><label for="penWidth">Stroke width (mm) · precise</label><input type="number" min="0.05" max="1.5" step="0.05" id="penWidth" value="0.2"></div>
-   </div>
-   <div class="stack"><label class="checkline"><input type="checkbox" id="guides" checked> Show faint 1–3–3 guide lines in the PDF</label><label class="checkline"><input type="checkbox" id="marginGuides"> Show left/right margin marks</label><label class="checkline"><input type="checkbox" id="variation" checked> Make each repeated letter slightly different</label><label class="checkline"><input type="checkbox" id="naturalPressure" checked> Subtle pen-pressure changes along the strokes</label></div>
-   <div class="realism-box" id="realismBox">
-    <div class="row"><label for="variationLevel">Handwriting variation strength</label><strong id="variationText">35% · subtle</strong></div>
-    <input type="range" id="variationLevel" min="0" max="100" step="1" value="35" aria-describedby="variationHelp" />
-    <p class="hint" id="variationHelp">Changes letter shape, size, tilt, baseline, and spacing. Nearby letters share a small baseline drift for more natural words. If enabled, pen pressure is varied along each stroke. Preview and print use the same seeded pattern.</p>
-    <div class="toolbar"><button class="btn" id="shuffleBtn" type="button">Try another variation pattern</button><span class="small muted" id="variationPattern">Pattern 1</span></div>
-   </div>
-   <div class="infobar"><strong id="paperInfo">A4 portrait: 210 × 297 mm.</strong> <span id="lineInfo">7 mm per writing row</span>. Unrecorded characters use a basic fallback font.</div>
-   <div class="realism-box" id="performanceBox">
-    <label for="renderQuality">Rendering performance</label>
-    <select id="renderQuality" style="margin:9px 0 4px;display:block;width:100%;border:1px solid #d6deea;border-radius:8px;padding:9px;color:#29394b;background:white">
-     <option value="fast">Fast — long notes / smaller PDF</option>
-     <option value="balanced" selected>Balanced — recommended</option>
-     <option value="original">Original — maximum legacy detail (slower)</option>
-    </select>
-    <p class="hint" style="margin:4px 0 10px">Fast and Balanced use one variable-width vector outline per pen stroke instead of dozens of overlapping stroke segments. They retain stylus pressure, organic lines, sampled letter shapes and ink effects.</p>
-    <label class="checkline" style="display:flex;font-weight:400"><input type="checkbox" id="fastPrint" checked> Optimize printing (skip heavy blur filters in the PDF)</label>
-    <p class="hint" style="margin:5px 0 0">Turn this off for the softest bleed and smudge in the final PDF. Your handwriting still has blots and other ink marks when it is on.</p>
-   </div>
-   <hr />
-   <div class="toolbar"><button class="btn primary" id="printBtn">Print / Save PDF</button><button class="btn" id="refreshBtn">Refresh preview</button><button class="btn" id="restoreBtn">Default layout</button></div>
-   <div class="note">For printing, use <strong>scale 100%</strong>, <strong>zero extra margins</strong>, and <strong>Background graphics</strong> for the full ink effects. The program requests your selected paper size; confirm the print dialog matches it. Choose “Save as PDF” for a file.</div>
-  </div>
- </section>
- <section class="preview-pane">
-  <div class="preview-top"><div><h2>Editable paper preview</h2><p id="previewStats">Preparing pages…</p></div>
-   <div class="preview-actions"><button type="button" class="btn edit-toggle" id="editPageToggle" aria-pressed="false" title="Click a handwritten line or equation to edit it on the page">Edit on page: Off</button><button type="button" class="btn" id="addPageLine" title="Add a new handwritten line at the end of your notes">+ Line</button><div class="zoom-controls" role="group" aria-label="Paper preview zoom">
-    <button type="button" class="btn" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
-    <input type="range" id="zoomSlider" min="50" max="250" step="10" value="100" aria-label="Preview zoom percentage">
-    <button type="button" class="btn" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
-    <output id="zoomValue" for="zoomSlider">100%</output>
-    <button type="button" class="btn" id="zoomReset" title="Return to normal size">Fit</button>
-   </div><button class="btn primary" id="printTop">Print / Save PDF</button></div>
-  </div>
-  <div class="page-list" id="pageList"></div>
-  <div class="edit-help" id="pageEditHint">Enable “Edit on page”, then click any line or equation. Type into the on-page editor and watch the writing update live. Ctrl+Enter saves, Esc cancels.</div>
-  <div class="page-edit-popover" id="pageEditPopover" hidden role="dialog" aria-label="Edit text on handwritten page">
-   <label id="pageEditLabel" for="pageEditInput">Edit handwritten line</label>
-   <textarea id="pageEditInput" spellcheck="false" aria-label="Text or equation source for selected page area"></textarea>
-   <div class="edit-tip">Edits update the handwriting preview and the main text box. Equations use their original $...$ or $$...$$ notation.</div>
-   <div class="row"><button type="button" class="btn" id="pageEditCancel">Cancel</button><button type="button" class="btn primary" id="pageEditDone">Done</button></div>
-  </div>
-  <p class="note">Use the + / − buttons or slider to zoom in and out. At larger zoom levels, scroll sideways to inspect the page. Zoom affects the screen preview only; the PDF keeps your selected paper dimensions.</p>
- </section>
-</main>
+$$\begin{aligned}\sigma &amp;= \frac{150000}{30000} \\ &amp;= \boxed{5\ \text{MPa}}\end{aligned}$$</textarea>
+<div class="stack" style="margin-top:12px"><label class="checkline"><input checked="" id="uppercase" type="checkbox"/> Convert text to uppercase (traditional engineering lettering)</label>
+<div class="infobar" id="caseStatus" role="status">Uppercase conversion is enabled. Switch it off to use lowercase samples in your notes.</div>
+<p class="hint">Accented letters work directly in notes and equations. Try <strong>NIÑO, niño, mañana, lápiz, café, naïve</strong>. Each accent uses your saved base letter and accent-mark sample, with no separate Ñ or ñ sample needed.</p>
+<div class="field"><label for="phraseMode">Handwriting composition</label><select id="phraseMode"><option value="hybrid">Hybrid: real phrase samples + individual letters (recommended)</option><option value="letters">Individual letters only</option></select></div></div>
+<div class="infobar quiet-stats" id="matchStats">Saved phrase matches will appear here after you start sampling.</div>
+
+
+
+</div><div class="card tool-panel" data-view="letters" hidden="">
+<h2>Letter sampler</h2><p class="compact-kicker">Draw, edit and save your character shapes</p>
+<p class="sub">Select a character, write it in the box using your mouse, stylus or finger, then save it. Repeat for the characters you need. You can save more than one version of a letter. The realism settings below create subtle new shapes even if you only sample each letter once. You can also sample complete words or phrases in the next panel.</p>
+<div class="row"><span class="selected" id="selectedChar">Selected: A</span><span class="muted small" id="count">Sample characters and math symbols</span></div><div id="sampleViewport"><div class="sample-box"><canvas aria-label="Draw handwriting character here" height="224" id="drawCanvas" width="640"></canvas></div></div><div class="toolbar"><button class="btn" id="undoBtn">Undo stroke</button><button class="btn" id="redoBtn">Redo stroke</button><button class="btn" id="clearBtn">Clear drawing</button><button class="btn primary" id="saveBtn">Save character</button><button class="btn" hidden="" id="cancelEditBtn">Cancel edit</button><button class="btn" id="nextBtn">Next missing</button></div><div class="infobar" id="sampleStatus">Write the selected letter between the horizontal guides. Click “Save character.”</div><section class="character-picker"><div class="section-kicker">CHOOSE CHARACTER</div><div class="character-filter-row"><input aria-label="Filter available characters" autocomplete="off" id="glyphSearch" placeholder="Find a letter or symbol…" type="search"/></div><div class="row"><div class="stack"><label class="checkline"><input id="lowercaseGrid" type="checkbox"/> Include lowercase letters</label><label class="checkline"><input checked="" id="mathSymbolsGrid" type="checkbox"/> Include mathematical symbols (sample them using your own handwriting)</label><label class="checkline"><input checked="" id="accentGrid" type="checkbox"/> Include accent marks for composite letters</label></div><span class="small muted" id="variantCount"></span></div><div aria-label="Characters to sample" class="char-grid" id="charGrid"></div></section><div class="thickness-panel">
+<div class="row"><label for="thicknessSlider"><strong>Stroke thickness</strong> (printed lettering)</label><strong id="thicknessValue">0.20 mm</strong></div>
+<input aria-label="Handwriting stroke thickness in millimeters" id="thicknessSlider" max="1.5" min="0.05" step="0.05" type="range" value="0.2">
+<svg aria-label="Stroke thickness example" class="thickness-swatch" id="thicknessSwatch" viewbox="0 0 250 26"><path d="M18 13 Q70 8 120 13 T232 13" fill="none" id="thicknessLine" stroke="#1c2a43" stroke-linecap="round" stroke-width="3"></path></svg>
+<p class="hint" style="margin:7px 0 0">Changes the drawing preview and every handwritten letter on the A4 page. Does not overwrite the shape of your saved samples.</p>
+</input></div><div aria-label="Drawing workspace controls" class="sample-controls">
+<label for="sampleZoom">Drawing zoom <output id="sampleZoomLabel">100%</output></label>
+<input aria-label="Drawing area zoom" id="sampleZoom" max="300" min="75" step="25" type="range" value="100"/>
+<button class="btn" id="sampleZoomReset" type="button">Reset zoom</button>
+<label><input checked="" id="sampleGuideToggle" type="checkbox"/> Show letter guides</label>
+<label><input id="sampleGridToggle" type="checkbox"/> Fine grid</label>
+</div><details class="studio-disclosure" id="letterAdvanced"><summary>Tracing, guides &amp; tablet pressure</summary><div class="accent-help" id="accentHelp">
+<div class="row"><strong>Build accented letters from saved parts</strong><span class="pill-new">V7.5</span></div>
+<p class="hint" style="margin:7px 0">Sample each letter and its separate accent mark once. Accents overlay the letter without moving it off its guide. For example, <strong>Ñ = N + ~</strong> and <strong>ñ = n + ~</strong>. The same mark can be reused on different letters.</p>
+<label class="checkline"><input checked="" id="composeAccents" type="checkbox"/> Compose accents automatically (use individual saved letters + marks)</label>
+<div class="toolbar" style="margin-top:9px"><button class="btn" data-accent-pick="N" type="button">Sample N</button><button class="btn" data-accent-pick="n" type="button">Sample n</button><button class="btn" data-accent-pick="~" type="button">Sample ~</button><button class="btn" data-accent-pick="´" type="button">Sample ´</button><button class="btn" data-accent-pick="`" type="button">Sample `</button></div>
+<div class="hint" id="accentStatus" role="status" style="margin-top:8px">Ñ and ñ are built from your samples automatically.</div>
+</div><div aria-label="Letter guide line meanings" class="sample-guide-legend" id="sampleGuideLegend">
+<span><i class="guide-chip cap"></i>Cap height</span>
+<span><i class="guide-chip xheight"></i>Lowercase x-height</span>
+<span><i class="guide-chip baseline"></i>Baseline</span>
+<span><i class="guide-chip desc"></i>Descenders</span>
+</div><div aria-label="Letter tracing template" class="tracing-panel">
+<div class="tracing-heading"><strong>Tracing template · Y14.5M-2009</strong><span class="pill-new">NEW</span></div>
+<div class="tracing-row"><label><input checked="" id="sampleTraceToggle" type="checkbox"/> Show faint letter / symbol</label><label for="sampleTraceOpacity">Opacity <output id="sampleTraceOpacityLabel">20%</output></label><input aria-label="Tracing template opacity" id="sampleTraceOpacity" max="55" min="5" step="5" type="range" value="20"/></div>
+<div class="tracing-row"><label class="trace-file-label" for="sampleTraceFontFile">Load exact Y14.5M-2009 font<input accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" id="sampleTraceFontFile" type="file"/></label><span class="trace-status" id="sampleTraceFontStatus" role="status">Uses the installed font when available; otherwise a clean fallback.</span></div>
+<p>The reference changes automatically when you select A, a, ~, +, √, or another symbol. It stays behind your pen strokes, lines up with the guides, and is never saved or printed. If the exact font is not installed, load your own <strong>Y14.5M-2009.ttf</strong> file above. <a href="https://www.fontspace.com/y145m-2009-font-f9006" rel="noopener noreferrer" target="_blank">Font information and source</a>.</p>
+</div><p class="hint" id="letterGuideHelp">Uppercase: write from the top guide to the baseline. For lowercase, turn on “Include lowercase letters.”</p><div aria-label="Drawing tablet pressure controls" class="pressure-panel">
+<div class="pressure-heading"><strong>Drawing tablet pen pressure</strong><span class="pill-new">V7.9</span></div>
+<label class="checkline"><input checked="" id="tabletPressure" type="checkbox"/> Use stylus pressure for stroke thickness</label>
+<div class="row" style="margin-top:10px"><label class="small" for="pressureSensitivity">Pressure sensitivity</label><strong class="small" id="pressureSensitivityValue">100%</strong></div>
+<input aria-label="How strongly stylus pressure changes stroke thickness" id="pressureSensitivity" max="200" min="0" step="10" type="range" value="100"/>
+<div class="pressure-meter-line"><span class="small muted">Live pen pressure</span><div aria-label="Current pen pressure" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" class="pressure-meter" id="pressureMeter" role="progressbar"><span id="pressureMeterFill"></span></div><output id="pressureLive">50%</output></div>
+<p class="hint" id="pressureStatus" role="status">Use a pressure-capable stylus in this canvas or the phrase sampler. A mouse draws at constant 50% pressure.</p>
+<p class="hint">Pressure is saved with your sampled strokes, including imported/exported handwriting profiles, and affects the A4 preview and PDF. Set sensitivity to 0% for uniform strokes.</p>
+</div><p class="hint">The colored guides and faint reference appear only while sampling, never on the printed page. At 100% the whole drawing area fits this panel.</p><p class="hint" style="margin:0 0 10px">View all samples for the selected character. Select <strong>View</strong> to enlarge, <strong>Edit</strong> to modify an existing version, or <strong>Delete</strong> to remove only that version. Multiple versions are rotated naturally in the page.</p></details><details class="studio-disclosure" id="savedLetterVersions"><summary>Saved versions &amp; sample library</summary><div class="gallery-header"><h3>Saved letter versions</h3><span class="muted small" id="galleryCount">No versions</span></div><div class="version-viewer" hidden="" id="versionViewer"><div class="row"><strong class="small" id="viewingLabel">Viewing sample</strong><span class="small muted">Exact saved strokes</span></div><div id="viewingArtwork"></div></div><div aria-live="polite" class="gallery" id="versionGallery"></div><div class="toolbar"><button class="btn" id="exportBtn">Export handwriting profile</button><button class="btn" id="importBtn">Import profile</button><button class="btn danger" id="resetBtn">Erase all samples</button></div><input accept=".json,application/json" class="file-input" id="importFile" type="file">
+<div class="note">Your letters and natural word/phrase samples stay in this browser. Export a profile (.json) to back them up or move to another computer.</div>
+</input></details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><div class="card photo-panel tool-panel" data-view="photo" hidden="" id="photoCard">
+<h2>Import handwriting</h2><p class="compact-kicker">Extract characters from a photo or scan</p>
+<p class="sub">Upload a photo or scan of handwriting. The app can suggest separate ink regions, or you can drag over a letter to crop it precisely. Choose which character it represents, then save the extracted pen strokes to your existing handwriting library. No internet or server needed.</p>
+<div class="photo-upload"><div class="field"><label for="photoFile">Handwriting image (PNG, JPEG, or WebP)</label><input accept="image/png,image/jpeg,image/webp,image/*" id="photoFile" type="file"/></div>
+<p class="hint" style="margin:9px 0 0">Best results: one letter or symbol per space, written in dark ink on plain, evenly lit white paper. Connected letters and ruled paper may need manual cropping.</p>
+</div>
+<div class="photo-settings">
+<div class="field"><label for="photoThreshold">Ink detection threshold: <output id="photoThresholdValue">165</output></label><input id="photoThreshold" max="235" min="75" step="5" type="range" value="165"/></div>
+<div class="stack"><label class="checkline"><input id="photoInvert" type="checkbox"/> Light writing on dark background</label><label class="checkline"><input checked="" id="photoShowBoxes" type="checkbox"/> Show detected letter regions</label></div>
+</div>
+<div class="toolbar" style="margin-top:10px"><button class="btn" disabled="" id="photoDetect" type="button">Find separate letters</button><button class="btn" disabled="" id="photoRotate" type="button">Rotate 90°</button><button class="btn" disabled="" id="photoClearBox" type="button">Clear selection</button></div>
+<div class="photo-workspace is-empty" id="photoViewport"><canvas aria-label="Uploaded handwriting image: drag to select one letter" height="350" id="photoCanvas" width="800"></canvas><span id="photoEmpty">Upload a handwriting image to begin.</span></div>
+<div class="row"><strong class="small">Detected regions</strong><span class="small muted" id="photoRegionCount">No image loaded</span></div>
+<div aria-label="Detected handwriting regions" class="photo-results" id="photoCandidates"></div>
+<div class="photo-selected" style="margin:10px 0 12px">
+<div class="field"><label for="photoBatchLabels">Optional bulk import: labels for detected regions, in reading order</label><input autocomplete="off" id="photoBatchLabels" placeholder="Example: ABCDEFG or abc123" spellcheck="false" type="text"/></div>
+<div class="toolbar" style="margin-top:9px"><button class="btn" disabled="" id="photoBatchSave" type="button">Save all labeled regions</button></div>
+<p class="hint" style="margin:7px 0 0">Works best when each separated character forms one detected region. Enter one character for each numbered region; use the blue crop selection instead for split symbols such as i, j, !, and accented letters.</p>
+</div>
+<div class="photo-selected">
+<div class="fields" style="margin:0 0 10px"><div class="field"><label for="photoChar">Assign selection to letter / symbol</label><input autocomplete="off" id="photoChar" maxlength="4" spellcheck="false" type="text" value="A"/></div><div class="field"><label for="photoSource">Source of selection</label><input id="photoSource" readonly="" value="Drag a region or choose a suggestion"/></div></div>
+<canvas aria-label="Extracted handwriting stroke preview" class="photo-mini" height="125" id="photoGlyphPreview" width="320"></canvas>
+<div class="toolbar"><button class="btn primary" disabled="" id="photoSave" type="button">Save as letter version</button><button class="btn" disabled="" id="photoSaveEdit" type="button">Save and edit strokes</button></div>
+<p class="hint" id="photoStatus" role="status" style="margin:10px 0 0">Select one letter, then preview and save the extracted strokes. You can correct it afterward with your mouse or drawing tablet.</p>
+</div>
+<p class="note">Photo extraction estimates the stroke centerlines from pixels. It cannot recover real drawing-tablet pressure, stroke order, or reliably recognize every letter from a paragraph. You assign the character and can edit the result before using it.</p>
+</div><div class="card tool-panel" data-view="phrases" hidden="" id="phraseCard">
+<h2>Phrase sampler</h2><p class="compact-kicker">Save natural-looking connected words</p>
+<p class="sub">Write a word or short sentence in one natural motion. When the <strong>same text</strong> appears in your notes, the program uses your real connected strokes instead of assembling individual letters. For new text it uses your letter samples. This runs offline; it does not train an AI model.</p>
+<div class="field"><label for="phraseText">Text you will handwrite (up to 60 characters)</label><input autocomplete="off" id="phraseText" maxlength="60" placeholder="Example: SOIL MECHANICS" type="text" value="SOIL MECHANICS"/></div>
+<div class="sample-box phrase-pad"><canvas aria-label="Draw the complete word or phrase here" height="194" id="phraseCanvas" width="960"></canvas></div>
+<div class="toolbar"><button class="btn" id="phraseUndo" type="button">Undo stroke</button><button class="btn" id="phraseClear" type="button">Clear</button><button class="btn primary" id="phraseSave" type="button">Save phrase</button><button class="btn" hidden="" id="phraseCancelEdit" type="button">Cancel edit</button></div>
+<div class="infobar" id="phraseStatus">Write the phrase as you normally would, left to right, between the guide lines. Avoid squeezing long sentences into the box; shorter samples work best.</div>
+<div class="gallery-header"><h3>Saved word / phrase samples</h3><span class="muted small" id="phraseCount">0 phrases</span></div>
+<div aria-live="polite" class="phrase-gallery" id="phraseGallery"></div>
+</div><div class="card tool-panel" data-view="equations" hidden=""><h2>Equation editor</h2><p class="compact-kicker">Create formulas, then insert them into your notes</p><div class="equation-panel equation-isolated" id="equationPanel">
+<div class="row"><h3>Equation editor <span class="pill-new">NEW</span></h3><span class="small muted">Math notation + your handwriting</span></div>
+<p class="hint">Build a formula below, then insert it at the cursor in your notes. Use <code>$...$</code> for an inline equation or <code>$$...$$</code> for a centered equation on its own line. You can also type LaTeX directly in your notes.</p>
+<div class="equation-template-toolbar" id="equationTemplates">
+<button class="btn" data-math-template="\frac{a}{b}" title="Fraction" type="button">a/b</button>
+<button class="btn" data-math-template="\sqrt{x}" title="Square root" type="button">√</button>
+<button class="btn" data-math-template="x^{2}" title="Exponent" type="button">x²</button>
+<button class="btn" data-math-template="M_{u}" title="Subscript" type="button">Mᵤ</button>
+<button class="btn" data-math-template="\sigma" title="Greek sigma" type="button">σ</button>
+<button class="btn" data-math-template="\Delta" title="Delta" type="button">Δ</button>
+<button class="btn" data-math-template="\sum_{i=1}^{n}" title="Summation" type="button">∑</button>
+<button class="btn" data-math-template="\int_{0}^{L}" title="Integral" type="button">∫</button>
+<button class="btn" data-math-template="\boxed{x}" title="Boxed answer" type="button">□</button>
+</div>
+<div class="field"><label for="equationDraft">Equation input (LaTeX-style)</label><textarea id="equationDraft" placeholder="\sigma = \frac{P}{A}" rows="2" spellcheck="false">\sigma = \frac{P}{A}</textarea></div>
+<div aria-label="Equation preview zoom" class="equation-zoom-controls" role="group">
+<strong class="small">Equation preview zoom</strong>
+<button aria-label="Zoom equation out" class="btn" id="eqZoomOut" type="button">−</button>
+<input aria-label="Equation zoom" id="eqZoomSlider" max="300" min="50" step="10" type="range" value="100"/>
+<button aria-label="Zoom equation in" class="btn" id="eqZoomIn" type="button">+</button>
+<output for="eqZoomSlider" id="eqZoomValue">100%</output>
+<button class="btn" id="eqZoomReset" type="button">Fit</button>
+</div>
+<div aria-label="Equation preview" class="equation-live" id="equationLive"></div>
+<p class="hint" style="margin:5px 0 0">Zoom affects this editor preview only. Equations on the paper keep their selected size.</p>
+<div class="toolbar" style="margin-top:10px"><button class="btn primary" id="insertInlineMath" type="button">Insert inline</button><button class="btn primary" id="insertDisplayMath" type="button">Insert centered equation</button><button class="btn" id="insertAlignMath" type="button">Insert aligned solution</button></div>
+<div class="fields" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:0">
+<div class="field"><label for="equationSize">Equation size</label><select id="equationSize"><option value="80">Small (80%)</option><option selected="" value="100">Normal (100%)</option><option value="120">Large (120%)</option><option value="150">Extra large (150%)</option></select></div>
+<div class="field"><label for="equationAlign">Standalone alignment</label><select id="equationAlign"><option value="center">Center</option><option value="left">Left</option></select></div>
+</div>
+<div class="math-roughness" id="mathRoughnessBox">
+<label class="checkline"><input checked="" id="mathHandDrawn" type="checkbox"/> Hand-drawn fraction bars, radicals, and answer boxes</label>
+<div class="roughness-slider">
+<div class="row"><label for="mathRoughness">Line irregularity</label><strong class="small" id="mathRoughnessValue">45% · natural</strong></div>
+<input aria-describedby="mathRoughnessHint" id="mathRoughness" max="100" min="0" step="1" type="range" value="45"/>
+<p class="hint" id="mathRoughnessHint">Adds tiny, smooth pen wobbles and imperfect corners to equation lines. 0% gives straight ruler lines. The same pattern is used in PDF output.</p>
+</div>
+</div>
+<p class="hint">Supported: fractions, stacked solutions, superscripts, subscripts, roots, Greek letters, summations, integrals, and boxed answers. Special symbols use your saved stroke samples where available. Square-root signs now stretch over the full expression inside their braces. For example, use <code>\sqrt{x+\int_0^L f(t)dt}</code> to place the integral under the root.</p>
+<p aria-live="polite" class="small warning" id="equationWarnings" role="status"></p>
+</div></div><div class="card tool-panel" data-view="appearance" hidden=""><h2>Appearance</h2><p class="compact-kicker">Pen style, ink texture and lettering variation</p><div class="ink-panel">
+<label for="inkColor">Handwriting ink color</label>
+<div class="ink-picker"><input aria-label="Choose handwritten text color" id="inkColor" type="color" value="#1c2a43"/><strong id="inkHex">#1C2A43</strong><span class="small muted">Pick any color</span></div>
+<div aria-label="Ink color presets" class="ink-presets">
+<button aria-label="Dark ink" class="ink-preset" data-ink="#1c2a43" style="background:#1c2a43" title="Dark ink" type="button"></button>
+<button aria-label="Black ink" class="ink-preset" data-ink="#111111" style="background:#111111" title="Black ink" type="button"></button>
+<button aria-label="Blue ink" class="ink-preset" data-ink="#1449ad" style="background:#1449ad" title="Blue ink" type="button"></button>
+<button aria-label="Teal ink" class="ink-preset" data-ink="#147273" style="background:#147273" title="Teal ink" type="button"></button>
+<button aria-label="Red ink" class="ink-preset" data-ink="#ad2525" style="background:#ad2525" title="Red ink" type="button"></button>
+</div>
+<p class="hint">Applies to the writing, saved-letter previews and printed/PDF pages. Your saved letter shapes stay unchanged.</p>
+</div><div class="realism-box" id="realismBox">
+<div class="row"><label for="variationLevel">Handwriting variation strength</label><strong id="variationText">35% · subtle</strong></div>
+<input aria-describedby="variationHelp" id="variationLevel" max="100" min="0" step="1" type="range" value="35">
+<p class="hint" id="variationHelp">Changes letter shape, size, tilt, baseline, and spacing. Nearby letters share a small baseline drift for more natural words. If enabled, pen pressure is varied along each stroke. Preview and print use the same seeded pattern.</p>
+<div class="toolbar"><button class="btn" id="shuffleBtn" type="button">Try another variation pattern</button><span class="small muted" id="variationPattern">Pattern 1</span></div>
+</input></div><div class="ink-effects" id="inkEffectsPanel">
+<h3>Realistic ink effects <span class="pill-new">NEW</span></h3>
+<p class="hint">Toggle effects separately to imitate ink soaking into paper, tiny excess-ink spots, or an accidental drag. Only the generated writing is affected, not the original saved samples.</p>
+<div class="effect-switches">
+<label class="effect-row"><input id="inkBlot" type="checkbox"/><span><strong>Ink blots</strong><small>Occasional extra-dark dots around a stroke</small></span></label>
+<label class="effect-row"><input id="inkBleed" type="checkbox"/><span><strong>Ink bleed</strong><small>Soft, slightly feathered stroke edges</small></span></label>
+<label class="effect-row"><input id="inkSmudge" type="checkbox"/><span><strong>Ink smudges</strong><small>Faint, sideways dragged ink marks</small></span></label>
+</div>
+<div class="row" style="margin-top:13px"><label class="small" for="effectStrength"><strong>Effects strength</strong></label><strong class="small" id="effectStrengthValue">50%</strong></div>
+<input aria-label="Ink effects strength" id="effectStrength" max="100" min="0" step="5" type="range" value="50"/>
+<p class="hint">At 0%, effects are invisible. At high strength they become more noticeable. Effects are reproducible in the preview and PDF.</p>
+</div><div class="stack"><label class="checkline"><input checked="" id="guides" type="checkbox"/> Show faint 1–3–3 guide lines in the PDF</label><label class="checkline"><input id="marginGuides" type="checkbox"/> Show left/right margin marks</label><label class="checkline"><input checked="" id="variation" type="checkbox"/> Make each repeated letter slightly different</label><label class="checkline"><input checked="" id="naturalPressure" type="checkbox"/> Subtle pen-pressure changes along the strokes</label></div></div><div class="card tool-panel" data-view="page" hidden="">
+<h2>Page &amp; export</h2><p class="compact-kicker">Paper size, spacing and output settings</p>
+<p class="sub">Choose paper dimensions and orientation. The 1–3–3 lettering guide uses 1 mm upper offset, 3 mm writing height, and 3 mm gap by default.</p>
+<div class="paper-panel">
+<div class="fields" style="margin-top:0">
+<div class="field"><label for="paperSize">Paper size</label><select id="paperSize"><option value="A4">A4 (210 × 297 mm)</option><option value="A3">A3 (297 × 420 mm)</option><option value="A5">A5 (148 × 210 mm)</option><option value="Letter">US Letter (8.5 × 11 in)</option><option value="Legal">US Legal (8.5 × 14 in)</option><option value="B5">ISO B5 (176 × 250 mm)</option><option value="Custom">Custom dimensions</option></select></div>
+<div class="field"><label for="paperOrientation">Orientation</label><select id="paperOrientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+</div>
+<div class="fields custom-paper" hidden="" id="customPaperFields">
+<div class="field"><label for="customPaperWidth">Width (mm)</label><input id="customPaperWidth" max="600" min="100" step="0.1" type="number" value="210"/></div>
+<div class="field"><label for="customPaperHeight">Height (mm)</label><input id="customPaperHeight" max="600" min="100" step="0.1" type="number" value="297"/></div>
+</div>
+<p class="hint" id="paperDescription">A4 portrait · 210 × 297 mm. Printed page and guide lines will fit this size.</p>
+</div><details class="studio-disclosure"><summary>Custom lettering dimensions &amp; margins</summary><div class="fields">
+<div class="field"><label for="u1">First band (mm)</label><input id="u1" max="8" min="0" step="0.25" type="number" value="1"/></div>
+<div class="field"><label for="u2">Letter height (mm)</label><input id="u2" max="12" min="1.5" step="0.25" type="number" value="3"/></div>
+<div class="field"><label for="u3">Line gap (mm)</label><input id="u3" max="15" min="0.5" step="0.25" type="number" value="3"/></div>
+<div class="field"><label for="marginTop">Top margin (mm)</label><input id="marginTop" max="60" min="0" step="1" type="number" value="17"/></div>
+<div class="field"><label for="marginLeft">Left margin (mm)</label><input id="marginLeft" max="60" min="0" step="1" type="number" value="16"/></div>
+<div class="field"><label for="marginRight">Right margin (mm)</label><input id="marginRight" max="60" min="0" step="1" type="number" value="14"/></div>
+<div class="field"><label for="marginBottom">Bottom margin (mm)</label><input id="marginBottom" max="60" min="0" step="1" type="number" value="15"/></div>
+<div class="field"><label for="letterSpace">Letter spacing (mm)</label><input id="letterSpace" max="5" min="0" step="0.1" type="number" value="0.5"/></div>
+<div class="field"><label for="penWidth">Stroke width (mm) · precise</label><input id="penWidth" max="1.5" min="0.05" step="0.05" type="number" value="0.2"/></div>
+</div></details>
+
+
+
+<div class="infobar"><strong id="paperInfo">A4 portrait: 210 × 297 mm.</strong> <span id="lineInfo">7 mm per writing row</span>. Unrecorded characters use a basic fallback font.</div>
+<div class="realism-box" id="performanceBox">
+<label for="renderQuality">Rendering performance</label>
+<select id="renderQuality" style="margin:9px 0 4px;display:block;width:100%;border:1px solid #d6deea;border-radius:8px;padding:9px;color:#29394b;background:white">
+<option value="fast">Fast — long notes / smaller PDF</option>
+<option selected="" value="balanced">Balanced — recommended</option>
+<option value="original">Original — maximum legacy detail (slower)</option>
+</select>
+<p class="hint" style="margin:4px 0 10px">Fast and Balanced use one variable-width vector outline per pen stroke instead of dozens of overlapping stroke segments. They retain stylus pressure, organic lines, sampled letter shapes and ink effects.</p>
+<label class="checkline" style="display:flex;font-weight:400"><input checked="" id="fastPrint" type="checkbox"/> Optimize printing (skip heavy blur filters in the PDF)</label>
+<p class="hint" style="margin:5px 0 0">Turn this off for the softest bleed and smudge in the final PDF. Your handwriting still has blots and other ink marks when it is on.</p>
+</div>
+<hr/>
+<div class="toolbar"><button class="btn primary" id="printBtn">Print / Save PDF</button><button class="btn" id="exportWordBtn" type="button">Save Word (.docx)</button><button class="btn" id="refreshBtn">Refresh preview</button><button class="btn" id="restoreBtn">Default layout</button></div>
+<div class="field" style="margin-top:10px"><label for="wordMode">Word export format</label>
+<select id="wordMode"><option selected="" value="visual">Handwritten pages (looks like preview; not editable text)</option><option value="editable">Editable text (writing and equations become plain text)</option></select></div>
+<p class="hint">The handwritten Word option inserts each page as a high-resolution image for consistent appearance in Microsoft Word or Google Docs. Choose Editable text if you need to rewrite sentences in Word. Both work offline.</p>
+<p aria-live="polite" class="export-status" id="exportStatus" role="status"></p>
+
+<details class="studio-disclosure"><summary>Print setup tips</summary><div class="note">For printing, use <strong>scale 100%</strong>, <strong>zero extra margins</strong>, and <strong>Background graphics</strong> for the full ink effects. The program requests your selected paper size; confirm the print dialog matches it. Choose “Save as PDF” for a file.</div></details></div></section></aside><section aria-label="Live handwritten paper preview" class="preview-pane">
+<div class="preview-top studio-preview-top"><div><h2>Page preview</h2><p id="previewStats">Preparing pages…</p></div>
+<div class="preview-actions"><button aria-pressed="false" class="btn edit-toggle" id="editPageToggle" title="Click a handwritten line or equation to edit it on the page" type="button">Edit on page: Off</button><button class="btn" id="addPageLine" title="Add a new handwritten line at the end of your notes" type="button">+ Line</button><div aria-label="Paper preview zoom" class="zoom-controls" role="group">
+<button aria-label="Zoom out" class="btn" id="zoomOut" title="Zoom out" type="button">−</button>
+<input aria-label="Preview zoom percentage" id="zoomSlider" max="250" min="50" step="10" type="range" value="100"/>
+<button aria-label="Zoom in" class="btn" id="zoomIn" title="Zoom in" type="button">+</button>
+<output for="zoomSlider" id="zoomValue">100%</output>
+<button class="btn" id="zoomReset" title="Return to normal size" type="button">Fit</button>
+</div><button class="btn" id="wordTop" type="button">Word</button><button class="btn primary" id="printTop">Export PDF</button></div>
+</div>
+<div class="page-list" id="pageList"></div>
+<div class="edit-help visually-hidden" id="pageEditHint">Enable “Edit on page”, then click any line or equation. Type into the on-page editor and watch the writing update live. Ctrl+Enter saves, Esc cancels.</div>
+<div aria-label="Edit text on handwritten page" class="page-edit-popover" hidden="" id="pageEditPopover" role="dialog">
+<label for="pageEditInput" id="pageEditLabel">Edit handwritten line</label>
+<textarea aria-label="Text or equation source for selected page area" id="pageEditInput" spellcheck="false"></textarea>
+<div class="edit-tip">Edits update the handwriting preview and the main text box. Equations use their original $...$ or $$...$$ notation.</div>
+<div class="row"><button class="btn" id="pageEditCancel" type="button">Cancel</button><button class="btn primary" id="pageEditDone" type="button">Done</button></div>
+</div>
+
+</section></main>
 <script>
 'use strict';
 (function(){
@@ -446,7 +561,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  const PAPER_PRESETS={A4:[210,297],A3:[297,420],A5:[148,210],Letter:[215.9,279.4],Legal:[215.9,355.6],B5:[176,250]};
  const svgNS='http://www.w3.org/2000/svg';
  let pageEditEnabled=false;let pageEditState=null;
- let phrases={};let phraseStrokes=[];let phraseCurrentStroke=null;let phraseDrawing=false;let editingPhrase=null;let editingPhraseIndex=null;let samples={};let chosen='A';let strokes=[];let activeStroke=null;let drawing=false;let redoStrokes=[];let variationSeed=10091;let variationPattern=1;let viewVersion=0;let editVersion=null;let previewZoom=100;
+ let phrases={};let phraseStrokes=[];let phraseCurrentStroke=null;let phraseDrawing=false;let editingPhrase=null;let editingPhraseIndex=null;let samples={};let chosen='A';let strokes=[];let activeStroke=null;let drawing=false;let redoStrokes=[];let variationSeed=10091;let variationPattern=1;let viewVersion=0;let editVersion=null;let previewZoom=100;let equationPreviewZoom=100;
  const $=id=>document.getElementById(id);
  const isColor=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
  const clampZoom=z=>Math.max(50,Math.min(250,Math.round(Number(z)/10)*10));
@@ -518,10 +633,10 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  const defaults={u1:1,u2:3,u3:3,marginTop:17,marginLeft:16,marginRight:14,marginBottom:15,letterSpace:0.5,penWidth:0.2,variationLevel:35,mathSymbolsGrid:true,accentGrid:true,composeAccents:true,uppercase:true,guides:true,marginGuides:false,variation:true,lowercaseGrid:false,naturalPressure:true,inkBlot:false,inkBleed:false,inkSmudge:false,mathHandDrawn:true,mathRoughness:45,effectStrength:50,customPaperWidth:210,customPaperHeight:297,sampleTraceOpacity:20,sampleTraceToggle:true,pressureSensitivity:100,tabletPressure:true,paperSize:'A4',paperOrientation:'portrait',inkColor:'#1c2a43'};
  function load(){try{const obj=JSON.parse(localStorage.getItem(KEY)||'{}');if(obj&&typeof obj==='object')samples=obj}catch(e){samples={}}
  try{const obj=JSON.parse(localStorage.getItem(PHRASES)||'{}');if(obj&&typeof obj==='object')phrases=obj}catch(e){phrases={}}
- try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(['fast','balanced','original'].includes(cfg.renderQuality))$('renderQuality').value=cfg.renderQuality;if(cfg.fastPrint!==undefined)$('fastPrint').checked=!!cfg.fastPrint;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
+ try{const cfg=JSON.parse(localStorage.getItem(SETTINGS)||'{}');for(const id of optionIds){if(cfg[id]!==undefined)$(id).value=cfg[id]};for(const id of checkIds){if(cfg[id]!==undefined)$(id).checked=!!cfg[id]};if($('lowercaseGrid').checked&&$('uppercase').checked)$('uppercase').checked=false;if(typeof cfg.content==='string')$('content').value=cfg.content;if(typeof cfg.equationDraft==='string')$('equationDraft').value=cfg.equationDraft;if(['80','100','120','150'].includes(String(cfg.equationSize)))$('equationSize').value=cfg.equationSize;if(['center','left'].includes(cfg.equationAlign))$('equationAlign').value=cfg.equationAlign;if(cfg.phraseMode==='letters'||cfg.phraseMode==='hybrid')$('phraseMode').value=cfg.phraseMode;if(['fast','balanced','original'].includes(cfg.renderQuality))$('renderQuality').value=cfg.renderQuality;if(cfg.fastPrint!==undefined)$('fastPrint').checked=!!cfg.fastPrint;if(PAPER_PRESETS[cfg.paperSize]||cfg.paperSize==='Custom')$('paperSize').value=cfg.paperSize;if(['portrait','landscape'].includes(cfg.paperOrientation))$('paperOrientation').value=cfg.paperOrientation;if(isColor(cfg.inkColor))$('inkColor').value=cfg.inkColor;if(Number.isFinite(cfg.previewZoom))previewZoom=clampZoom(cfg.previewZoom);if(Number.isFinite(cfg.equationPreviewZoom))equationPreviewZoom=Math.max(50,Math.min(300,Math.round(cfg.equationPreviewZoom/10)*10));if(['visual','editable'].includes(cfg.wordMode))$('wordMode').value=cfg.wordMode;if(Number.isFinite(cfg.variationSeed))variationSeed=(cfg.variationSeed>>>0);if(Number.isInteger(cfg.variationPattern)&&cfg.variationPattern>0)variationPattern=cfg.variationPattern}catch(e){}
  }
  function store(){try{localStorage.setItem(KEY,JSON.stringify(samples));localStorage.setItem(PHRASES,JSON.stringify(phrases))}catch(e){$('sampleStatus').textContent='Browser storage full: please export your handwriting profile.'}}
- function storeSettings(){const o={};for(const id of optionIds)o[id]=$(id).value;for(const id of checkIds)o[id]=$(id).checked;o.content=$('content').value;o.equationDraft=$('equationDraft').value;o.equationSize=$('equationSize').value;o.equationAlign=$('equationAlign').value;o.phraseMode=$('phraseMode').value;o.renderQuality=$('renderQuality').value;o.fastPrint=$('fastPrint').checked;o.paperSize=$('paperSize').value;o.paperOrientation=$('paperOrientation').value;o.inkColor=$('inkColor').value;o.previewZoom=previewZoom;o.variationSeed=variationSeed;o.variationPattern=variationPattern;try{localStorage.setItem(SETTINGS,JSON.stringify(o))}catch(e){}}
+ function storeSettings(){const o={};for(const id of optionIds)o[id]=$(id).value;for(const id of checkIds)o[id]=$(id).checked;o.content=$('content').value;o.equationDraft=$('equationDraft').value;o.equationSize=$('equationSize').value;o.equationAlign=$('equationAlign').value;o.phraseMode=$('phraseMode').value;o.renderQuality=$('renderQuality').value;o.fastPrint=$('fastPrint').checked;o.paperSize=$('paperSize').value;o.paperOrientation=$('paperOrientation').value;o.inkColor=$('inkColor').value;o.previewZoom=previewZoom;o.equationPreviewZoom=equationPreviewZoom;o.wordMode=$('wordMode').value;o.variationSeed=variationSeed;o.variationPattern=variationPattern;try{localStorage.setItem(SETTINGS,JSON.stringify(o))}catch(e){}}
  function alphabet(){return [...new Set([...ABC,...($('lowercaseGrid').checked?EXTRA:''),...($('mathSymbolsGrid').checked?MATH_SYMBOLS:''),...($('accentGrid').checked?ACCENT_MARKS:'')])].join('')}
  function glyphList(){const root=$('charGrid');root.replaceChildren();for(const char of alphabet()){const b=document.createElement('button');b.className='glyph'+(chosen===char?' active':'')+((samples[char]||[]).length?' saved':'');b.title='Sample '+char;b.textContent=char;b.type='button';b.addEventListener('click',()=>select(char));root.appendChild(b)}
  const count=[...alphabet()].filter(c=>(samples[c]||[]).length>0).length;$('count').textContent=`${count} of ${[...alphabet()].length} sampled`;}
@@ -734,10 +849,13 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  const hash=(n)=>{let x=(n*1664525+1013904223)>>>0;x^=x>>>16;x=Math.imul(x,2246822519);x^=x>>>13;return (x>>>0)/4294967296;};
  function rand(ch,idx,channel){return hash((variationSeed + Math.imul(idx+1,747796405) + Math.imul(ch.charCodeAt(0)+1,2891336453) + Math.imul(channel+1,277803737))>>>0)}
  function shapeFor(char,i){const variants=samples[char];if(!variants||!variants.length)return null;return variants[(Math.floor(rand(char,0,99)*variants.length)+i)%variants.length]}
- function variationFor(ch,idx,c){const s=c.variation?c.variationLevel/100:0;
-  return {strength:s,width:1+(rand(ch,idx,1)-.5)*.18*s,height:1+(rand(ch,idx,2)-.5)*.15*s,
-   x:(rand(ch,idx,3)-.5)*.22*s,y:(rand(ch,idx,4)-.5)*.30*s,
-   tilt:(rand(ch,idx,5)-.5)*8*s,pen:1+(rand(ch,idx,6)-.5)*.22*s,
+ // Preserve simple, nearly straight letterforms. Variations in placement and
+ // pen pressure remain, but the geometry isn't warped into an S-shaped stroke.
+ function isStraightGlyph(ch){return 'Il1i|!'.includes(ch)}
+ function variationFor(ch,idx,c){const s=c.variation?c.variationLevel/100:0,straight=isStraightGlyph(ch);
+  return {strength:straight?s*.035:s,width:1+(rand(ch,idx,1)-.5)*(straight?.045:.18)*s,height:1+(rand(ch,idx,2)-.5)*(straight?.045:.15)*s,
+   x:(rand(ch,idx,3)-.5)*.22*s,y:(rand(ch,idx,4)-.5)*(straight?.11:.30)*s,
+   tilt:(rand(ch,idx,5)-.5)*(straight?2:8)*s,pen:1+(rand(ch,idx,6)-.5)*(straight?.10:.22)*s,
    opacity:1-(rand(ch,idx,7)*.10*s),spacing:(rand(ch,idx,8)-.5)*.28*s};
  }
  function sharedDrift(idx,c){if(!c.variation)return 0;const amount=(c.variationLevel/100)*.12;return amount*(Math.sin((idx+variationSeed%31)/3.8)+.55*Math.sin((idx+variationSeed%17)/7.2));}
@@ -831,7 +949,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   const pts=[],phase=rand(ch,idx,82+si)*6.283;
   for(let i=0;i<=steps;i++){
    const t=i/steps,p=at(t),tip=Math.min(1,t*steps*1.3,(1-t)*steps*1.3);
-   const natural=.91+.12*Math.sin(t*7.8+phase)+.055*Math.sin(t*17.4+phase*1.7);
+   const natural=isStraightGlyph(ch)?1:(.91+.12*Math.sin(t*7.8+phase)+.055*Math.sin(t*17.4+phase*1.7));
    const synthetic=c.naturalPressure?((.92+.18*(p.p-.5))*natural*(.82+.18*tip)):1;
    const radius=Math.max(.002,baseWidth*pressureFactor(p.p,c)*synthetic/2);
    pts.push({...p,r:radius});
@@ -880,7 +998,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   const phase=rand(ch,idx,82+si)*6.283;
   for(let k=0;k<pieces;k++){
    const mid=(k+.5)/pieces,tip=Math.min(1,mid*6,(1-mid)*6),p=pointAt(mid);
-   const natural=.91+.12*Math.sin(mid*7.8+phase)+.055*Math.sin(mid*17.4+phase*1.7);
+   const natural=isStraightGlyph(ch)?1:(.91+.12*Math.sin(mid*7.8+phase)+.055*Math.sin(mid*17.4+phase*1.7));
    const synthetic=c.naturalPressure?((.92+.18*(p[2]-.5))*natural*(.82+.18*tip)):1;
    const pressure=pressureFactor(p[2],c)*synthetic;
    const segment=[];for(let t=0;t<=3;t++)segment.push(pointAt((k+t/3)/pieces));
@@ -1094,7 +1212,7 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   }
   if(k==='scripts'){
    const b=mathLayout(node.base,c,size,seqNo),up=node.sup?mathLayout(node.sup,c,size*.64,seqNo+101):blank(),lo=node.sub?mathLayout(node.sub,c,size*.64,seqNo+203):blank();
-   const upY=-(b.a*.83+up.d*.35),loY=b.d+lo.a*.75;
+   const upY=-(b.a*.83+up.d*.35),loY=Math.max(.36*unit,b.d*.54+lo.a*.30);
    const w=b.w+Math.max(up.w,lo.w)*.92,a=Math.max(b.a,node.sup?-upY+up.a:0),d=Math.max(b.d,node.sub?loY+lo.d:0);
    return {w,a,d,draw(parent,x,y){b.draw(parent,x,y);if(node.sup)up.draw(parent,x+b.w-.10*unit,y+upY);if(node.sub)lo.draw(parent,x+b.w-.10*unit,y+loY)}};
   }
@@ -1227,6 +1345,8 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  function renderEquationDraft(){const c=getCfg(),target=$('equationLive');target.replaceChildren();const rows=equationRows($('equationDraft').value,c,99999);
   const fullWidth=Math.max(28,c.paperW-c.marginLeft-c.marginRight),totalH=Math.max(c.u2*3,rows.items.reduce((acc,row)=>acc+row.height,0));
   const svg=el('svg',{viewBox:`0 0 ${fullWidth} ${totalH}`,'aria-label':'Equation editor live preview'},target);
+  const widthPx=Math.max(300,target.clientWidth-20)*equationPreviewZoom/100;
+  svg.style.width=widthPx.toFixed(1)+'px';svg.style.height=Math.max(50,widthPx*totalH/fullWidth).toFixed(1)+'px';
   let y=0;for(const item of rows.items){item.draw(svg,1,y+Math.max(item.a+.35,item.height*.5+(item.a-item.d)*.35),fullWidth-2);y+=item.height}
   const contentIssues=target.dataset.mathContentWarnings||'';
   const draftIssues=rows.issues.length?'Equation input notice: '+[...new Set(rows.issues)].slice(0,3).join('; '):'';
@@ -1242,6 +1362,14 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
   }
   else insertAtCursor('\n$$'+formula+'$$\n');
  }
+ function setEquationPreviewZoom(v){equationPreviewZoom=Math.max(50,Math.min(300,Math.round(v/10)*10));
+  $('eqZoomSlider').value=String(equationPreviewZoom);$('eqZoomValue').textContent=equationPreviewZoom+'%';
+  $('eqZoomOut').disabled=equationPreviewZoom===50;$('eqZoomIn').disabled=equationPreviewZoom===300;
+  renderEquationDraft();storeSettings();}
+ $('eqZoomSlider').addEventListener('input',e=>setEquationPreviewZoom(Number(e.target.value)));
+ $('eqZoomOut').addEventListener('click',()=>setEquationPreviewZoom(equationPreviewZoom-10));
+ $('eqZoomIn').addEventListener('click',()=>setEquationPreviewZoom(equationPreviewZoom+10));
+ $('eqZoomReset').addEventListener('click',()=>setEquationPreviewZoom(100));
  $('insertInlineMath').onclick=()=>insertMathBlock('inline');
  $('insertDisplayMath').onclick=()=>insertMathBlock('display');
  $('insertAlignMath').onclick=()=>insertMathBlock('align');
@@ -1453,6 +1581,111 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  $('content').addEventListener('input',()=>scheduleRender(175));$('equationSize').addEventListener('change',refresh);$('equationAlign').addEventListener('change',refresh);$('equationDraft').addEventListener('input',()=>{storeSettings();renderEquationDraft()});$('phraseMode').addEventListener('change',refresh);$('refreshBtn').onclick=refresh;
  $('restoreBtn').onclick=()=>{$('renderQuality').value='balanced';$('fastPrint').checked=true;document.body.classList.add('fast-print');for(const id of optionIds)$(id).value=defaults[id];for(const id of ['mathSymbolsGrid','accentGrid','composeAccents','uppercase','lowercaseGrid','guides','marginGuides','variation','naturalPressure','inkBlot','inkBleed','inkSmudge','mathHandDrawn','sampleTraceToggle','tabletPressure'])$(id).checked=defaults[id];$('paperSize').value=defaults.paperSize;$('paperOrientation').value=defaults.paperOrientation;variationSeed=10091;variationPattern=1;$('phraseMode').value='hybrid';$('equationSize').value='100';$('equationAlign').value='center';$('inkColor').value=defaults.inkColor;updateCaseStatus();syncInkUI();updateThicknessUI();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=false;$('pressureSensitivityValue').textContent=$('pressureSensitivity').value+'%';$('pressureSensitivity').disabled=false;redrawCanvas();redrawPhraseCanvas();refresh()};
  function printPage(){refresh();window.print()};$('printBtn').onclick=printPage;$('printTop').onclick=printPage;
+ // V8.3: Self-contained .docx generation. No servers, CDN, fonts or libraries.
+ // A Word file can be image-based (exact handwriting) OR editable (plain text).
+ const DOCX_MIME='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+ function xmlEscape(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
+ function zipCRC32(bytes){let crc=0xffffffff;for(let i=0;i<bytes.length;i++){crc^=bytes[i];for(let j=0;j<8;j++)crc=(crc>>>1)^((crc&1)?0xedb88320:0)}return (crc^0xffffffff)>>>0}
+ function offlineZip(files){
+  const encoder=new TextEncoder(),parts=[],entries=[];let offset=0;
+  const u16=(dv,at,v)=>dv.setUint16(at,v,true),u32=(dv,at,v)=>dv.setUint32(at,v>>>0,true);
+  for(const [name,source] of files){
+   const path=encoder.encode(name),data=typeof source==='string'?encoder.encode(source):source;
+   const crc=zipCRC32(data),size=data.length;
+   const local=new Uint8Array(30+path.length),ld=new DataView(local.buffer);
+   u32(ld,0,0x04034b50);u16(ld,4,20);u16(ld,6,0);u16(ld,8,0);u16(ld,10,0);u16(ld,12,0);
+   u32(ld,14,crc);u32(ld,18,size);u32(ld,22,size);u16(ld,26,path.length);u16(ld,28,0);local.set(path,30);
+   parts.push(local,data);entries.push({path,crc,size,offset});offset+=local.length+size;
+  }
+  const directoryOffset=offset;
+  for(const e of entries){const hdr=new Uint8Array(46+e.path.length),d=new DataView(hdr.buffer);
+   u32(d,0,0x02014b50);u16(d,4,20);u16(d,6,20);u16(d,8,0);u16(d,10,0);u16(d,12,0);u16(d,14,0);
+   u32(d,16,e.crc);u32(d,20,e.size);u32(d,24,e.size);u16(d,28,e.path.length);u16(d,30,0);u16(d,32,0);
+   u16(d,34,0);u16(d,36,0);u32(d,38,0);u32(d,42,e.offset);hdr.set(e.path,46);parts.push(hdr);offset+=hdr.length;
+  }
+  const end=new Uint8Array(22),d=new DataView(end.buffer);u32(d,0,0x06054b50);
+  u16(d,4,0);u16(d,6,0);u16(d,8,entries.length);u16(d,10,entries.length);u32(d,12,offset-directoryOffset);u32(d,16,directoryOffset);u16(d,20,0);
+  parts.push(end);return new Blob(parts,{type:DOCX_MIME});
+ }
+ const docxTop=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`;
+ function wordPageInfo(cfg,visual){
+  const twips=x=>Math.round(x*1440/25.4),emu=x=>Math.round(x*36000000/1000);
+  const w=twips(cfg.paperW),h=twips(cfg.paperH);
+  const margin=visual?0:null;
+  const x=visual?{top:0,right:0,bottom:0,left:0}:Object.fromEntries(['top','right','bottom','left'].map(a=>[a,twips(cfg['margin'+a[0].toUpperCase()+a.slice(1)])]));
+  return {w,h,emu,section:`<w:sectPr><w:pgSz w:w="${w}" w:h="${h}"/><w:pgMar w:top="${x.top}" w:right="${x.right}" w:bottom="${x.bottom}" w:left="${x.left}" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>`};
+ }
+ function makeDocxBody(cfg,mode,images){
+  const page=wordPageInfo(cfg,mode==='visual');
+  let body='',rels=[],extras=[];
+  if(mode==='visual'){
+   // Slight reduction protects the page count from Word's paragraph-height rounding.
+   const factor=(cfg.paperH-8)/cfg.paperH;
+   const width=page.emu(cfg.paperW*factor),height=page.emu(cfg.paperH*factor);
+   for(let i=0;i<images.length;i++){
+    const pid=i+1;
+    const before=i?'<w:pageBreakBefore/>':'';
+    body+=`<w:p><w:pPr>${before}<w:jc w:val="center"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${width}" cy="${height}"/><wp:docPr id="${pid}" name="Handwritten page ${pid}" descr="Handwriting Studio page ${pid}"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="0" name="Page ${pid}.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId${pid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${width}" cy="${height}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
+    rels.push(`<Relationship Id="rId${pid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/page${pid}.png"/>`);
+    extras.push([`word/media/page${pid}.png`,images[i]]);
+   }
+  }else{
+   const lines=$('content').value.replace(/\r/g,'').split('\n');
+   for(const line of lines){
+    const clean=line.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+    body+=`<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr>${clean?`<w:r><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos"/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${xmlEscape(clean)}</w:t></w:r>`:''}</w:p>`;
+   }
+  }
+  const document=docxTop+`<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>${body}${page.section}</w:body></w:document>`;
+  const contentTypes=docxTop+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>';
+  const rootRels=docxTop+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
+  const wordRels=docxTop+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+rels.join('')+'</Relationships>';
+  return offlineZip([['[Content_Types].xml',contentTypes],['_rels/.rels',rootRels],['word/document.xml',document],['word/_rels/document.xml.rels',wordRels],...extras]);
+ }
+ async function svgWordPagePNG(svg,c){
+  const clean=svg.cloneNode(true);
+  clean.querySelectorAll('.page-edit-hit').forEach(n=>n.remove());
+  clean.setAttribute('xmlns',svgNS);
+  const dpi=150,width=Math.round(c.paperW*dpi/25.4),height=Math.round(c.paperH*dpi/25.4);
+  clean.setAttribute('width',width);clean.setAttribute('height',height);
+  const serialized=new XMLSerializer().serializeToString(clean);
+  const url=URL.createObjectURL(new Blob([serialized],{type:'image/svg+xml;charset=utf-8'}));
+  try{
+   const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('Could not rasterize page. Try disabling ink filters.'));img.src=url});
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+   const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.drawImage(img,0,0,width,height);
+   const blob=await new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(Error('Could not encode Word page image.')),'image/png'));
+   canvas.width=0;canvas.height=0;return new Uint8Array(await blob.arrayBuffer());
+  }finally{URL.revokeObjectURL(url)}
+ }
+ function saveWordBlob(data,name){const url=URL.createObjectURL(data),a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000)}
+ function wordStatus(msg,err=false){$('exportStatus').textContent=msg;$('exportStatus').classList.toggle('is-error',!!err)}
+ let exportingWord=false;
+ async function exportWord(){if(exportingWord)return;const btn=$('exportWordBtn');exportingWord=true;btn.disabled=true;
+  const mode=$('wordMode').value, paper=getCfg();
+  try{
+   if(paper.paperW>558||paper.paperH>558)throw Error('This custom paper exceeds Word’s maximum page dimension (about 558 mm). Choose a smaller size.');
+   wordStatus('Preparing Word document…');
+   // Ensure no pending preview update or unfinished page edit is excluded.
+   refresh();await new Promise(resolve=>setTimeout(resolve,0));
+   const svgs=[...document.querySelectorAll('#pageList .sheet > svg')];
+   if(mode==='visual'&&!svgs.length)throw Error('The preview has no pages to export.');
+   const images=[];
+   if(mode==='visual')for(let i=0;i<svgs.length;i++){
+    wordStatus(`Rendering handwritten page ${i+1} of ${svgs.length}…`);
+    images.push(await svgWordPagePNG(svgs[i],paper));
+    await new Promise(resolve=>setTimeout(resolve,0));
+   }
+   wordStatus('Packaging Word document…');await new Promise(resolve=>setTimeout(resolve,0));
+   const blob=makeDocxBody(paper,mode,images);
+   saveWordBlob(blob,`Handwriting_Studio_${mode==='visual'?'Handwritten':'Editable'}_${paper.paperSize}.docx`);
+   wordStatus(`Saved ${mode==='visual'?svgs.length+' handwritten page(s)':'editable text'} as a Word .docx file (${Math.max(1,Math.round(blob.size/1024))} KB).`);
+  }catch(err){console.error('Word export failed',err);wordStatus('Word export failed: '+(err&&err.message||'Unknown error'),true)}
+  finally{btn.disabled=false;exportingWord=false}
+ }
+ $('exportWordBtn').addEventListener('click',exportWord);$('wordTop').addEventListener('click',exportWord);
+ $('wordMode').addEventListener('change',storeSettings);
+
  // V8.0: Local photo-to-vector handwriting import. Photos stay entirely inside this browser.
  const photoCanvas=$('photoCanvas'),photoCtx=photoCanvas.getContext('2d');
  const photoPreview=$('photoGlyphPreview'),photoPreviewCtx=photoPreview.getContext('2d');
@@ -1642,8 +1875,47 @@ $$\begin{aligned}\sigma &= \frac{150000}{30000} \\ &= \boxed{5\ \text{MPa}}\end{
  };
 
 
- load();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=!$('sampleTraceToggle').checked;select(chosen);updateAccentStatus();updateCaseStatus();syncInkUI();syncZoomUI();updateThicknessUI();updateVariationUI();updateEffectsUI();updateMathRoughnessUI();$('pressureSensitivityValue').textContent=$('tabletPressure').checked?$('pressureSensitivity').value+'%':'Off';$('pressureSensitivity').disabled=!$('tabletPressure').checked;redrawPhraseCanvas();renderPhraseGallery();render();renderEquationDraft();
+ load();$('sampleTraceOpacityLabel').textContent=$('sampleTraceOpacity').value+'%';$('sampleTraceOpacity').disabled=!$('sampleTraceToggle').checked;select(chosen);updateAccentStatus();updateCaseStatus();syncInkUI();syncZoomUI();updateThicknessUI();updateVariationUI();updateEffectsUI();updateMathRoughnessUI();$('pressureSensitivityValue').textContent=$('tabletPressure').checked?$('pressureSensitivity').value+'%':'Off';$('pressureSensitivity').disabled=!$('tabletPressure').checked;redrawPhraseCanvas();renderPhraseGallery();render();setEquationPreviewZoom(equationPreviewZoom);
 })();
 </script>
-</body>
+<script>
+// V8.4 navigation and compact character search. Does not alter handwriting data or renderer.
+(function(){
+ 'use strict';
+ const tabs=[...document.querySelectorAll('.studio-nav-btn')];
+ const panes=[...document.querySelectorAll('.tool-panel')];
+ const controls=document.querySelector('.studio-sidebar > .controls');
+ const search=document.getElementById('glyphSearch');
+ function activate(id,focusTab=false){
+   const target=panes.find(p=>p.dataset.view===id);
+   if(!target)return;
+   panes.forEach(p=>{p.hidden=p!==target;});
+   tabs.forEach(tab=>{const sel=tab.dataset.target===id;tab.setAttribute('aria-pressed',String(sel));tab.tabIndex=sel?0:-1;if(sel&&focusTab)tab.focus();});
+   if(controls)controls.scrollTop=0;
+   try{sessionStorage.setItem('hs-v84-tool',id);}catch(e){}
+   requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
+ }
+ tabs.forEach(tab=>tab.addEventListener('click',()=>activate(tab.dataset.target)));
+ document.addEventListener('keydown',ev=>{
+   if(ev.altKey&&!ev.ctrlKey&&!ev.metaKey&&/^[1-7]$/.test(ev.key)){
+     const active=document.activeElement;
+     if(active&&(active.tagName==='INPUT'||active.tagName==='TEXTAREA'))return;
+     ev.preventDefault();activate(tabs[Number(ev.key)-1].dataset.target,true);
+   }
+ });
+ function filterChars(){
+  if(!search)return; const query=search.value.trim().toLowerCase();
+  document.querySelectorAll('#charGrid .glyph').forEach(g=>{
+   let ch=g.textContent.trim().toLowerCase();
+   g.hidden=!!query&&!ch.includes(query);
+  });
+ }
+ if(search){search.addEventListener('input',filterChars);
+   const grid=document.getElementById('charGrid');
+   if(grid)new MutationObserver(filterChars).observe(grid,{childList:true});
+ }
+ const initial=(()=>{try{return sessionStorage.getItem('hs-v84-tool')}catch(e){return null}})();
+ activate(panes.some(p=>p.dataset.view===initial)?initial:'write');
+})();
+</script></body>
 </html>
